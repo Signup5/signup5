@@ -1,0 +1,1 @@
+ALTER TABLE invitation RENAME COLUMN user_id TO person_id;
