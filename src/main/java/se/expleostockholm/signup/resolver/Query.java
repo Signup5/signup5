@@ -6,7 +6,6 @@ import se.expleostockholm.signup.domain.Event;
 import se.expleostockholm.signup.services.EventService;
 
 import javax.annotation.Resource;
-import java.util.ArrayList;
 import java.util.List;
 
 @Component

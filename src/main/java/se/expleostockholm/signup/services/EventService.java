@@ -13,10 +13,6 @@ public class EventService {
     @Resource
     private EventMapper eventMapper;
 
-    public List<Event> getEventById(Long id) {
-        return eventMapper.getEventById(id);
-    }
-
     public List<Event> getAllEvents() {
         return eventMapper.getAllEvents();
     }

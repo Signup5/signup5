@@ -1,14 +1,26 @@
+enum Attendance {
+    ATTENDING
+    NOT_ATTENDING
+    MAYBE
+}
+
 type Event {
     id: ID!
-    host_id: String
-    title: String
-    description: String
-    datetime: String
-    location: String
+}
+
+type Invitation {
+    id: ID!
+    person_id: Int
+    event_id: Int
+    attendance: Attendance
 }
 
 type Query {
     allEvents: [Event]
+}
+
+type Mutation {
+    setAttendance(attendance: Attendance, invitation_id: Int): Invitation
 }
 
 schema {
