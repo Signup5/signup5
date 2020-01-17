@@ -12,11 +12,12 @@ type Invitation {
     id: ID!
     person_id: Int
     event_id: Int
-    attendance: String
+    attendance: Attendance
 }
 
 type Query {
     allEvents: [Event]
+    getInvitationById(id: Int): Invitation
 }
 
 type Mutation {
