@@ -12,7 +12,7 @@ type Invitation {
     id: ID!
     person_id: Int
     event_id: Int
-    attendance: Attendance
+    attendance: String
 }
 
 type Query {
@@ -20,7 +20,7 @@ type Query {
 }
 
 type Mutation {
-    setAttendance(attendance: Attendance, invitation_id: Int): Invitation
+    setAttendance(attendance: Attendance, invitation_id: Int): Int
 }
 
 schema {

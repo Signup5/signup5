@@ -14,7 +14,7 @@ public class Mutation implements GraphQLMutationResolver {
     @Resource
     InvitationMapper invitationMapper;
 
-    public Invitation setAttendance(Attendance attendance, Long invitation_id) {
+    public Long setAttendance(Attendance attendance, Long invitation_id) {
         return invitationMapper.setAttendance(attendance,  invitation_id);
     }
 

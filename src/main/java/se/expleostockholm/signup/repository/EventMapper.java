@@ -1,7 +1,6 @@
 package se.expleostockholm.signup.repository;
 
 import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 import se.expleostockholm.signup.domain.Event;
 
