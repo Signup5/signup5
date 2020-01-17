@@ -3,7 +3,7 @@ type Event {
     host_id: String
     title: String
     description: String
-        datetime: String
+    datetime: String
     location: String
 }
 
