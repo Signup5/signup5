@@ -12,15 +12,10 @@ import java.util.Optional;
 @Mapper
 public interface InvitationMapper {
 
-    @Select(getInvitationById)
+    @Select("SELECT * from invitation WHERE id = #{invitation_id}")
     Optional<Invitation> getInvitationById(@Param("invitation_id") Long invitation_id);
 
-    @Update(setAttendance)
+    @Update("UPDATE invitation SET attendance=#{attendance}::attendance WHERE id = #{invitation_id}")
     Long setAttendance(@Param("attendance") Attendance attendance, @Param("invitation_id") Long invitation_id);
 
-    String getInvitationById =
-            "SELECT * from signup.invitation WHERE id = #{invitation_id}";
-
-    String setAttendance =
-            "UPDATE signup.invitation SET attendance=#{attendance}::signup.attendance WHERE id = #{invitation_id}";
 }

@@ -9,6 +9,6 @@ import java.util.List;
 @Mapper
 public interface EventMapper {
 
-    @Select("SELECT * FROM signup.event")
+    @Select("SELECT * FROM event")
     List<Event> getAllEvents();
 }
