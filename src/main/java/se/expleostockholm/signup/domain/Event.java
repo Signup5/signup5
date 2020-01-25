@@ -10,6 +10,6 @@ public class Event {
     private Long host_id;
     private String title;
     private String description;
-    private Date datetime;
+    private Date date_of_event;
     private String location;
 }

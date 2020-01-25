@@ -53,6 +53,7 @@ class DatabaseAccessTests {
     assertEquals(1, events.size());
     Event event = events.get(0);
     assertEquals("Marcus Event", event.getTitle());
+    assertEquals("2020-01-25", event.getDate_of_event().toString());
   }
 
   @Test

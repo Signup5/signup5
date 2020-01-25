@@ -6,6 +6,9 @@ enum Attendance {
 
 type Event {
     id: ID!
+    title: String
+    description: String
+    date_of_event: String
 }
 
 type Invitation {
