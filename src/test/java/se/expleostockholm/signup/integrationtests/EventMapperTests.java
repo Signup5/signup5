@@ -1,4 +1,4 @@
-package se.expleostockholm.signup;
+package se.expleostockholm.signup.integrationtests;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -9,24 +9,19 @@ import org.springframework.test.context.ContextConfiguration;
 import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
-import se.expleostockholm.signup.domain.Attendance;
 import se.expleostockholm.signup.domain.Event;
-import se.expleostockholm.signup.domain.Invitation;
 import se.expleostockholm.signup.repository.EventMapper;
-import se.expleostockholm.signup.repository.InvitationMapper;
 
 import javax.annotation.Resource;
-
 import java.util.List;
-import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @Testcontainers
 @SpringBootTest
-@ContextConfiguration(initializers = {DatabaseAccessTests.Initializer.class})
-class DatabaseAccessTests {
+@ContextConfiguration(initializers = {EventMapperTests.Initializer.class})
+class EventMapperTests {
 
   // will be started before and stopped after each test method
   @Container
@@ -38,9 +33,6 @@ class DatabaseAccessTests {
 
   @Resource
   private EventMapper eventMapper;
-
-  @Resource
-  private InvitationMapper invitationMapper;
 
   @Test
   void verifyThatTestDbIsRunning() {
@@ -54,21 +46,6 @@ class DatabaseAccessTests {
     Event event = events.get(0);
     assertEquals("Marcus Event", event.getTitle());
     assertEquals("2020-01-25", event.getDate_of_event().toString());
-  }
-
-  @Test
-  void verifyGetInvitation(){
-    Optional<Invitation> invitationOption = invitationMapper.getInvitationById(1L);
-    assertTrue(invitationOption.isPresent());
-    assertEquals(1L, invitationOption.get().getEvent_id());
-  }
-
-  @Test
-  void verifySetAttendance(){
-    invitationMapper.setAttendance(Attendance.MAYBE, 1L);
-    Optional<Invitation> invitationOption = invitationMapper.getInvitationById(1L);
-    assertTrue(invitationOption.isPresent());
-    assertEquals(Attendance.MAYBE, invitationOption.get().getAttendance());
   }
 
   static class Initializer
