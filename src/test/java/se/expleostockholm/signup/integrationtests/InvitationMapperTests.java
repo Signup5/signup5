@@ -16,8 +16,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @Testcontainers
 @SpringBootTest
-@ContextConfiguration(initializers = {DatabaseTests.Initializer.class})
-class InvitationMapperTests extends DatabaseTests {
+@ContextConfiguration(initializers = {SignupDbTests.Initializer.class})
+class InvitationMapperTests extends SignupDbTests {
 
   @Resource
   private InvitationMapper invitationMapper;

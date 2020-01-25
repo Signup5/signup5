@@ -15,16 +15,11 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @Testcontainers
 @SpringBootTest
-@ContextConfiguration(initializers = {DatabaseTests.Initializer.class})
-class EventMapperTests extends DatabaseTests {
+@ContextConfiguration(initializers = {SignupDbTests.Initializer.class})
+class EventMapperTests extends SignupDbTests {
 
   @Resource
   private EventMapper eventMapper;
-
-  @Test
-  void verifyThatTestDbIsRunning() {
-    assertTrue(postgresqlTestContainer.isRunning());
-  }
 
   @Test
   void verifyGetAllEvents() {
