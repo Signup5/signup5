@@ -1,0 +1,8 @@
+query {
+    allEvents {
+        id
+        title
+        description
+        date_of_event
+    }
+}
