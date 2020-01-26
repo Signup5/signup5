@@ -2,7 +2,7 @@ package se.expleostockholm.signup.domain;
 
 import lombok.Data;
 
-import java.sql.Date;
+import java.time.LocalDate;
 
 @Data
 public class Event {
@@ -10,6 +10,6 @@ public class Event {
     private Long host_id;
     private String title;
     private String description;
-    private Date date_of_event;
+    private LocalDate date_of_event;
     private String location;
 }

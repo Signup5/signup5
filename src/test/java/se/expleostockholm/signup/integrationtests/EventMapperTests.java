@@ -27,9 +27,7 @@ class EventMapperTests extends SignupDbTests {
     assertEquals(1, events.size());
     Event event = events.get(0);
     assertEquals("Marcus Event", event.getTitle());
-
-    // todo: BUG: date is not read properly from db
-    // assertEquals("2020-01-24", event.getDate_of_event().toString());
+    assertEquals("2021-03-31", event.getDate_of_event().toString());
   }
 
 }

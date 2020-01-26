@@ -30,8 +30,6 @@ class QueryTests extends SignupDbTests {
     assertEquals("1", response.get("$.data.allEvents[0].id"));
     assertEquals("Marcus Event", response.get("$.data.allEvents[0].title"));
     assertEquals("Party party.", response.get("$.data.allEvents[0].description"));
-
-    // todo: BUG: date is not read properly from db
-    //assertEquals("2020-01-24", response.get("$.data.allEvents[0].date_of_event"));
+    assertEquals("2021-03-31", response.get("$.data.allEvents[0].date_of_event"));
   }
 }
