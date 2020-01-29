@@ -4,12 +4,14 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
+import org.springframework.stereotype.Repository;
 import se.expleostockholm.signup.domain.Attendance;
 import se.expleostockholm.signup.domain.Invitation;
 
 import java.util.Optional;
 
 @Mapper
+@Repository
 public interface InvitationMapper {
 
     @Select("SELECT * from invitation WHERE id = #{invitation_id}")

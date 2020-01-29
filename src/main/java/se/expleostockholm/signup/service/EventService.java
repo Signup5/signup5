@@ -1,4 +1,4 @@
-package se.expleostockholm.signup.services;
+package se.expleostockholm.signup.service;
 
 import org.springframework.stereotype.Service;
 import se.expleostockholm.signup.domain.Event;

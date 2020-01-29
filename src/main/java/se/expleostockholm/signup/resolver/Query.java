@@ -1,30 +1,35 @@
 package se.expleostockholm.signup.resolver;
 
 import com.coxautodev.graphql.tools.GraphQLQueryResolver;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
-import se.expleostockholm.signup.domain.Attendance;
 import se.expleostockholm.signup.domain.Event;
 import se.expleostockholm.signup.domain.Invitation;
-import se.expleostockholm.signup.repository.InvitationMapper;
-import se.expleostockholm.signup.services.EventService;
+import se.expleostockholm.signup.service.EventService;
+import se.expleostockholm.signup.service.InvitationService;
 
-import javax.annotation.Resource;
 import java.util.List;
 
 @Component
+@Slf4j
 public class Query implements GraphQLQueryResolver {
 
-    @Resource
+
     private EventService eventService;
-    @Resource
-    private InvitationMapper invitationMapper;
+    private InvitationService invitationService;
+
+    public Query(EventService eventService, InvitationService invitationService) {
+        this.eventService = eventService;
+        this.invitationService = invitationService;
+    }
 
     public List<Event> allEvents() {
+        log.info("hejsansvesja");
         return eventService.getAllEvents();
     }
 
     public Invitation getInvitationById(Long id) {
-        return invitationMapper.getInvitationById(id).get();
+        return invitationService.getInvitationById(id).get();
     }
 
 }
