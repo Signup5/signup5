@@ -17,7 +17,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 @Testcontainers
 @SpringBootTest
 @ContextConfiguration(initializers = {SignupDbTests.Initializer.class})
-public class InvitationServiceTests {
+public class InvitationServiceTests extends SignupDbTests{
 
     @Resource
     private InvitationService invitationService;
