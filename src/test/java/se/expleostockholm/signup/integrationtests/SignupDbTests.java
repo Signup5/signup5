@@ -10,22 +10,22 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public abstract class SignupDbTests {
 
-  @Container
-  protected static SignupDbTestcontainer dbTestContainer = SignupDbTestcontainer.getInstance();
+    @Container
+    protected static SignupDbTestcontainer dbTestContainer = SignupDbTestcontainer.getInstance();
 
-  @Test
-  void verifyThatTestDbIsRunning() {
-    assertTrue(dbTestContainer.isRunning());
-  }
-
-  static class Initializer
-    implements ApplicationContextInitializer<ConfigurableApplicationContext> {
-    public void initialize(ConfigurableApplicationContext configurableApplicationContext) {
-      TestPropertyValues.of(
-        "spring.datasource.url=" + dbTestContainer.getJdbcUrl(),
-        "spring.datasource.username=" + dbTestContainer.getUsername(),
-        "spring.datasource.password=" + dbTestContainer.getPassword()
-      ).applyTo(configurableApplicationContext.getEnvironment());
+    @Test
+    void verifyThatTestDbIsRunning() {
+        assertTrue(dbTestContainer.isRunning());
     }
-  }
+
+    static class Initializer
+            implements ApplicationContextInitializer<ConfigurableApplicationContext> {
+        public void initialize(ConfigurableApplicationContext configurableApplicationContext) {
+            TestPropertyValues.of(
+                    "spring.datasource.url=" + dbTestContainer.getJdbcUrl(),
+                    "spring.datasource.username=" + dbTestContainer.getUsername(),
+                    "spring.datasource.password=" + dbTestContainer.getPassword()
+            ).applyTo(configurableApplicationContext.getEnvironment());
+        }
+    }
 }

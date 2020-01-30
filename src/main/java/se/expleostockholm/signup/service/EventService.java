@@ -10,8 +10,11 @@ import java.util.List;
 @Service
 public class EventService {
 
-    @Resource
     private EventMapper eventMapper;
+
+    public EventService(EventMapper eventMapper) {
+        this.eventMapper = eventMapper;
+    }
 
     public List<Event> getAllEvents() {
         return eventMapper.getAllEvents();

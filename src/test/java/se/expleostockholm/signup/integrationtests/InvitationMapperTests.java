@@ -19,22 +19,21 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 @ContextConfiguration(initializers = {SignupDbTests.Initializer.class})
 class InvitationMapperTests extends SignupDbTests {
 
-  @Resource
-  private InvitationMapper invitationMapper;
+    @Resource
+    private InvitationMapper invitationMapper;
 
-  @Test
-  void verifyGetInvitation(){
-    Optional<Invitation> invitationOption = invitationMapper.getInvitationById(1L);
-    assertTrue(invitationOption.isPresent());
-    assertEquals(1L, invitationOption.get().getEvent_id());
-  }
+    @Test
+    void verify_getInvitation() {
+        Optional<Invitation> invitationOption = invitationMapper.getInvitationById(1L);
+        assertTrue(invitationOption.isPresent());
+        assertEquals(1L, invitationOption.get().getEvent_id());
+    }
 
-  @Test
-  void verifySetAttendance(){
-    invitationMapper.setAttendance(Attendance.MAYBE, 1L);
-    Optional<Invitation> invitationOption = invitationMapper.getInvitationById(1L);
-    assertTrue(invitationOption.isPresent());
-    assertEquals(Attendance.MAYBE, invitationOption.get().getAttendance());
-  }
-
+    @Test
+    void verify_setAttendance() {
+        invitationMapper.setAttendance(Attendance.MAYBE, 1L);
+        Optional<Invitation> invitationOption = invitationMapper.getInvitationById(1L);
+        assertTrue(invitationOption.isPresent());
+        assertEquals(Attendance.MAYBE, invitationOption.get().getAttendance());
+    }
 }

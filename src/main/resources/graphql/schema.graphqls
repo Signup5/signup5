@@ -2,6 +2,7 @@ enum Attendance {
     ATTENDING
     NOT_ATTENDING
     MAYBE
+    NO_RESPONSE
 }
 
 type Event {

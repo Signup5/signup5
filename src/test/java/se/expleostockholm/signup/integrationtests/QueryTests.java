@@ -19,17 +19,17 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 @ContextConfiguration(initializers = {SignupDbTests.Initializer.class})
 class QueryTests extends SignupDbTests {
 
-  @Resource
-  private GraphQLTestTemplate graphQLTestTemplate;
+    @Resource
+    private GraphQLTestTemplate graphQLTestTemplate;
 
- @Test
-  public void allEventsTest() throws IOException {
-    GraphQLResponse response = graphQLTestTemplate.perform("queries/allEvents.graphql", null);
+    @Test
+    public void allEventsTest() throws IOException {
+        GraphQLResponse response = graphQLTestTemplate.perform("queries/allEvents.graphql", null);
 
-    assertTrue(response.isOk());
-    assertEquals("1", response.get("$.data.allEvents[0].id"));
-    assertEquals("Marcus Event", response.get("$.data.allEvents[0].title"));
-    assertEquals("Party party.", response.get("$.data.allEvents[0].description"));
-    assertEquals("2021-03-31", response.get("$.data.allEvents[0].date_of_event"));
-  }
+        assertTrue(response.isOk());
+        assertEquals("1", response.get("$.data.allEvents[0].id"));
+        assertEquals("Marcus Event", response.get("$.data.allEvents[0].title"));
+        assertEquals("Party party.", response.get("$.data.allEvents[0].description"));
+        assertEquals("2021-03-31", response.get("$.data.allEvents[0].date_of_event"));
+    }
 }

@@ -29,7 +29,7 @@ public class Query implements GraphQLQueryResolver {
     }
 
     public Invitation getInvitationById(Long id) {
-        return invitationService.getInvitationById(id).get();
+        return invitationService.getInvitationById(id);
     }
 
 }

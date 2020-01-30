@@ -11,23 +11,21 @@ import javax.annotation.Resource;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @Testcontainers
 @SpringBootTest
 @ContextConfiguration(initializers = {SignupDbTests.Initializer.class})
 class EventMapperTests extends SignupDbTests {
 
-  @Resource
-  private EventMapper eventMapper;
+    @Resource
+    private EventMapper eventMapper;
 
-  @Test
-  void verifyGetAllEvents() {
-    List<Event> events = eventMapper.getAllEvents();
-    assertEquals(1, events.size());
-    Event event = events.get(0);
-    assertEquals("Marcus Event", event.getTitle());
-    assertEquals("2021-03-31", event.getDate_of_event().toString());
-  }
-
+    @Test
+    void verify_getAllEvents() {
+        List<Event> events = eventMapper.getAllEvents();
+        assertEquals(1, events.size());
+        Event event = events.get(0);
+        assertEquals("Marcus Event", event.getTitle());
+        assertEquals("2021-03-31", event.getDate_of_event().toString());
+    }
 }
