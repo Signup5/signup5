@@ -1,0 +1,5 @@
+query GetInvitationById($invitation_id: Int){
+    invitation: getInvitationById (id: $invitation_id) {
+        attendance
+    }
+}

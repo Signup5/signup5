@@ -17,13 +17,15 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 @Testcontainers
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ContextConfiguration(initializers = {SignupDbTests.Initializer.class})
-class QueryTests extends SignupDbTests {
+class MutationTests extends SignupDbTests {
 
     @Resource
     private GraphQLTestTemplate graphQLTestTemplate;
 
     @Test
-    public void allEventsTest() throws IOException {
+    public void setAttendanceTest() throws IOException {
+
+
         GraphQLResponse response = graphQLTestTemplate.perform("queries/allEvents.graphql", null);
 
         assertTrue(response.isOk());
