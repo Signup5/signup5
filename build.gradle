@@ -9,9 +9,6 @@ version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '11'
 
 configurations {
-    cucumberRuntime {
-        extendsFrom testImplementation
-    }
     developmentOnly
     runtimeClasspath {
         extendsFrom developmentOnly
@@ -45,14 +42,7 @@ dependencies {
 
     runtimeOnly 'org.postgresql:postgresql'
 
-    testImplementation('org.springframework.boot:spring-boot-starter-test') {
-        exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
-    }
-
-    testImplementation 'io.cucumber:cucumber-java8:5.1.2'
-    testImplementation 'io.cucumber:cucumber-junit:5.1.2'
-    testImplementation 'io.cucumber:cucumber-spring:5.1.2'
-
+    testImplementation('org.springframework.boot:spring-boot-starter-test')
 
     testImplementation "org.testcontainers:testcontainers:1.12.3"
     testImplementation "org.testcontainers:postgresql:1.12.3"
@@ -62,15 +52,3 @@ dependencies {
 test {
     useJUnitPlatform()
 }
-
-//
-//task cucumber() {
-//    dependsOn assemble, compileTestJava
-//    doLast {
-//        javaexec {
-//            main = "io.cucumber.core.cli.Main"
-//            classpath = configurations.cucumberRuntime + sourceSets.main.output + sourceSets.test.output
-//            args = ['--plugin', 'pretty', '--glue', 'stepDefinitions', 'src/test/resources/features']
-//        }
-//    }
-//}

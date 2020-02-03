@@ -1,8 +1,10 @@
 package se.expleostockholm.signup.integrationtests;
 
 
+import org.springframework.boot.test.context.SpringBootTest;
 import org.testcontainers.containers.PostgreSQLContainer;
 
+@SpringBootTest()
 public class SignupDbTestcontainer extends PostgreSQLContainer<SignupDbTestcontainer> {
     private static final String IMAGE_VERSION = "postgres:12";
     private static SignupDbTestcontainer container;
@@ -16,7 +18,8 @@ public class SignupDbTestcontainer extends PostgreSQLContainer<SignupDbTestconta
             container = new SignupDbTestcontainer()
                     .withDatabaseName("signup")
                     .withUsername("postgres")
-                    .withPassword("password");
+                    .withPassword("password")
+                    .withExposedPorts(5432);
         }
         return container;
     }

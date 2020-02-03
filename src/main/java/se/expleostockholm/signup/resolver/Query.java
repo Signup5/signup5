@@ -24,7 +24,6 @@ public class Query implements GraphQLQueryResolver {
     }
 
     public List<Event> allEvents() {
-        log.info("hejsansvejsan");
         return eventService.getAllEvents();
     }
 

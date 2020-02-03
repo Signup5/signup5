@@ -5,23 +5,33 @@ enum Attendance {
     NO_RESPONSE
 }
 
+type Person {
+    id: ID!
+    email: String!
+    first_name: String
+    last_name: String
+}
+
 type Event {
     id: ID!
-    title: String
+    title: String!
     description: String
-    date_of_event: String
+    date_of_event: String!
 }
 
 type Invitation {
     id: ID!
-    person_id: Int
-    event_id: Int
-    attendance: Attendance
+    guest: Person!
+    event: Event!
+    attendance: Attendance!
 }
 
 type Query {
     allEvents: [Event]
+    getEventById(id: Int): Event
     getInvitationById(id: Int): Invitation
+    allPersons: [Person]
+    getPersonById(id: Int): Person
 }
 
 type Mutation {
