@@ -32,8 +32,6 @@ type Query {
     allEvents: [Event]
     getEventById(id: Int): Event
     getInvitationById(id: Int): Invitation
-#    allPersons: [Person]
-#    getPersonById(id: Int): Person
 }
 
 type Mutation {

@@ -26,7 +26,7 @@ class InvitationMapperTests extends SignupDbTests {
     void verify_getInvitation() {
         Optional<Invitation> invitationOption = invitationMapper.getInvitationById(1L);
         assertTrue(invitationOption.isPresent());
-        assertEquals(1L, invitationOption.get().getEvent_id());
+        assertEquals(1L, invitationOption.get().getEvent().getId());
     }
 
     @Test
