@@ -14,9 +14,11 @@ type Person {
 
 type Event {
     id: ID!
+    host: Person!
     title: String!
     description: String
     date_of_event: String!
+    location: String
 }
 
 type Invitation {

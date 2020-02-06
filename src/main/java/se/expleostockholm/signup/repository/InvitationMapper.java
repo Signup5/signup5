@@ -22,11 +22,6 @@ public interface InvitationMapper {
     })
     Optional<Invitation> getInvitationById(Long id);
 
-
-
-
     @Update("UPDATE invitation SET attendance=#{attendance}::attendance WHERE id = #{invitation_id}")
     Long setAttendance(@Param("attendance") Attendance attendance, @Param("invitation_id") Long invitation_id);
-
-
 }

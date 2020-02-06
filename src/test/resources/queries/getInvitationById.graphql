@@ -1,5 +1,11 @@
 query GetInvitationById($invitation_id: Int){
     invitation: getInvitationById (id: $invitation_id) {
+        event {
+            id
+            title
+            description
+            date_of_event
+        }
         attendance
     }
 }
