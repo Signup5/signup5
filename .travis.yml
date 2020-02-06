@@ -1,0 +1,8 @@
+language: java
+
+services:
+  - docker
+
+before_install:
+  - docker pull postgres
+  - docker run --name pg_signup5 -e POSTGRES_USER=postgres -e POSTGRES_PASSWORD=password -e POSTGRES_DB=signup -p 5432:5432 -d postgres:12
