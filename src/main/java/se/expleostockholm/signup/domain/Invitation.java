@@ -1,13 +1,17 @@
 package se.expleostockholm.signup.domain;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
 @Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class Invitation {
     private Long id;
-    private Long person_id;
-    private Long event_id;
+    private Person person;
+    private Event event;
     private Attendance attendance;
 }

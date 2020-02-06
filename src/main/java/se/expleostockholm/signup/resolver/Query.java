@@ -1,34 +1,37 @@
 package se.expleostockholm.signup.resolver;
 
 import com.coxautodev.graphql.tools.GraphQLQueryResolver;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import se.expleostockholm.signup.domain.Event;
 import se.expleostockholm.signup.domain.Invitation;
-import se.expleostockholm.signup.service.EventService;
-import se.expleostockholm.signup.service.InvitationService;
+import se.expleostockholm.signup.exception.EventNotFoundException;
+import se.expleostockholm.signup.exception.InvitationNotFoundException;
+import se.expleostockholm.signup.repository.EventMapper;
+import se.expleostockholm.signup.repository.InvitationMapper;
 
 import java.util.List;
 
 @Component
-@Slf4j
 public class Query implements GraphQLQueryResolver {
 
+    private InvitationMapper invitationMapper;
+    private EventMapper eventMapper;
 
-    private EventService eventService;
-    private InvitationService invitationService;
-
-    public Query(EventService eventService, InvitationService invitationService) {
-        this.eventService = eventService;
-        this.invitationService = invitationService;
+    public Query(InvitationMapper invitationMapper, EventMapper eventMapper) {
+        this.invitationMapper = invitationMapper;
+        this.eventMapper = eventMapper;
     }
 
     public List<Event> allEvents() {
-        return eventService.getAllEvents();
+        return eventMapper.getAllEvents();
     }
 
     public Invitation getInvitationById(Long id) {
-        return invitationService.getInvitationById(id);
+        return invitationMapper.getInvitationById(id).orElseThrow(() -> new InvitationNotFoundException("No invitation found!"));
+    }
+
+    public Event getEventById(Long id) {
+        return eventMapper.getEventById(id).orElseThrow(() -> new EventNotFoundException("No event found!"));
     }
 
 }

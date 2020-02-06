@@ -21,7 +21,7 @@ type Event {
 
 type Invitation {
     id: ID!
-    guest: Person!
+    person: Person!
     event: Event!
     attendance: Attendance!
 }
@@ -30,8 +30,8 @@ type Query {
     allEvents: [Event]
     getEventById(id: Int): Event
     getInvitationById(id: Int): Invitation
-    allPersons: [Person]
-    getPersonById(id: Int): Person
+#    allPersons: [Person]
+#    getPersonById(id: Int): Person
 }
 
 type Mutation {
