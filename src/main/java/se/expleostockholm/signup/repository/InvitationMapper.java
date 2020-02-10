@@ -15,7 +15,7 @@ public interface InvitationMapper {
 
     @Select("SELECT * from invitation WHERE id = #{id}")
     @Results({
-            @Result(property = "person", column = "person_id",
+            @Result(property = "guest", column = "guest_id",
                     one = @One(select = "se.expleostockholm.signup.repository.PersonMapper.getPersonById")),
             @Result(property = "event", column = "event_id",
                     one = @One(select = "se.expleostockholm.signup.repository.EventMapper.getEventById"))

@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class Invitation {
     private Long id;
-    private Person person;
+    private Person guest;
     private Event event;
     private Attendance attendance;
 }

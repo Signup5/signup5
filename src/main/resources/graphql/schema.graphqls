@@ -23,7 +23,7 @@ type Event {
 
 type Invitation {
     id: ID!
-    person: Person!
+    guest: Person!
     event: Event!
     attendance: Attendance!
 }
