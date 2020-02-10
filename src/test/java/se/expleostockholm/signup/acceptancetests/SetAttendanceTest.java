@@ -27,46 +27,50 @@ public class SetAttendanceTest extends SignupDbTests {
     @Autowired
     private GraphQLTestTemplate graphQLTestTemplate;
 
+    private ObjectNode queryVariables;
+
+    private static Long invitation_id = 1L;
+    private static String expectedMessage_positive = "Attendance was updated!";
+
+
     private static Stream<Arguments> providedData() {
         return Stream.of(
-                Arguments.of(1L, Attendance.ATTENDING),
-                Arguments.of(1L, Attendance.NOT_ATTENDING),
-                Arguments.of(1L, Attendance.MAYBE),
-                Arguments.of(1L, Attendance.NO_RESPONSE)
+                Arguments.of(invitation_id, Attendance.ATTENDING, expectedMessage_positive),
+                Arguments.of(invitation_id, Attendance.NOT_ATTENDING, expectedMessage_positive),
+                Arguments.of(invitation_id, Attendance.MAYBE, expectedMessage_positive),
+                Arguments.of(invitation_id, Attendance.NO_RESPONSE, expectedMessage_positive)
         );
     }
 
     @ParameterizedTest
     @MethodSource("providedData")
-    public void verify_setAttendance_success(Long invitationId, Attendance attendance) throws IOException {
-        ObjectNode queryVariables = variables(invitationId, attendance);
+    public void setAttendance_test(Long invitationId, Attendance attendance, String expectedMessage) throws IOException {
+        queryVariables = setQueryVariables(invitationId, attendance);
+        String responseMessage = when_person_responds_with_attendance(queryVariables);
 
-        String responseMessage = setAttendance(queryVariables);
-        Attendance newAttendance = getAttendance(queryVariables);
-
-        String expectedMessage = "Attendance was updated!";
-        Attendance expectedAttendance = attendance;
-
-        assertAll(
-                () -> assertEquals(expectedMessage, responseMessage),
-                () -> assertEquals(expectedAttendance, newAttendance)
-        );
+        then_person_gets_response_message(responseMessage, expectedMessage);
+        and_invitation_status_is_updated_to_attendance(attendance);
     }
 
-
-    public String setAttendance(ObjectNode variables) throws IOException {
+    public String when_person_responds_with_attendance(ObjectNode variables) throws IOException {
         return graphQLTestTemplate
                 .perform("queries/setAttendance.graphql", variables)
                 .get("$.data.message");
     }
 
-    public Attendance getAttendance(ObjectNode variables) throws IOException {
-        return Attendance.valueOf(graphQLTestTemplate
-                .perform("queries/getInvitationById.graphql", variables)
-                .get("$.data.invitation.attendance"));
+    public void then_person_gets_response_message(String responseMessage, String expectedMessage) {
+        assertEquals(expectedMessage, responseMessage);
     }
 
-    public ObjectNode variables(Long invitationId, Attendance attendance) {
+    public void and_invitation_status_is_updated_to_attendance(Attendance expectedAttendance) throws IOException {
+        Attendance actualAttendance = Attendance.valueOf(graphQLTestTemplate
+                .perform("queries/getInvitationById.graphql", queryVariables)
+                .get("$.data.invitation.attendance"));
+
+        assertEquals(expectedAttendance, actualAttendance);
+    }
+
+    public ObjectNode setQueryVariables(Long invitationId, Attendance attendance) {
         ObjectNode queryVariables = new ObjectMapper().createObjectNode();
         queryVariables.put("attendance", attendance.toString());
         queryVariables.put("invitation_id", invitationId);
