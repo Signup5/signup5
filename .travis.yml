@@ -1,16 +1,14 @@
 language: java
 jdk:
-  - openjdk13
-
+- openjdk13
 os:
-  - linux
-
+- linux
 before_install:
-  - chmod +x gradlew
-
+- chmod +x gradlew
 deploy:
   provider: heroku
   api_key:
-    secure: dpuSsMbifkvBQ1kUZ7fTp2gxUuES34SQVMvcyCQBXmmdKIOtxeEuGmiYSSvOfWYh4+7x4mNhC9TGgCI93QYHveGZwuU9Zz3N9vxdhWBwO+pGoCp3jvpQTq+cyUt13bKPKg6LxNfgGb5kC/L1V/MDlDqTqrq+sAjn6dYaseuz05h7ayD95uszlzHFiLfygTePffXedVUBA9oBwbHnnm1Z2Yebe0wOREeoVY8K/Hb38c5iZjAyc2O+ExIMnOioIoNbvprAVI3NeT+nr5gRTpOCei+K1rkrQLkgxTvQq6LE+pIXROsUo1n0sTdKpPqJ/wSKowkdr8d20We4G+7S5a0cu65Y/nGFJkHmzq7C2AhI7o8PLWxq3ZGSzBGwXSbkl+qFoPmblog8pkMaCtpqCRTjbXwpC0UYGpIHYaoA10AUCJVZbXPtP/vPCcYbh+gqudOHpu4medWKpfRP9RyLfAE1sjhWO9SokCLlhx13bM8kGSwTbvaPHrfTS+mMfOoVGjLbPYNcOdEBbrASsBVLczlILJjBFNutqmem+QjSWRfCpOYEm5ciw1eSssB9TvvwsvpSWUx2+zlNrhpLU+xCRnyslfJk1OWl7TzI9vcAP6gRBw/a0AQo3lXn6QxOFMekHJR0OxUM4qzXMdCgbz93w0j5yK9Z8hKqrY5ydgUEOBt7z6I=
-  app:
-    master: signup5-dev
+    secure: VxvdKRUKvdx7gyvHkOcqer5TDGG+FIRov9T3z9S0D1XfCmnMeVId+kVg09HmyanWPbAITE3pLefTN6rd8DV3G6zWWp3R8fUQWX4eDaVQiXJR5CpcagmPYzPENlyY6y0/t83iPXqtQyDMRvEte8pVp3bSPNyqQZIm6GsOBwjPQM5/kZ9Dnmt2qFzSgKYaYrXttHEga9zTrnou1vVPOcR9IM5HM5/cQZ/J1Ej5nOdOv6ztb2xWKlmrp/5TsZ6O4XwjUuZb5o8nL2BZsKFJt/Egsm3zLk4GuovzAIJseNOJC7utQ+DYeJbrU1wY1d94aysZlCZDGKJXyBf+6NG5QH8qm7Lpi9z8WkWELuIdMeXXNl/T6gxTpbKLEHUgkU2PomiQHCdxQQpQWJlxHnXJocHEt3V5o3mewBQyvCSoYtAKioBWovSOihsxIv80LYGnrAYQ82sZ+LdRJO+oAz4GNPoq4iwvKZsKVcLrQJ/fzlGu6iThtrBt0qvlswjc0Zxv8y2AB5HPY9UBLXqP4Q9LyyY0s96dh3RlFx4NNZEUtDo5c2E6QTZTPwLx5yVeYfxWXE8vAGwAAIu549XjnPgWgk5ezZX8/ox55cvOrmwzVWqLaePf0YBXjmLspg7b04/CD7cXl22peBbfnESBnMQY57CEpIYbaSXDn9WR5XhC7BdJ6qo=
+  app: signup5-dev
+  on:
+    repo: Signup5/signup5
