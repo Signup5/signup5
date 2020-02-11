@@ -20,7 +20,6 @@ import static org.junit.jupiter.api.Assertions.*;
 @Testcontainers
 @SpringBootTest
 @ContextConfiguration(initializers = {SignupDbTests.Initializer.class})
-@Slf4j
 class InvitationMapperTest extends SignupDbTests {
 
     @Resource
@@ -28,26 +27,14 @@ class InvitationMapperTest extends SignupDbTests {
 
     @Test
     void verify_getInvitation() {
-        Optional<Invitation> invitation = invitationMapper.getInvitationById(1L);
+        Optional<Invitation> invitation = invitationMapper.getInvitationById(2L);
 
-        Logger logger = LoggerFactory.getLogger(InvitationMapperTest.class);
-
-        logger.error("---------------\n" + invitation.get().toString());
-
-        assertTrue(invitation.isPresent(), "No invitation found!");
-        assertEquals(6L, invitation.get().getEvent().getId(), "Event id did not match!");
-        assertEquals(40L, invitation.get().getGuest().getId(), "Guest id did not match!");
-        assertEquals(Attendance.NO_RESPONSE, invitation.get().getAttendance(), "Attendance did not match!");
-
-                /*
         assertAll(
                 () -> assertTrue(invitation.isPresent(), "No invitation found!"),
-                () -> assertEquals(6L, invitation.get().getEvent().getId(), "Event id did not match!"),
-                () -> assertEquals(40L, invitation.get().getGuest().getId(), "Guest id did not match!"),
-                () -> assertEquals(Attendance.NO_RESPONSE, invitation.get().getAttendance(), "Attendance did not match!")
+                () -> assertEquals(2L, invitation.get().getEvent().getId(), "Event id did not match!"),
+                () -> assertEquals(30L, invitation.get().getGuest().getId(), "Guest id did not match!"),
+                () -> assertEquals(Attendance.NOT_ATTENDING, invitation.get().getAttendance(), "Attendance did not match!")
         );
-
-                 */
     }
 
     @Test
