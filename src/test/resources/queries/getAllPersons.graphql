@@ -1,0 +1,8 @@
+query {
+    getAllPersons {
+        id
+        email
+        first_name
+        last_name
+    }
+}

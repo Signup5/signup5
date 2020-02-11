@@ -47,7 +47,9 @@ insert into person (id, first_name, last_name, email) values (46, 'Sergeant', 'B
 insert into person (id, first_name, last_name, email) values (47, 'Tedda', 'Lampkin', 'tlampkin1a@nifty.com');
 insert into person (id, first_name, last_name, email) values (48, 'Michaela', 'Mingardo', 'mmingardo1b@google.it');
 insert into person (id, first_name, last_name, email) values (49, 'Brittne', 'Sumsion', 'bsumsion1c@wufoo.com');
-insert into person (id, first_name, last_name, email) values (50, 'Brena', 'Portchmouth', 'bportchmouth1d@github.io');insert into event (id, host_id, title, description, date_of_event, location) values (1, 18, 'That Championship Season', 'Enhanced discrete moderator', '2020-09-04', '9982 Coleman Terrace');
+insert into person (id, first_name, last_name, email) values (50, 'Brena', 'Portchmouth', 'bportchmouth1d@github.io');
+
+insert into event (id, host_id, title, description, date_of_event, location) values (1, 18, 'That Championship Season', 'Enhanced discrete moderator', '2020-09-04', '9982 Coleman Terrace');
 insert into event (id, host_id, title, description, date_of_event, location) values (2, 32, 'Next Three Days, The', 'Reactive high-level infrastructure', '2020-08-30', '446 Forest Run Trail');
 insert into event (id, host_id, title, description, date_of_event, location) values (3, 36, 'In the Folds of the Flesh', 'Cloned well-modulated functionalities', '2020-07-18', '74 Kenwood Trail');
 insert into event (id, host_id, title, description, date_of_event, location) values (4, 16, 'Something Wild', 'Streamlined scalable moderator', '2020-12-23', '5 Manufacturers Way');
@@ -56,7 +58,9 @@ insert into event (id, host_id, title, description, date_of_event, location) val
 insert into event (id, host_id, title, description, date_of_event, location) values (7, 4, 'Black Dog', 'Persevering clear-thinking database', '2020-07-08', '87861 Pennsylvania Crossing');
 insert into event (id, host_id, title, description, date_of_event, location) values (8, 46, '8: The Mormon Proposition', 'Centralized object-oriented Graphical User Interface', '2020-07-08', '8409 Iowa Crossing');
 insert into event (id, host_id, title, description, date_of_event, location) values (9, 10, 'Hansel & Gretel', 'Quality-focused tangible focus group', '2020-06-07', '7828 Lillian Plaza');
-insert into event (id, host_id, title, description, date_of_event, location) values (10, 13, 'The Castle of Fu Manchu', 'Multi-tiered scalable strategy', '2021-01-20', '6956 Nelson Pass');insert into invitation (id, event_id, guest_id, attendance) values (1, 6, 40, 'NO_RESPONSE');
+insert into event (id, host_id, title, description, date_of_event, location) values (10, 13, 'The Castle of Fu Manchu', 'Multi-tiered scalable strategy', '2021-01-20', '6956 Nelson Pass');
+
+insert into invitation (id, event_id, guest_id, attendance) values (1, 6, 40, 'NO_RESPONSE');
 insert into invitation (id, event_id, guest_id, attendance) values (2, 2, 30, 'NOT_ATTENDING');
 insert into invitation (id, event_id, guest_id, attendance) values (3, 7, 42, 'ATTENDING');
 insert into invitation (id, event_id, guest_id, attendance) values (4, 2, 10, 'NO_RESPONSE');

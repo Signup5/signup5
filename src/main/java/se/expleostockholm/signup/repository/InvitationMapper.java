@@ -27,5 +27,11 @@ public interface InvitationMapper {
     Long setAttendance(@Param("attendance") Attendance attendance, @Param("invitation_id") Long invitation_id);
 
     @Select("SELECT * FROM invitation")
+    @Results({
+            @Result(property = "guest", column = "guest_id",
+                    one = @One(select = "se.expleostockholm.signup.repository.PersonMapper.getPersonById")),
+            @Result(property = "event", column = "event_id",
+                    one = @One(select = "se.expleostockholm.signup.repository.EventMapper.getEventById"))
+    })
     List<Invitation> getAllInvitations();
 }
