@@ -1,30 +1,24 @@
 language: java
 jdk:
-  - openjdk13
-
+- openjdk13
 os:
-  - linux
-
+- linux
 before_cache:
-  - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
-  - rm -fr $HOME/.gradle/caches/*/plugin-resolution/
-
+- rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
+- rm -fr $HOME/.gradle/caches/*/plugin-resolution/
 cache:
   directories:
-    - $HOME/.gradle/caches/
-    - $HOME/.gradle/wrapper/
-
+  - "$HOME/.gradle/caches/"
+  - "$HOME/.gradle/wrapper/"
 before_install:
-  - chmod +x gradlew
-
+- chmod +x gradlew
 branches:
   only:
-    - master
-
+  - master
 deploy:
   provider: heroku
   api_key:
-    secure: VxvdKRUKvdx7gyvHkOcqer5TDGG+FIRov9T3z9S0D1XfCmnMeVId+kVg09HmyanWPbAITE3pLefTN6rd8DV3G6zWWp3R8fUQWX4eDaVQiXJR5CpcagmPYzPENlyY6y0/t83iPXqtQyDMRvEte8pVp3bSPNyqQZIm6GsOBwjPQM5/kZ9Dnmt2qFzSgKYaYrXttHEga9zTrnou1vVPOcR9IM5HM5/cQZ/J1Ej5nOdOv6ztb2xWKlmrp/5TsZ6O4XwjUuZb5o8nL2BZsKFJt/Egsm3zLk4GuovzAIJseNOJC7utQ+DYeJbrU1wY1d94aysZlCZDGKJXyBf+6NG5QH8qm7Lpi9z8WkWELuIdMeXXNl/T6gxTpbKLEHUgkU2PomiQHCdxQQpQWJlxHnXJocHEt3V5o3mewBQyvCSoYtAKioBWovSOihsxIv80LYGnrAYQ82sZ+LdRJO+oAz4GNPoq4iwvKZsKVcLrQJ/fzlGu6iThtrBt0qvlswjc0Zxv8y2AB5HPY9UBLXqP4Q9LyyY0s96dh3RlFx4NNZEUtDo5c2E6QTZTPwLx5yVeYfxWXE8vAGwAAIu549XjnPgWgk5ezZX8/ox55cvOrmwzVWqLaePf0YBXjmLspg7b04/CD7cXl22peBbfnESBnMQY57CEpIYbaSXDn9WR5XhC7BdJ6qo=
+    secure: TmXgICChLr5PT4fCKywMlgj1Jxw28o7kGfsEHdAUYb1oEclP7KwDSkwaA1rPT9QciW8IXXYjU2sYmsKb8nwc7mbJZyXaq5yGmoeW6Zr16/UEQ+NQI4fn62NafSi7Zru1duOvHdM92HrNJ7ct/9Ukj54NSPzxacMyMujaB7wIrCDmJrhDwQVymuNiZRzOvilhzmjX9TSkLdswQFvylfqT0usdgymtDfAfWwuz5leYSHRI5dwSDCsLm7exLKANE0K/n/46z3XMMtD1JxLVGIUOn6pGlz+ISZ/AcpJNgAcGZshVJn6ynfxWRzzxh/ASVRtIHpenc7LC6JGtL/InMbmfVMDLm0s2j3lXfikGyEG9aYTQJSXuA+KyyZ2y+YV4Fmot7bTluhZWFOlVlX2lvwH4VMyEP94vFSVUP+jE7YxvV1x34lTwg4MEa8BpYo1nRFPVgO0FAjcX4CM4SoOJHSatodoy3kSh97NetjPRwJ0SKbSU86u4l06gbT9JPYB4i1Ws5MCYhH4HabBBzp2xoJR7+vxpBJ2a/Uv25DSdioEAXZVeW1784TAfGdqPd+fA8rsI1Di6AMN8K98lTmkLavWqtzgx722ydyMpDh3a1y9mswzWMV3TPsbS4jx5e1MsXhBXXNuBNmKXNYXKnoHVlsqmd9THCWEGNDtfyn67XkMDn4g=
   app: signup5-dev
   on:
     repo: Signup5/signup5
