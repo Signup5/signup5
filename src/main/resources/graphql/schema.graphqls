@@ -29,7 +29,9 @@ type Invitation {
 }
 
 type Query {
-    allEvents: [Event]
+    getAllPersons: [Person]
+    getAllEvents: [Event]
+    getAllInvitations: [Invitation]
     getEventById(id: Int): Event
     getInvitationById(id: Int): Invitation
 }
