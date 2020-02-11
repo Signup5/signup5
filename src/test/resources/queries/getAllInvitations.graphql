@@ -1,10 +1,10 @@
 query {
     getAllInvitations {
-        id
+        invitation_id: id
         event {
-            id
+            event_id: id
             host {
-                id
+                host_id: id
                 email
                 first_name
                 last_name
@@ -15,7 +15,7 @@ query {
             location
         }
         guest {
-            id
+            guest_id: id
             email
             first_name
             last_name
