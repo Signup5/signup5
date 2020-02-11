@@ -15,7 +15,6 @@ public class Mutation implements GraphQLMutationResolver {
     }
 
     public String setAttendance(Attendance attendance, Long invitation_id) {
-
         return invitationMapper.setAttendance(attendance, invitation_id) == 1 ?
                 "Attendance was updated!" : "Oops... something went wrong while updating attendance.";
     }
