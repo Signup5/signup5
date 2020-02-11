@@ -1,1 +1,0 @@
-ALTER TYPE attendance ADD VALUE 'NO_RESPONSE';

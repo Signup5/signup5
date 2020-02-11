@@ -1,4 +1,4 @@
-CREATE TYPE attendance AS ENUM ('ATTENDING', 'NOT_ATTENDING', 'MAYBE');
+CREATE TYPE attendance AS ENUM ('ATTENDING', 'NOT_ATTENDING', 'MAYBE', 'NO_RESPONSE');
 
 CREATE TABLE person
 (
@@ -7,7 +7,6 @@ CREATE TABLE person
     first_name VARCHAR(255),
     last_name  VARCHAR(255)
 );
-
 CREATE TABLE event
 (
     id            SERIAL PRIMARY KEY,
@@ -17,11 +16,10 @@ CREATE TABLE event
     date_of_event DATE,
     location      VARCHAR(255)
 );
-
 CREATE TABLE invitation
 (
-    id         SERIAL,
-    person_id  INT NOT NULL REFERENCES person (id),
-    event_id   INT NOT NULL REFERENCES event (id),
-    attendance attendance
+    id         SERIAL PRIMARY KEY,
+    guest_id   INT        NOT NULL REFERENCES person (id),
+    event_id   INT        NOT NULL REFERENCES event (id),
+    attendance attendance NOT NULL DEFAULT 'NO_RESPONSE'
 );
