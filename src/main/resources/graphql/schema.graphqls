@@ -18,13 +18,15 @@ type Event {
     title: String!
     description: String
     date_of_event: String!
+    time_of_event: String!
     location: String
+    invitations: [Invitation]
 }
 
 type Invitation {
     id: ID!
     guest: Person!
-    event: Event!
+    event_id: Int!
     attendance: Attendance!
 }
 

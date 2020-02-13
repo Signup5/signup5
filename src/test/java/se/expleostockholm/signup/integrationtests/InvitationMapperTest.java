@@ -1,10 +1,6 @@
 package se.expleostockholm.signup.integrationtests;
 
-import lombok.extern.java.Log;
-import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ContextConfiguration;
 import org.testcontainers.junit.jupiter.Testcontainers;
@@ -31,7 +27,7 @@ class InvitationMapperTest extends SignupDbTests {
 
         assertAll(
                 () -> assertTrue(invitation.isPresent(), "No invitation found!"),
-                () -> assertEquals(2L, invitation.get().getEvent().getId(), "Event id did not match!"),
+                () -> assertEquals(2L, invitation.get().getEvent_id(), "Event id did not match!"),
                 () -> assertEquals(30L, invitation.get().getGuest().getId(), "Guest id did not match!"),
                 () -> assertEquals(Attendance.NOT_ATTENDING, invitation.get().getAttendance(), "Attendance did not match!")
         );

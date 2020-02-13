@@ -8,7 +8,6 @@ import se.expleostockholm.signup.domain.Person;
 import se.expleostockholm.signup.repository.PersonMapper;
 
 import javax.annotation.Resource;
-
 import java.util.List;
 import java.util.Optional;
 

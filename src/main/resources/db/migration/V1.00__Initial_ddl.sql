@@ -10,7 +10,7 @@ CREATE TABLE person
 CREATE TABLE event
 (
     id            SERIAL PRIMARY KEY,
-    host_id       INT NOT NULL,
+    host_id       INT NOT NULL REFERENCES person (id),
     title         VARCHAR(255),
     description   VARCHAR(255),
     date_of_event DATE,

@@ -3,9 +3,7 @@ package se.expleostockholm.signup.repository;
 import org.apache.ibatis.annotations.*;
 import org.springframework.stereotype.Repository;
 import se.expleostockholm.signup.domain.Attendance;
-import se.expleostockholm.signup.domain.Event;
 import se.expleostockholm.signup.domain.Invitation;
-import se.expleostockholm.signup.domain.Person;
 
 import java.util.List;
 import java.util.Optional;
@@ -17,9 +15,7 @@ public interface InvitationMapper {
     @Select("SELECT * from invitation WHERE id = #{id}")
     @Results({
             @Result(property = "guest", column = "guest_id",
-                    one = @One(select = "se.expleostockholm.signup.repository.PersonMapper.getPersonById")),
-            @Result(property = "event", column = "event_id",
-                    one = @One(select = "se.expleostockholm.signup.repository.EventMapper.getEventById"))
+                    one = @One(select = "se.expleostockholm.signup.repository.PersonMapper.getPersonById"))
     })
     Optional<Invitation> getInvitationById(Long id);
 
@@ -29,9 +25,19 @@ public interface InvitationMapper {
     @Select("SELECT * FROM invitation")
     @Results({
             @Result(property = "guest", column = "guest_id",
-                    one = @One(select = "se.expleostockholm.signup.repository.PersonMapper.getPersonById")),
-            @Result(property = "event", column = "event_id",
-                    one = @One(select = "se.expleostockholm.signup.repository.EventMapper.getEventById"))
+                    one = @One(select = "se.expleostockholm.signup.repository.PersonMapper.getPersonById"))
     })
     List<Invitation> getAllInvitations();
+
+    @Select("SELECT * FROM invitation WHERE event_id = #{id}")
+    @Results({
+            @Result(property = "guest", column = "guest_id",
+                    one = @One(select = "se.expleostockholm.signup.repository.PersonMapper.getPersonById"))
+    })
+    List<Invitation> getInvitationByEventId(Long id);
+
+    @Insert("INSERT INTO invitation (guest_id, event_id) VALUES (#{guest.id}, #{event_id})")
+    @Options(useGeneratedKeys=true, keyProperty="id", keyColumn="id")
+    void saveInvitation(Invitation invitation);
+
 }

@@ -1,7 +1,5 @@
 package se.expleostockholm.signup.integrationtests;
 
-import com.graphql.spring.boot.test.GraphQLResponse;
-import com.graphql.spring.boot.test.GraphQLTestTemplate;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ContextConfiguration;
@@ -12,10 +10,10 @@ import se.expleostockholm.signup.repository.InvitationMapper;
 import se.expleostockholm.signup.resolver.Mutation;
 
 import javax.annotation.Resource;
-import java.io.IOException;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 
 @Testcontainers

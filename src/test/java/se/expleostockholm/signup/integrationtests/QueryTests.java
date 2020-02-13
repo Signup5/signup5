@@ -9,6 +9,7 @@ import org.testcontainers.junit.jupiter.Testcontainers;
 
 import javax.annotation.Resource;
 import java.io.IOException;
+import java.time.LocalTime;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -31,6 +32,7 @@ class QueryTests extends SignupDbTests {
                 () -> assertEquals("That Championship Season", response.get("$.data.getAllEvents[0].title"), "Event title did not match!"),
                 () -> assertEquals("Enhanced discrete moderator", response.get("$.data.getAllEvents[0].description"), "Event description did not match!"),
                 () -> assertEquals("2020-09-04", response.get("$.data.getAllEvents[0].date_of_event"), "Date of event did not match!"),
+                () -> assertEquals(LocalTime.parse("12:00:00"), LocalTime.parse(response.get("$.data.getAllEvents[0].time_of_event")), "Time of event did not match"),
                 () -> assertEquals("9982 Coleman Terrace", response.get("$.data.getAllEvents[0].location"), "Event location did not match!"),
                 () -> assertEquals("18", response.get("$.data.getAllEvents[0].host.id"), "Host id did not match!")
         );

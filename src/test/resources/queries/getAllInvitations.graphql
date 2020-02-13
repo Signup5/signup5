@@ -1,19 +1,7 @@
 query {
     getAllInvitations {
         id
-        event {
-            id
-            host {
-                id
-                email
-                first_name
-                last_name
-            }
-            title
-            description
-            date_of_event
-            location
-        }
+        event_id
         guest {
             id
             email

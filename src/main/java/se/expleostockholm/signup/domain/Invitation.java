@@ -10,6 +10,6 @@ import lombok.*;
 public class Invitation {
     private Long id;
     private Person guest;
-    private Event event;
+    private Long event_id;
     private Attendance attendance;
 }
