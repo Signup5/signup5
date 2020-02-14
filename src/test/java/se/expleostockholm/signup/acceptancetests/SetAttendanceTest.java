@@ -17,7 +17,6 @@ import java.io.IOException;
 import java.util.stream.Stream;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertAll;
 
 @Testcontainers
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -31,16 +30,6 @@ public class SetAttendanceTest extends SignupDbTests {
 
     private static Long invitation_id = 1L;
     private static String expectedMessage_positive = "Attendance was updated!";
-
-
-    private static Stream<Arguments> providedData() {
-        return Stream.of(
-                Arguments.of(invitation_id, Attendance.ATTENDING, expectedMessage_positive),
-                Arguments.of(invitation_id, Attendance.NOT_ATTENDING, expectedMessage_positive),
-                Arguments.of(invitation_id, Attendance.MAYBE, expectedMessage_positive),
-                Arguments.of(invitation_id, Attendance.NO_RESPONSE, expectedMessage_positive)
-        );
-    }
 
     @ParameterizedTest
     @MethodSource("providedData")
@@ -68,6 +57,15 @@ public class SetAttendanceTest extends SignupDbTests {
                 .get("$.data.invitation.attendance"));
 
         assertEquals(expectedAttendance, actualAttendance);
+    }
+
+    private static Stream<Arguments> providedData() {
+        return Stream.of(
+                Arguments.of(invitation_id, Attendance.ATTENDING, expectedMessage_positive),
+                Arguments.of(invitation_id, Attendance.NOT_ATTENDING, expectedMessage_positive),
+                Arguments.of(invitation_id, Attendance.MAYBE, expectedMessage_positive),
+                Arguments.of(invitation_id, Attendance.NO_RESPONSE, expectedMessage_positive)
+        );
     }
 
     public ObjectNode setQueryVariables(Long invitationId, Attendance attendance) {

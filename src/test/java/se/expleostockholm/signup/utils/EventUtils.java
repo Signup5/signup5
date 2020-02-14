@@ -8,6 +8,8 @@ import java.time.LocalTime;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static se.expleostockholm.signup.utils.InvitationUtils.assertInvitationListsAreEqual;
+import static se.expleostockholm.signup.utils.PersonUtils.assertPersonsAreEqual;
 
 public class EventUtils {
 
@@ -30,7 +32,9 @@ public class EventUtils {
                 () -> assertEquals(expectedEvent.getTime_of_event(), actualEvent.get().getTime_of_event(), "Event time did not match!!"),
                 () -> assertEquals(expectedEvent.getDescription(), actualEvent.get().getDescription(), "Event description did not match!"),
                 () -> assertEquals(expectedEvent.getLocation(), actualEvent.get().getLocation(), "Event location did not match!"),
-                () -> assertEquals(expectedEvent.getTitle(), actualEvent.get().getTitle(), "Event title did not match!")
+                () -> assertEquals(expectedEvent.getTitle(), actualEvent.get().getTitle(), "Event title did not match!"),
+                () -> assertInvitationListsAreEqual(expectedEvent.getInvitations(), actualEvent.get().getInvitations()),
+                () -> assertPersonsAreEqual(expectedEvent.getHost(), actualEvent.get().getHost(), "Host")
         );
     }
 }

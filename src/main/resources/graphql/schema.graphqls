@@ -30,6 +30,27 @@ type Invitation {
     attendance: Attendance!
 }
 
+input EventInput {
+    host_id: Int!
+    title: String!
+    description: String
+    date_of_event: String!
+    time_of_event: String
+    location: String
+    invitations: [InvitationInput]
+}
+
+input InvitationInput {
+    guest: PersonInput!
+    attendance: Attendance
+}
+
+input PersonInput {
+    email: String!
+    first_name: String
+    last_name: String
+}
+
 type Query {
     getAllPersons: [Person]
     getAllEvents: [Event]
@@ -40,8 +61,10 @@ type Query {
 
 type Mutation {
     setAttendance(attendance: Attendance, invitation_id: Int): String
+    createEvent(input: EventInput): String
 }
 
 schema {
     query: Query
+    mutation: Mutation
 }
