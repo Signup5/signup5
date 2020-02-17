@@ -16,8 +16,8 @@ public class EventUtils {
     public static Event createMockEvent(Person host) {
         return Event.builder()
                 .host(host)
-                .date_of_event(LocalDate.now())
-                .time_of_event(LocalTime.now())
+                .date_of_event(LocalDate.parse("2021-12-12"))
+                .time_of_event(LocalTime.parse("09:00:00"))
                 .description("This is a test event.")
                 .location("Vasagatan 1")
                 .title("My event")

@@ -5,6 +5,21 @@ enum Attendance {
     NO_RESPONSE
 }
 
+# java.util.Date implementation
+scalar Date
+
+# java.time.LocalDate implementation
+scalar LocalDate
+
+# java.time.LocalDateTime implementation
+scalar LocalDateTime
+
+# java.time.LocalTime implementation
+scalar LocalTime
+
+# javal.time.OffsetDateTime implementation
+scalar OffsetDateTime
+
 type Person {
     id: ID!
     email: String!
@@ -17,8 +32,8 @@ type Event {
     host: Person!
     title: String!
     description: String
-    date_of_event: String!
-    time_of_event: String!
+    date_of_event: LocalDate!
+    time_of_event: LocalTime!
     location: String
     invitations: [Invitation]
 }
@@ -31,21 +46,32 @@ type Invitation {
 }
 
 input EventInput {
-    host_id: Int!
+    id: Int
+    host: HostInput!
     title: String!
     description: String
-    date_of_event: String!
-    time_of_event: String
+    date_of_event: LocalDate!
+    time_of_event: LocalTime
     location: String
     invitations: [InvitationInput]
 }
 
 input InvitationInput {
-    guest: PersonInput!
+    id: Int
+    guest: GuestInput!
+    event_id: Int
     attendance: Attendance
 }
 
-input PersonInput {
+input HostInput {
+    id: Int!
+    email: String
+    first_name: String
+    last_name: String
+}
+
+input GuestInput {
+    id: Int
     email: String!
     first_name: String
     last_name: String
@@ -55,6 +81,7 @@ type Query {
     getAllPersons: [Person]
     getAllEvents: [Event]
     getAllInvitations: [Invitation]
+    getPersonById(id: Int): Person
     getEventById(id: Int): Event
     getInvitationById(id: Int): Invitation
 }

@@ -20,6 +20,7 @@ configurations {
 
 repositories {
     mavenCentral()
+    jcenter()
 }
 
 dependencies {
@@ -28,8 +29,9 @@ dependencies {
 
     implementation 'com.graphql-java-kickstart:graphql-spring-boot-starter:6.0.1'
     implementation 'com.graphql-java-kickstart:graphiql-spring-boot-starter:6.0.1'
-    implementation 'com.graphql-java-kickstart:voyager-spring-boot-starter:6.0.1'
+    implementation 'com.graphql-java-kickstart:graphql-java-tools:5.6.0'
     testImplementation 'com.graphql-java-kickstart:graphql-spring-boot-starter-test:6.0.1'
+    implementation 'com.zhokhov.graphql:graphql-datetime-spring-boot-starter:1.6.0'
 
     implementation 'org.flywaydb:flyway-core'
     implementation 'org.springframework.boot:spring-boot-starter-jdbc'
@@ -47,6 +49,9 @@ dependencies {
     testImplementation "org.testcontainers:testcontainers:1.12.3"
     testImplementation "org.testcontainers:postgresql:1.12.3"
     testImplementation "org.testcontainers:junit-jupiter:1.12.3"
+    implementation 'com.github.javafaker:javafaker:1.0.2'
+
+    implementation 'com.google.code.gson:gson:2.8.6'
 }
 
 test {

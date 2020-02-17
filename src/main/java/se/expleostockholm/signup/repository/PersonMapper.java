@@ -1,8 +1,6 @@
 package se.expleostockholm.signup.repository;
 
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.*;
 import org.springframework.stereotype.Repository;
 import se.expleostockholm.signup.domain.Person;
 
@@ -16,6 +14,13 @@ public interface PersonMapper {
     @Select("SELECT * FROM person WHERE id = #{person_id}")
     Optional<Person> getPersonById(@Param("person_id") Long person_id);
 
+    @Select("SELECT * FROM person WHERE email = #{email}")
+    Optional<Person> getPersonByEmail(String email);
+
     @Select("SELECT * FROM person")
     List<Person> getAllPersons();
+
+    @Insert("INSERT INTO person (first_name, last_name, email) VALUES(#{first_name}, #{last_name}, #{email})")
+    @Options(useGeneratedKeys=true, keyProperty="id", keyColumn="id")
+    Long savePerson(Person person);
 }

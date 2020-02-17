@@ -1,6 +1,5 @@
 package se.expleostockholm.signup.utils;
 
-import org.junit.jupiter.api.Assertions;
 import se.expleostockholm.signup.domain.Attendance;
 import se.expleostockholm.signup.domain.Event;
 import se.expleostockholm.signup.domain.Invitation;
@@ -8,10 +7,9 @@ import se.expleostockholm.signup.domain.Person;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static se.expleostockholm.signup.utils.PersonUtils.*;
+import static se.expleostockholm.signup.utils.PersonUtils.assertPersonsAreEqual;
 
 public class InvitationUtils {
 

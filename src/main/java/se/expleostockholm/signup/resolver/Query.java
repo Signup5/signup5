@@ -7,6 +7,7 @@ import se.expleostockholm.signup.domain.Invitation;
 import se.expleostockholm.signup.domain.Person;
 import se.expleostockholm.signup.exception.EventNotFoundException;
 import se.expleostockholm.signup.exception.InvitationNotFoundException;
+import se.expleostockholm.signup.exception.PersonNotFoundException;
 import se.expleostockholm.signup.repository.EventMapper;
 import se.expleostockholm.signup.repository.InvitationMapper;
 import se.expleostockholm.signup.repository.PersonMapper;
@@ -42,4 +43,7 @@ public class Query implements GraphQLQueryResolver {
         return eventMapper.getEventById(id).orElseThrow(() -> new EventNotFoundException("No event found!"));
     }
 
+    public Person getPersonById(Long id) {
+        return personMapper.getPersonById(id).orElseThrow(() -> new PersonNotFoundException("No person found!"));
+    }
 }

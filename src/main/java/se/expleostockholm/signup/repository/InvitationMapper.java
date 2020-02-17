@@ -36,8 +36,8 @@ public interface InvitationMapper {
     })
     List<Invitation> getInvitationByEventId(Long id);
 
-    @Insert("INSERT INTO invitation (guest_id, event_id) VALUES (#{guest.id}, #{event_id})")
+    @Insert("INSERT INTO invitation (guest_id, event_id, attendance) VALUES (#{guest.id}, #{event_id}, #{attendance}::attendance)")
     @Options(useGeneratedKeys=true, keyProperty="id", keyColumn="id")
-    void saveInvitation(Invitation invitation);
+    Long saveInvitation(Invitation invitation);
 
 }
