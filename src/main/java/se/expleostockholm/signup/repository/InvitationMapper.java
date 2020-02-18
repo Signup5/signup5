@@ -40,4 +40,6 @@ public interface InvitationMapper {
     @Options(useGeneratedKeys=true, keyProperty="id", keyColumn="id")
     Long saveInvitation(Invitation invitation);
 
+    @Delete("DELETE FROM invitation WHERE event_id = #{id}")
+    void removeInvitationByEventId(Long id);
 }

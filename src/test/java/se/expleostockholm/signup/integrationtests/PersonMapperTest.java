@@ -1,9 +1,12 @@
 package se.expleostockholm.signup.integrationtests;
 
+import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.event.annotation.AfterTestClass;
 import org.testcontainers.junit.jupiter.Testcontainers;
+import se.expleostockholm.signup.domain.Attendance;
 import se.expleostockholm.signup.domain.Person;
 import se.expleostockholm.signup.repository.PersonMapper;
 
@@ -16,12 +19,19 @@ import static org.junit.jupiter.api.Assertions.*;
 @Testcontainers
 @SpringBootTest
 @ContextConfiguration(initializers = {SignupDbTests.Initializer.class})
-class PersonMapperTest extends SignupDbTests {
+public class PersonMapperTest extends SignupDbTests {
 
     @Resource
     PersonMapper personMapper;
 
+    @AfterTestClass
+    public void tearDown() {
+
+    }
+
+
     @Test
+    @Order(1)
     void getPersonById() {
         Optional<Person> person = personMapper.getPersonById(1L);
 
@@ -35,8 +45,9 @@ class PersonMapperTest extends SignupDbTests {
     }
 
     @Test
+    @Order(2)
     void getAllPersons() {
         List<Person> allPersons = personMapper.getAllPersons();
-        assertEquals(85, allPersons.size(), "Number of persons did not match!");
+        assertEquals(50, allPersons.size(), "Number of persons did not match!");
     }
 }

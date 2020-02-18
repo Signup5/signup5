@@ -17,7 +17,7 @@ import static org.junit.jupiter.api.Assertions.*;
 @Testcontainers
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ContextConfiguration(initializers = {SignupDbTests.Initializer.class})
-class QueryTests extends SignupDbTests {
+public class QueryTests extends SignupDbTests {
 
     @Resource
     private GraphQLTestTemplate graphQLTestTemplate;

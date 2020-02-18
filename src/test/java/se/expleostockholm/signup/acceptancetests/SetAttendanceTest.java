@@ -9,10 +9,13 @@ import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.event.annotation.AfterTestClass;
 import org.testcontainers.junit.jupiter.Testcontainers;
 import se.expleostockholm.signup.domain.Attendance;
 import se.expleostockholm.signup.integrationtests.SignupDbTests;
+import se.expleostockholm.signup.repository.InvitationMapper;
 
+import javax.annotation.Resource;
 import java.io.IOException;
 import java.util.stream.Stream;
 
@@ -26,10 +29,18 @@ public class SetAttendanceTest extends SignupDbTests {
     @Autowired
     private GraphQLTestTemplate graphQLTestTemplate;
 
+    @Resource
+    private InvitationMapper invitationMapper;
+
     private ObjectNode queryVariables;
 
     private static Long invitation_id = 1L;
     private static String expectedMessage_positive = "Attendance was updated!";
+
+    @AfterTestClass
+    public void tearDown() {
+        invitationMapper.setAttendance(Attendance.NO_RESPONSE, invitation_id);
+    }
 
     @ParameterizedTest
     @MethodSource("providedData")

@@ -23,4 +23,7 @@ public interface PersonMapper {
     @Insert("INSERT INTO person (first_name, last_name, email) VALUES(#{first_name}, #{last_name}, #{email})")
     @Options(useGeneratedKeys=true, keyProperty="id", keyColumn="id")
     Long savePerson(Person person);
+
+    @Delete("DELETE FROM person WHERE email = #{email}")
+    void removePersonByEmail(String email);
 }

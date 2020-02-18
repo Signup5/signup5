@@ -5,16 +5,23 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.graphql.spring.boot.test.GraphQLResponse;
 import com.graphql.spring.boot.test.GraphQLTestTemplate;
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.api.TestInstance.Lifecycle;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.event.annotation.AfterTestClass;
+import org.springframework.test.context.event.annotation.AfterTestExecution;
 import org.testcontainers.junit.jupiter.Testcontainers;
 import se.expleostockholm.signup.domain.Event;
 import se.expleostockholm.signup.domain.Invitation;
 import se.expleostockholm.signup.domain.Person;
 import se.expleostockholm.signup.domain.Response;
 import se.expleostockholm.signup.integrationtests.SignupDbTests;
+import se.expleostockholm.signup.repository.EventMapper;
+import se.expleostockholm.signup.repository.InvitationMapper;
 import se.expleostockholm.signup.repository.PersonMapper;
 
 import javax.annotation.Resource;
@@ -41,17 +48,32 @@ public class CreateEventTest extends SignupDbTests {
     @Resource
     private PersonMapper personMapper;
 
+    @Resource
+    private EventMapper eventMapper;
+
+    @Resource
+    private InvitationMapper invitationMapper;
+
     private ObjectNode eventInput;
     private ObjectNode eventVariables;
-    private ObjectNode variable;
+    private ObjectNode variables;
 
     private Event event;
+
+
+    @AfterTestClass
+    void tearDown() {
+        invitationMapper.removeInvitationByEventId(event.getId());
+        event.getInvitations().forEach(i -> personMapper.removePersonByEmail(i.getGuest().getEmail()));
+        eventMapper.removeEventById(event.getId());
+    }
 
     @Test
     public void createEvent_test() throws IOException {
         Person host = given_host_exists();
         Event expectedEvent = when_host_creates_new_event_and_invites_guests(host);
         then_host_can_see_invitation_statistics(expectedEvent);
+        tearDown();
     }
 
     public Person given_host_exists() {
@@ -81,7 +103,10 @@ public class CreateEventTest extends SignupDbTests {
         Response response = graphQLResponse.get("$.data.response", Response.class);
 
         String responseMessage = response.getMessage();
+
         Long eventId = response.getId();
+
+        System.out.println(eventId);
 
         assertEquals("Event was successfully saved", responseMessage);
 
@@ -91,7 +116,7 @@ public class CreateEventTest extends SignupDbTests {
     }
 
     public void then_host_can_see_invitation_statistics(Event expectedEvent) throws IOException {
-        ObjectNode variables = new ObjectMapper()
+        variables = new ObjectMapper()
                 .createObjectNode()
                 .put("event_id", expectedEvent.getId());
 
@@ -104,4 +129,6 @@ public class CreateEventTest extends SignupDbTests {
 
         assertInvitationListsAreEqual(expectedInvitations, actualInvitations);
     }
+
+
 }

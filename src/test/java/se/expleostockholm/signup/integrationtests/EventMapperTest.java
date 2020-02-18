@@ -1,8 +1,10 @@
 package se.expleostockholm.signup.integrationtests;
 
+import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.event.annotation.AfterTestClass;
 import org.testcontainers.junit.jupiter.Testcontainers;
 import se.expleostockholm.signup.domain.Attendance;
 import se.expleostockholm.signup.domain.Event;
@@ -31,7 +33,7 @@ import static se.expleostockholm.signup.utils.PersonUtils.assertPersonsAreEqual;
 @Testcontainers
 @SpringBootTest
 @ContextConfiguration(initializers = {SignupDbTests.Initializer.class})
-class EventMapperTest extends SignupDbTests {
+public class EventMapperTest extends SignupDbTests {
 
     @Resource
     EventMapper eventMapper;
@@ -42,7 +44,17 @@ class EventMapperTest extends SignupDbTests {
     @Resource
     InvitationMapper invitationMapper;
 
+    private Event expectedEvent;
+    private Invitation expectedInvitation;
+
+    @AfterTestClass
+    void tearDown() {
+        invitationMapper.removeInvitationByEventId(expectedEvent.getId());
+        eventMapper.removeEventById(expectedEvent.getId());
+    }
+
     @Test
+    @Order(1)
     void event_exists_success() {
         Optional<Event> actualEvent = eventMapper.getEventById(1L);
         Person expectedGuest = Person.builder()
@@ -81,20 +93,24 @@ class EventMapperTest extends SignupDbTests {
     }
 
     @Test
+    @Order(2)
     void allEvents_nrOfEvents_match() {
         List<Event> events = eventMapper.getAllEvents();
-        assertEquals(11, events.size(), "Number of events did not match!");
+        events.forEach(e -> System.out.println(e.toString()));
+        assertEquals(10, events.size(), "Number of events did not match!");
     }
 
     @Test
+    @Order(3)
     void event_saved_success() {
         Person expectedHost = personMapper.getPersonById(50L).get();
         Person expectedGuest = personMapper.getPersonById(10L).get();
 
-        Event expectedEvent = createMockEvent(expectedHost);
+        expectedEvent = createMockEvent(expectedHost);
         eventMapper.saveEvent(expectedEvent);
 
-        Invitation expectedInvitation = createMockInvitation(expectedEvent, expectedGuest);
+        System.out.println(expectedEvent.toString());
+        expectedInvitation = createMockInvitation(expectedEvent, expectedGuest);
         invitationMapper.saveInvitation(expectedInvitation);
 
         expectedEvent.setInvitations(List.of(expectedInvitation));
