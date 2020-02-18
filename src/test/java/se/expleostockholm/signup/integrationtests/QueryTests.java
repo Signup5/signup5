@@ -13,7 +13,6 @@ import java.time.LocalTime;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-
 @Testcontainers
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ContextConfiguration(initializers = {SignupDbTests.Initializer.class})
@@ -40,7 +39,6 @@ public class QueryTests extends SignupDbTests {
 
     @Test
     public void getAllPersons() throws IOException {
-
         GraphQLResponse response = graphQLTestTemplate.perform("queries/getAllPersons.graphql", null);
 
         assertAll(

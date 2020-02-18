@@ -8,12 +8,10 @@ import com.graphql.spring.boot.test.GraphQLTestTemplate;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
-import org.junit.jupiter.api.TestInstance.Lifecycle;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.event.annotation.AfterTestClass;
-import org.springframework.test.context.event.annotation.AfterTestExecution;
 import org.testcontainers.junit.jupiter.Testcontainers;
 import se.expleostockholm.signup.domain.Event;
 import se.expleostockholm.signup.domain.Invitation;
@@ -32,11 +30,13 @@ import java.util.List;
 import java.util.stream.IntStream;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.TestInstance.*;
 import static se.expleostockholm.signup.utils.EventUtils.createMockEvent;
 import static se.expleostockholm.signup.utils.InvitationUtils.assertInvitationListsAreEqual;
 import static se.expleostockholm.signup.utils.InvitationUtils.createMockInvitation;
 import static se.expleostockholm.signup.utils.PersonUtils.createMockPerson;
 
+@TestInstance(Lifecycle.PER_CLASS)
 @Testcontainers
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ContextConfiguration(initializers = {SignupDbTests.Initializer.class})
@@ -61,8 +61,9 @@ public class CreateEventTest extends SignupDbTests {
     private Event event;
 
 
-    @AfterTestClass
-    void tearDown() {
+    @AfterAll
+    public void tearDown() {
+        System.out.println("inside teardown");
         invitationMapper.removeInvitationByEventId(event.getId());
         event.getInvitations().forEach(i -> personMapper.removePersonByEmail(i.getGuest().getEmail()));
         eventMapper.removeEventById(event.getId());
@@ -99,18 +100,12 @@ public class CreateEventTest extends SignupDbTests {
         eventInput.putPOJO("eventInput", eventVariables);
 
         GraphQLResponse graphQLResponse = graphQLTestTemplate.perform("mutations/createEvent.graphql", eventInput);
-
         Response response = graphQLResponse.get("$.data.response", Response.class);
-
         String responseMessage = response.getMessage();
-
-        Long eventId = response.getId();
-
-        System.out.println(eventId);
 
         assertEquals("Event was successfully saved", responseMessage);
 
-        event.setId(eventId);
+        event.setId(response.getId());
 
         return event;
     }

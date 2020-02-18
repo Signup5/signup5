@@ -1,7 +1,9 @@
 package se.expleostockholm.signup.integrationtests;
 
-import org.junit.jupiter.api.Order;
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.api.TestInstance.Lifecycle;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.event.annotation.AfterTestClass;
@@ -11,8 +13,6 @@ import se.expleostockholm.signup.repository.EventMapper;
 import se.expleostockholm.signup.repository.InvitationMapper;
 import se.expleostockholm.signup.repository.PersonMapper;
 import se.expleostockholm.signup.resolver.Mutation;
-import se.expleostockholm.signup.utils.EventUtils;
-import se.expleostockholm.signup.utils.PersonUtils;
 
 import javax.annotation.Resource;
 import java.util.Optional;
@@ -21,9 +21,8 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static se.expleostockholm.signup.utils.EventUtils.assertEventsAreEqual;
 import static se.expleostockholm.signup.utils.EventUtils.createMockEvent;
-import static se.expleostockholm.signup.utils.PersonUtils.createMockPerson;
 
-
+@TestInstance(Lifecycle.PER_CLASS)
 @Testcontainers
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ContextConfiguration(initializers = {SignupDbTests.Initializer.class})
@@ -41,17 +40,16 @@ public class MutationTest extends SignupDbTests {
     @Resource
     private PersonMapper personMapper;
 
-    private Long eventId;
     private Long invitationId = 1L;
     private Long hostId = 3L;
 
     private Event expectedEvent;
     private Person expectedHost;
 
-    @AfterTestClass
+    @AfterAll
     public void tearDown() {
+        eventMapper.removeEventById(expectedEvent.getId());
         personMapper.removePersonByEmail(expectedHost.getEmail());
-        eventMapper.removeEventById(eventId);
     }
 
     @Test
@@ -70,8 +68,7 @@ public class MutationTest extends SignupDbTests {
         expectedEvent = createMockEvent(expectedHost);
 
         Response response = mutation.createEvent(expectedEvent);
-        eventId = response.getId();
-        expectedEvent.setId(eventId);
+        expectedEvent.setId(response.getId());
         assertEventsAreEqual(expectedEvent, eventMapper.getEventById(response.getId()));
     }
 

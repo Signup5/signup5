@@ -1,10 +1,8 @@
 package se.expleostockholm.signup.integrationtests;
 
-import org.junit.jupiter.api.Order;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.event.annotation.AfterTestClass;
 import org.testcontainers.junit.jupiter.Testcontainers;
 import se.expleostockholm.signup.domain.Attendance;
 import se.expleostockholm.signup.domain.Event;
@@ -13,9 +11,6 @@ import se.expleostockholm.signup.domain.Person;
 import se.expleostockholm.signup.repository.EventMapper;
 import se.expleostockholm.signup.repository.InvitationMapper;
 import se.expleostockholm.signup.repository.PersonMapper;
-import se.expleostockholm.signup.utils.EventUtils;
-import se.expleostockholm.signup.utils.InvitationUtils;
-import se.expleostockholm.signup.utils.PersonUtils;
 
 import javax.annotation.Resource;
 import java.time.LocalDate;
@@ -24,38 +19,42 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.MethodOrderer.*;
+import static org.junit.jupiter.api.TestInstance.*;
 import static se.expleostockholm.signup.utils.EventUtils.assertEventsAreEqual;
 import static se.expleostockholm.signup.utils.EventUtils.createMockEvent;
 import static se.expleostockholm.signup.utils.InvitationUtils.assertInvitationsAreEqual;
 import static se.expleostockholm.signup.utils.InvitationUtils.createMockInvitation;
 import static se.expleostockholm.signup.utils.PersonUtils.assertPersonsAreEqual;
 
+@TestInstance(Lifecycle.PER_CLASS)
+@TestMethodOrder(OrderAnnotation.class)
 @Testcontainers
 @SpringBootTest
 @ContextConfiguration(initializers = {SignupDbTests.Initializer.class})
 public class EventMapperTest extends SignupDbTests {
 
     @Resource
-    EventMapper eventMapper;
+    private EventMapper eventMapper;
 
     @Resource
-    PersonMapper personMapper;
+    private PersonMapper personMapper;
 
     @Resource
-    InvitationMapper invitationMapper;
+    private InvitationMapper invitationMapper;
 
     private Event expectedEvent;
     private Invitation expectedInvitation;
 
-    @AfterTestClass
-    void tearDown() {
+    @AfterAll
+    public void tearDown() {
         invitationMapper.removeInvitationByEventId(expectedEvent.getId());
         eventMapper.removeEventById(expectedEvent.getId());
     }
 
     @Test
     @Order(1)
-    void event_exists_success() {
+    public void event_exists_success() {
         Optional<Event> actualEvent = eventMapper.getEventById(1L);
         Person expectedGuest = Person.builder()
                 .id(8L)
@@ -94,22 +93,20 @@ public class EventMapperTest extends SignupDbTests {
 
     @Test
     @Order(2)
-    void allEvents_nrOfEvents_match() {
+    public void allEvents_nrOfEvents_match() {
         List<Event> events = eventMapper.getAllEvents();
-        events.forEach(e -> System.out.println(e.toString()));
         assertEquals(10, events.size(), "Number of events did not match!");
     }
 
     @Test
     @Order(3)
-    void event_saved_success() {
+    public void event_saved_success() {
         Person expectedHost = personMapper.getPersonById(50L).get();
         Person expectedGuest = personMapper.getPersonById(10L).get();
 
         expectedEvent = createMockEvent(expectedHost);
         eventMapper.saveEvent(expectedEvent);
 
-        System.out.println(expectedEvent.toString());
         expectedInvitation = createMockInvitation(expectedEvent, expectedGuest);
         invitationMapper.saveInvitation(expectedInvitation);
 

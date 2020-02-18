@@ -1,12 +1,12 @@
 package se.expleostockholm.signup.integrationtests;
 
+import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.event.annotation.AfterTestClass;
 import org.testcontainers.junit.jupiter.Testcontainers;
-import se.expleostockholm.signup.domain.Attendance;
 import se.expleostockholm.signup.domain.Person;
 import se.expleostockholm.signup.repository.PersonMapper;
 
@@ -16,19 +16,14 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+@TestMethodOrder(OrderAnnotation.class)
 @Testcontainers
 @SpringBootTest
 @ContextConfiguration(initializers = {SignupDbTests.Initializer.class})
 public class PersonMapperTest extends SignupDbTests {
 
     @Resource
-    PersonMapper personMapper;
-
-    @AfterTestClass
-    public void tearDown() {
-
-    }
-
+    private PersonMapper personMapper;
 
     @Test
     @Order(1)

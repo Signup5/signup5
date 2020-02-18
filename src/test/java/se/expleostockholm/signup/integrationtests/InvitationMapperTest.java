@@ -1,7 +1,10 @@
 package se.expleostockholm.signup.integrationtests;
 
+
+import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.event.annotation.AfterTestClass;
@@ -18,9 +21,11 @@ import javax.annotation.Resource;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.MethodOrderer.*;
 import static se.expleostockholm.signup.utils.InvitationUtils.assertInvitationsAreEqual;
 import static se.expleostockholm.signup.utils.InvitationUtils.createMockInvitation;
 
+@TestMethodOrder(OrderAnnotation.class)
 @Testcontainers
 @SpringBootTest
 @ContextConfiguration(initializers = {SignupDbTests.Initializer.class})
@@ -40,11 +45,11 @@ public class InvitationMapperTest extends SignupDbTests {
 
     private Invitation expectedInvitation;
 
-
     @AfterTestClass
-    void tearDown() {
+    public void tearDown() {
         invitationMapper.removeInvitationByEventId(eventId);
     }
+
     @Test
     @Order(1)
     void invitation_exists_success() {
