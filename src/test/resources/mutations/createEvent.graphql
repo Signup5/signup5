@@ -1,0 +1,8 @@
+mutation createEvent($eventInput: EventInput!){
+    response: createEvent(input: $eventInput) {
+        id
+        message
+    }
+}
+
+

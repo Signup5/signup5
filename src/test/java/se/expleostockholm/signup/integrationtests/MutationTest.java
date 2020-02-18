@@ -6,6 +6,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.testcontainers.junit.jupiter.Testcontainers;
 import se.expleostockholm.signup.domain.Attendance;
 import se.expleostockholm.signup.domain.Invitation;
+import se.expleostockholm.signup.domain.Response;
 import se.expleostockholm.signup.repository.InvitationMapper;
 import se.expleostockholm.signup.resolver.Mutation;
 
@@ -29,12 +30,12 @@ class MutationTest extends SignupDbTests {
 
     @Test
     public void setAttendance() {
-        String responseMessage = mutation.setAttendance(Attendance.ATTENDING, 1L);
+        Response response = mutation.setAttendance(Attendance.ATTENDING, 1L);
 
         Optional<Invitation> invitation = invitationMapper.getInvitationById(1L);
 
         assertAll(
-                () -> assertEquals("Attendance was updated!", responseMessage, "Response message did not match!"),
+                () -> assertEquals("Attendance was updated!", response.getMessage(), "Response message did not match!"),
                 () -> assertEquals(Attendance.ATTENDING, invitation.get().getAttendance(), "Attendance did not match!")
         );
 

@@ -2,10 +2,7 @@ package se.expleostockholm.signup.resolver;
 
 import com.coxautodev.graphql.tools.GraphQLMutationResolver;
 import org.springframework.stereotype.Component;
-import se.expleostockholm.signup.domain.Attendance;
-import se.expleostockholm.signup.domain.Event;
-import se.expleostockholm.signup.domain.Invitation;
-import se.expleostockholm.signup.domain.Person;
+import se.expleostockholm.signup.domain.*;
 import se.expleostockholm.signup.repository.EventMapper;
 import se.expleostockholm.signup.repository.InvitationMapper;
 import se.expleostockholm.signup.repository.PersonMapper;
@@ -26,15 +23,16 @@ public class Mutation implements GraphQLMutationResolver {
         this.personMapper = personMapper;
     }
 
-    public String setAttendance(Attendance attendance, Long invitation_id) {
-        return invitationMapper.setAttendance(attendance, invitation_id) == 1 ?
+    public Response setAttendance(Attendance attendance, Long invitation_id) {
+        String responseMessage = invitationMapper.setAttendance(attendance, invitation_id) == 1 ?
                 "Attendance was updated!" : "Oops... something went wrong while updating attendance.";
+
+        return Response.builder()
+                .message(responseMessage)
+                .build();
     }
 
-    public String createEvent(Event event) {
-        System.out.println("are we here====");
-
-
+    public Response createEvent(Event event) {
         Long nrOfUpdatedEventRows = eventMapper.saveEvent(event);
         if (nrOfUpdatedEventRows > 0) {
             List<Invitation> invitations = event.getInvitations();
@@ -47,18 +45,19 @@ public class Mutation implements GraphQLMutationResolver {
                 } else {
                     invitation.setGuest(guest.get());
                 }
-
                 invitation.setEvent_id(event.getId());
                 nrOfInvitations += invitationMapper.saveInvitation(invitation);
-                System.out.println(invitation.toString());
             }
-            System.out.println(event.toString());
-
             if (nrOfInvitations == invitations.size())  {
-                return "Event was Successfully saved";
+                return Response.builder()
+                        .message("Event was successfully saved")
+                        .id(event.getId())
+                        .build();
             }
         }
-        System.out.println(event.toString());
-        return "Oops... something went wrong while creating Event.";
+
+        return Response.builder()
+                .message("Oops... something went wrong while creating event")
+                .build();
     }
 }

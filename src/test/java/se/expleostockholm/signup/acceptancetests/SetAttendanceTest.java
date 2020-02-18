@@ -43,8 +43,8 @@ public class SetAttendanceTest extends SignupDbTests {
 
     public String when_person_responds_with_attendance(ObjectNode variables) throws IOException {
         return graphQLTestTemplate
-                .perform("queries/setAttendance.graphql", variables)
-                .get("$.data.message");
+                .perform("mutations/setAttendance.graphql", variables)
+                .get("$.data.response.message");
     }
 
     public void then_person_gets_response_message(String responseMessage, String expectedMessage) {

@@ -37,6 +37,6 @@ class PersonMapperTest extends SignupDbTests {
     @Test
     void getAllPersons() {
         List<Person> allPersons = personMapper.getAllPersons();
-        assertEquals(50, allPersons.size(), "Number of persons did not match!");
+        assertEquals(85, allPersons.size(), "Number of persons did not match!");
     }
 }

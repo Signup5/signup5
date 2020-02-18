@@ -1,3 +1,0 @@
-mutation setAttendance($attendance: Attendance, $invitation_id: Int) {
-    message: setAttendance(attendance: $attendance, invitation_id: $invitation_id)
-}

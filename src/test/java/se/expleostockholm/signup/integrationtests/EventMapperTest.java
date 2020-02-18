@@ -83,7 +83,7 @@ class EventMapperTest extends SignupDbTests {
     @Test
     void allEvents_nrOfEvents_match() {
         List<Event> events = eventMapper.getAllEvents();
-        assertEquals(10, events.size(), "Number of events did not match!");
+        assertEquals(11, events.size(), "Number of events did not match!");
     }
 
     @Test

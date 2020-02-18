@@ -11,14 +11,13 @@ import se.expleostockholm.signup.domain.Person;
 import se.expleostockholm.signup.repository.EventMapper;
 import se.expleostockholm.signup.repository.InvitationMapper;
 import se.expleostockholm.signup.repository.PersonMapper;
-import se.expleostockholm.signup.utils.InvitationUtils;
-import se.expleostockholm.signup.utils.PersonUtils;
 
 import javax.annotation.Resource;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static se.expleostockholm.signup.utils.InvitationUtils.*;
+import static se.expleostockholm.signup.utils.InvitationUtils.assertInvitationsAreEqual;
+import static se.expleostockholm.signup.utils.InvitationUtils.createMockInvitation;
 
 @Testcontainers
 @SpringBootTest
@@ -55,12 +54,10 @@ class InvitationMapperTest extends SignupDbTests {
                 () -> assertTrue(invitation.isPresent(), "No invitation found!"),
                 () -> assertEquals(Attendance.MAYBE, invitation.get().getAttendance(), "Attendance did not match!")
         );
-
     }
 
     @Test
     void invitation_saved_success() {
-
         Person guest = personMapper.getPersonById(50L).get();
         Event event = eventMapper.getEventById(10L).get();
         Invitation expected_invitation = createMockInvitation(event, guest);

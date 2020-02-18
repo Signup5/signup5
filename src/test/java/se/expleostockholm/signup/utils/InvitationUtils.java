@@ -1,14 +1,15 @@
 package se.expleostockholm.signup.utils;
 
-import se.expleostockholm.signup.domain.Attendance;
 import se.expleostockholm.signup.domain.Event;
 import se.expleostockholm.signup.domain.Invitation;
 import se.expleostockholm.signup.domain.Person;
 
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static se.expleostockholm.signup.utils.PersonUtils.assertPersonsAreEqual;
 
 public class InvitationUtils {
@@ -17,29 +18,34 @@ public class InvitationUtils {
         return Invitation.builder()
                 .event_id(expectedEvent.getId())
                 .guest(guest)
-                .attendance(Attendance.NO_RESPONSE)
+                .build();
+    }
+
+    public static Invitation createMockInvitation(Person guest) {
+        return Invitation.builder()
+                .guest(guest)
                 .build();
     }
 
     public static void assertInvitationsAreEqual(Invitation expectedInvitation, Invitation actualInvitation) {
         assertAll(
-                () -> assertEquals(expectedInvitation.getId(), actualInvitation.getId(), "Invitation id did not match!"),
-                () -> assertEquals(expectedInvitation.getEvent_id(), actualInvitation.getEvent_id(), "Event id did not match!"),
                 () -> assertEquals(expectedInvitation.getAttendance(), actualInvitation.getAttendance(), "Attendance did not match!"),
                 () -> assertPersonsAreEqual(expectedInvitation.getGuest(), actualInvitation.getGuest(), "Guest")
         );
-
     }
 
-    public static void assertInvitationListsAreEqual(List<Invitation> expectedInvitationList, List<Invitation> actualInvitationList){
+    public static void assertInvitationListsAreEqual(List<Invitation> expectedInvitationList, List<Invitation> actualInvitationList) {
+        assertEquals(expectedInvitationList.size(), actualInvitationList.size(), "Number of invitations did not match!");
+
         if (expectedInvitationList.size() > 1 && actualInvitationList.size() > 1) {
-            Collections.sort(expectedInvitationList, (i1, i2) -> (int) (i1.getId() - i2.getId()));
-            Collections.sort(actualInvitationList, (i1, i2) -> (int) (i1.getId() - i2.getId()));
+            Collections.sort(expectedInvitationList, COMPARE_BY_GUEST_EMAIL);
+            Collections.sort(actualInvitationList, COMPARE_BY_GUEST_EMAIL);
         }
 
-        assertAll(
-                () -> assertEquals(expectedInvitationList.size(), actualInvitationList.size(), "Number of invitations did not match!"),
-                () -> assertTrue(expectedInvitationList.equals(actualInvitationList), "Invitation lists did not match!")
-        );
+        for (int i = 0; i < expectedInvitationList.size(); i++) {
+            assertInvitationsAreEqual(expectedInvitationList.get(i), actualInvitationList.get(i));
+        }
     }
+
+    public static Comparator<Invitation> COMPARE_BY_GUEST_EMAIL = Comparator.comparing(invitation -> invitation.getGuest().getEmail());
 }

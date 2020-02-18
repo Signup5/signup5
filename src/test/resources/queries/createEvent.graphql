@@ -1,5 +1,0 @@
-mutation createEvent($eventInput: EventInput!){
-    message: createEvent(input: $eventInput)
-}
-
-

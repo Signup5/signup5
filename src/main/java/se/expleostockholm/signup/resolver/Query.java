@@ -27,13 +27,13 @@ public class Query implements GraphQLQueryResolver {
         this.personMapper = personMapper;
     }
 
-    public List<Person> getAllPersons() { return personMapper.getAllPersons(); };
+    public List<Person> getAllPersons() { return personMapper.getAllPersons(); }
 
     public List<Event> getAllEvents() {
         return eventMapper.getAllEvents();
     }
 
-    public List<Invitation> getAllInvitations() {return invitationMapper.getAllInvitations(); };
+    public List<Invitation> getAllInvitations() {return invitationMapper.getAllInvitations(); }
 
     public Invitation getInvitationById(Long id) {
         return invitationMapper.getInvitationById(id).orElseThrow(() -> new InvitationNotFoundException("No invitation found!"));
@@ -45,5 +45,9 @@ public class Query implements GraphQLQueryResolver {
 
     public Person getPersonById(Long id) {
         return personMapper.getPersonById(id).orElseThrow(() -> new PersonNotFoundException("No person found!"));
+    }
+
+    public List<Invitation> getInvitationsByEventId(Long id) {
+        return invitationMapper.getInvitationByEventId(id);
     }
 }

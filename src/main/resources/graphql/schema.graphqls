@@ -5,20 +5,8 @@ enum Attendance {
     NO_RESPONSE
 }
 
-# java.util.Date implementation
-scalar Date
-
-# java.time.LocalDate implementation
 scalar LocalDate
-
-# java.time.LocalDateTime implementation
-scalar LocalDateTime
-
-# java.time.LocalTime implementation
 scalar LocalTime
-
-# javal.time.OffsetDateTime implementation
-scalar OffsetDateTime
 
 type Person {
     id: ID!
@@ -43,6 +31,11 @@ type Invitation {
     guest: Person!
     event_id: Int!
     attendance: Attendance!
+}
+
+type Response {
+    id: Int
+    message: String
 }
 
 input EventInput {
@@ -84,11 +77,12 @@ type Query {
     getPersonById(id: Int): Person
     getEventById(id: Int): Event
     getInvitationById(id: Int): Invitation
+    getInvitationsByEventId(id: Int): [Invitation]
 }
 
 type Mutation {
-    setAttendance(attendance: Attendance, invitation_id: Int): String
-    createEvent(input: EventInput): String
+    setAttendance(attendance: Attendance, invitation_id: Int): Response
+    createEvent(input: EventInput): Response
 }
 
 schema {

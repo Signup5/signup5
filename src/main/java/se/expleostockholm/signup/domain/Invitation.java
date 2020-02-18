@@ -13,6 +13,6 @@ public class Invitation {
     private Long id;
     private Person guest;
     private Long event_id;
-    @Default
+    @Builder.Default
     private Attendance attendance = Attendance.NO_RESPONSE;
 }

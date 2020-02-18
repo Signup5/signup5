@@ -16,7 +16,6 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Event {
-
     private Long id;
     private Person host;
     @Default

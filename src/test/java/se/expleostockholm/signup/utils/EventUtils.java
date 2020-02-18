@@ -27,7 +27,6 @@ public class EventUtils {
     public static void assertEventsAreEqual(Event expectedEvent, Optional<Event> actualEvent) {
         assertAll(
                 () -> assertTrue(actualEvent.isPresent(), "No event found!"),
-                () -> assertEquals(expectedEvent.getId(), actualEvent.get().getId(), "Event id did not match!"),
                 () -> assertEquals(expectedEvent.getDate_of_event(), actualEvent.get().getDate_of_event(), "Event date did not match!!"),
                 () -> assertEquals(expectedEvent.getTime_of_event(), actualEvent.get().getTime_of_event(), "Event time did not match!!"),
                 () -> assertEquals(expectedEvent.getDescription(), actualEvent.get().getDescription(), "Event description did not match!"),
