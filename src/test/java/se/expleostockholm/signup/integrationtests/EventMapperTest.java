@@ -3,6 +3,7 @@ package se.expleostockholm.signup.integrationtests;
 import org.junit.jupiter.api.*;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.event.annotation.AfterTestClass;
 import org.testcontainers.junit.jupiter.Testcontainers;
 import se.expleostockholm.signup.domain.Attendance;
 import se.expleostockholm.signup.domain.Event;
@@ -27,7 +28,6 @@ import static se.expleostockholm.signup.utils.InvitationUtils.assertInvitationsA
 import static se.expleostockholm.signup.utils.InvitationUtils.createMockInvitation;
 import static se.expleostockholm.signup.utils.PersonUtils.assertPersonsAreEqual;
 
-@TestInstance(Lifecycle.PER_CLASS)
 @TestMethodOrder(OrderAnnotation.class)
 @Testcontainers
 @SpringBootTest
@@ -46,7 +46,7 @@ public class EventMapperTest extends SignupDbTests {
     private Event expectedEvent;
     private Invitation expectedInvitation;
 
-    @AfterAll
+    @AfterTestClass
     public void tearDown() {
         invitationMapper.removeInvitationByEventId(expectedEvent.getId());
         eventMapper.removeEventById(expectedEvent.getId());
