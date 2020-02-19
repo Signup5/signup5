@@ -61,6 +61,11 @@ public class CreateEventTest extends SignupDbTests {
 
     public void tearDown() {
         invitationMapper.removeInvitationByEventId(event.getId());
+        StringBuilder sb = new StringBuilder();
+
+        event.getInvitations().forEach(i -> sb.append(i.getGuest().getEmail() + "\n"));
+        System.out.println(sb.toString());
+
         event.getInvitations().forEach(i -> personMapper.removePersonByEmail(i.getGuest().getEmail()));
         eventMapper.removeEventById(event.getId());
     }
