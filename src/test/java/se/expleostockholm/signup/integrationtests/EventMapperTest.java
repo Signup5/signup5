@@ -46,7 +46,6 @@ public class EventMapperTest extends SignupDbTests {
     private Event expectedEvent;
     private Invitation expectedInvitation;
 
-    @AfterTestClass
     public void tearDown() {
         invitationMapper.removeInvitationByEventId(expectedEvent.getId());
         eventMapper.removeEventById(expectedEvent.getId());
@@ -121,5 +120,7 @@ public class EventMapperTest extends SignupDbTests {
         assertPersonsAreEqual(expectedHost, actualHost, "Host");
         assertPersonsAreEqual(expectedGuest, actualGuest, "Guest");
         assertInvitationsAreEqual(expectedInvitation, actualInvitation);
+
+        tearDown();
     }
 }

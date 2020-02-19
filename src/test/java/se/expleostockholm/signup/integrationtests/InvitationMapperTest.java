@@ -21,7 +21,7 @@ import static org.junit.jupiter.api.TestInstance.Lifecycle;
 import static se.expleostockholm.signup.utils.InvitationUtils.assertInvitationsAreEqual;
 import static se.expleostockholm.signup.utils.InvitationUtils.createMockInvitation;
 
-@TestInstance(Lifecycle.PER_CLASS)
+
 @TestMethodOrder(OrderAnnotation.class)
 @Testcontainers
 @SpringBootTest
@@ -42,7 +42,6 @@ public class InvitationMapperTest extends SignupDbTests {
 
     private Invitation expectedInvitation;
 
-    @AfterAll
     public void tearDown() {
         invitationMapper.removeInvitationByEventId(eventId);
     }
@@ -83,5 +82,6 @@ public class InvitationMapperTest extends SignupDbTests {
         Invitation actual_invitation = invitationMapper.getInvitationById(expectedInvitation.getId()).get();
 
         assertInvitationsAreEqual(expectedInvitation, actual_invitation);
+        tearDown();
     }
 }

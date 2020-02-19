@@ -3,6 +3,10 @@ package se.expleostockholm.signup.acceptancetests;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.graphql.spring.boot.test.GraphQLTestTemplate;
+import org.junit.jupiter.api.MethodOrderer;
+import org.junit.jupiter.api.Order;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -21,6 +25,7 @@ import java.util.stream.Stream;
 
 import static org.junit.Assert.assertEquals;
 
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @Testcontainers
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ContextConfiguration(initializers = {SignupDbTests.Initializer.class})
@@ -37,12 +42,8 @@ public class SetAttendanceTest extends SignupDbTests {
     private static Long invitation_id = 1L;
     private static String expectedMessage_positive = "Attendance was updated!";
 
-    @AfterTestClass
-    public void tearDown() {
-        invitationMapper.setAttendance(Attendance.NO_RESPONSE, invitation_id);
-    }
-
     @ParameterizedTest
+    @Order(1)
     @MethodSource("providedData")
     public void setAttendance_test(Long invitationId, Attendance attendance, String expectedMessage) throws IOException {
         queryVariables = setQueryVariables(invitationId, attendance);
@@ -50,6 +51,7 @@ public class SetAttendanceTest extends SignupDbTests {
 
         then_person_gets_response_message(responseMessage, expectedMessage);
         and_invitation_status_is_updated_to_attendance(attendance);
+
     }
 
     public String when_person_responds_with_attendance(ObjectNode variables) throws IOException {
@@ -85,6 +87,12 @@ public class SetAttendanceTest extends SignupDbTests {
         queryVariables.put("invitation_id", invitationId);
 
         return queryVariables;
+    }
+
+    @Test
+    @Order(2)
+    public void tearDown() {
+        invitationMapper.setAttendance(Attendance.NO_RESPONSE, invitation_id);
     }
 
 

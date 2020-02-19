@@ -36,7 +36,6 @@ import static se.expleostockholm.signup.utils.InvitationUtils.assertInvitationLi
 import static se.expleostockholm.signup.utils.InvitationUtils.createMockInvitation;
 import static se.expleostockholm.signup.utils.PersonUtils.createMockPerson;
 
-@TestInstance(Lifecycle.PER_CLASS)
 @Testcontainers
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ContextConfiguration(initializers = {SignupDbTests.Initializer.class})
@@ -60,10 +59,7 @@ public class CreateEventTest extends SignupDbTests {
 
     private Event event;
 
-
-    @AfterAll
     public void tearDown() {
-        System.out.println("inside teardown");
         invitationMapper.removeInvitationByEventId(event.getId());
         event.getInvitations().forEach(i -> personMapper.removePersonByEmail(i.getGuest().getEmail()));
         eventMapper.removeEventById(event.getId());

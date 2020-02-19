@@ -1,8 +1,6 @@
 package se.expleostockholm.signup.integrationtests;
 
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.TestInstance.Lifecycle;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ContextConfiguration;
@@ -21,7 +19,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static se.expleostockholm.signup.utils.EventUtils.assertEventsAreEqual;
 import static se.expleostockholm.signup.utils.EventUtils.createMockEvent;
 
-@TestInstance(Lifecycle.PER_CLASS)
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @Testcontainers
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ContextConfiguration(initializers = {SignupDbTests.Initializer.class})
@@ -45,13 +43,13 @@ public class MutationTest extends SignupDbTests {
     private Event expectedEvent;
     private Person expectedHost;
 
-    @AfterAll
     public void tearDown() {
         eventMapper.removeEventById(expectedEvent.getId());
         personMapper.removePersonByEmail(expectedHost.getEmail());
     }
 
     @Test
+    @Order(1)
     public void setAttendance() {
         Response response = mutation.setAttendance(Attendance.ATTENDING, invitationId);
         Optional<Invitation> invitation = invitationMapper.getInvitationById(invitationId);
@@ -62,6 +60,7 @@ public class MutationTest extends SignupDbTests {
     }
 
     @Test
+    @Order(2)
     public void createEvent() {
         expectedHost = personMapper.getPersonById(hostId).get();
         expectedEvent = createMockEvent(expectedHost);
@@ -69,6 +68,8 @@ public class MutationTest extends SignupDbTests {
         Response response = mutation.createEvent(expectedEvent);
         expectedEvent.setId(response.getId());
         assertEventsAreEqual(expectedEvent, eventMapper.getEventById(response.getId()));
+
+        tearDown();
     }
 
 }
