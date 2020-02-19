@@ -45,7 +45,6 @@ public class MutationTest extends SignupDbTests {
 
     public void tearDown() {
         eventMapper.removeEventById(expectedEvent.getId());
-        personMapper.removePersonByEmail(expectedHost.getEmail());
     }
 
     @Test
