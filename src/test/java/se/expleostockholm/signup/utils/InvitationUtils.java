@@ -47,5 +47,5 @@ public class InvitationUtils {
         }
     }
 
-    public static Comparator<Invitation> COMPARE_BY_GUEST_EMAIL = Comparator.comparing(invitation -> invitation.getGuest().getEmail());
+    public static final Comparator<Invitation> COMPARE_BY_GUEST_EMAIL = Comparator.comparing(invitation -> invitation.getGuest().getEmail());
 }

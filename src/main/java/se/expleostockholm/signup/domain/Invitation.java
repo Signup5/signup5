@@ -2,8 +2,6 @@ package se.expleostockholm.signup.domain;
 
 import lombok.*;
 
-import static lombok.Builder.*;
-
 @Data
 @Builder
 @AllArgsConstructor

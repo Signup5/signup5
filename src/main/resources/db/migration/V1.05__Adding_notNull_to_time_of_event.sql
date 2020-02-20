@@ -1,0 +1,1 @@
+ALTER TABLE event ALTER COLUMN time_of_event SET NOT NULL;

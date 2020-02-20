@@ -1,11 +1,14 @@
 package se.expleostockholm.signup.integrationtests;
 
-import org.junit.jupiter.api.*;
-import org.junit.jupiter.api.TestInstance.Lifecycle;
+import org.junit.jupiter.api.MethodOrderer;
+import org.junit.jupiter.api.Order;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ContextConfiguration;
 import org.testcontainers.junit.jupiter.Testcontainers;
 import se.expleostockholm.signup.domain.*;
+import se.expleostockholm.signup.exception.EventAlreadyExistException;
 import se.expleostockholm.signup.repository.EventMapper;
 import se.expleostockholm.signup.repository.InvitationMapper;
 import se.expleostockholm.signup.repository.PersonMapper;
@@ -14,8 +17,7 @@ import se.expleostockholm.signup.resolver.Mutation;
 import javax.annotation.Resource;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertAll;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 import static se.expleostockholm.signup.utils.EventUtils.assertEventsAreEqual;
 import static se.expleostockholm.signup.utils.EventUtils.createMockEvent;
 
@@ -37,8 +39,8 @@ public class MutationTest extends SignupDbTests {
     @Resource
     private PersonMapper personMapper;
 
-    private Long invitationId = 1L;
-    private Long hostId = 3L;
+    private final Long invitationId = 1L;
+    private final Long hostId = 3L;
 
     private Event expectedEvent;
     private Person expectedHost;
@@ -53,7 +55,8 @@ public class MutationTest extends SignupDbTests {
         Response response = mutation.setAttendance(Attendance.ATTENDING, invitationId);
         Optional<Invitation> invitation = invitationMapper.getInvitationById(invitationId);
         assertAll(
-                () -> assertEquals("Attendance was updated!", response.getMessage(), "Response message did not match!"),
+                () -> assertEquals("Attendance was successfully updated!", response.getMessage(), "Response message did not match!"),
+                () -> assertTrue(invitation.isPresent(), "Invitation not found!"),
                 () -> assertEquals(Attendance.ATTENDING, invitation.get().getAttendance(), "Attendance did not match!")
         );
     }
@@ -61,6 +64,7 @@ public class MutationTest extends SignupDbTests {
     @Test
     @Order(2)
     public void createEvent() {
+        System.out.println(hostId);
         expectedHost = personMapper.getPersonById(hostId).get();
         expectedEvent = createMockEvent(expectedHost);
 
@@ -71,4 +75,11 @@ public class MutationTest extends SignupDbTests {
         tearDown();
     }
 
+    @Test
+    @Order(3)
+    public void create_Duplicate_Event_fail() {
+        assertThrows(EventAlreadyExistException.class, () ->
+                mutation.createEvent(eventMapper.getEventById(1L).get())
+        );
+    }
 }

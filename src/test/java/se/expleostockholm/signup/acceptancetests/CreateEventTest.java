@@ -5,13 +5,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.graphql.spring.boot.test.GraphQLResponse;
 import com.graphql.spring.boot.test.GraphQLTestTemplate;
-import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.event.annotation.AfterTestClass;
 import org.testcontainers.junit.jupiter.Testcontainers;
 import se.expleostockholm.signup.domain.Event;
 import se.expleostockholm.signup.domain.Invitation;
@@ -24,13 +21,13 @@ import se.expleostockholm.signup.repository.PersonMapper;
 
 import javax.annotation.Resource;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.IntStream;
 
+import static java.util.stream.Collectors.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.TestInstance.*;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static se.expleostockholm.signup.utils.EventUtils.createMockEvent;
 import static se.expleostockholm.signup.utils.InvitationUtils.assertInvitationListsAreEqual;
 import static se.expleostockholm.signup.utils.InvitationUtils.createMockInvitation;
@@ -74,15 +71,16 @@ public class CreateEventTest extends SignupDbTests {
     }
 
     public Person given_host_exists() {
-        return personMapper.getPersonById(12L).get();
+        Optional<Person> host = personMapper.getPersonById(12L);
+        assertTrue(host.isPresent());
+        return host.get();
     }
 
     public Event when_host_creates_new_event_and_invites_guests(Person host) throws IOException {
         event = createMockEvent(host);
 
-        List<Invitation> invitations = new ArrayList();
-        IntStream.range(0, 35).forEach(i -> invitations.add(createMockInvitation(createMockPerson())));
-        event.setInvitations(invitations);
+        event.setInvitations(IntStream.range(0, 35)
+                .mapToObj(i -> createMockInvitation(createMockPerson())).collect(toList()));
 
         eventVariables = new ObjectMapper().createObjectNode();
         eventInput = new ObjectMapper().createObjectNode();
@@ -91,6 +89,7 @@ public class CreateEventTest extends SignupDbTests {
         eventVariables.putPOJO("title", event.getTitle());
         eventVariables.putPOJO("date_of_event", event.getDate_of_event().toString());
         eventVariables.putPOJO("time_of_event", event.getTime_of_event().toString());
+        eventVariables.putPOJO("location", event.getLocation());
         eventVariables.putPOJO("invitations", event.getInvitations());
 
         eventInput.putPOJO("eventInput", eventVariables);
@@ -111,12 +110,11 @@ public class CreateEventTest extends SignupDbTests {
                 .createObjectNode()
                 .put("event_id", expectedEvent.getId());
 
-        ObjectMapper mapper = new ObjectMapper();
         GraphQLResponse graphQLResponse = graphQLTestTemplate.perform("queries/getInvitationsByEventId.graphql", variables);
 
-        List<LinkedHashMap> objectList = graphQLResponse.get("$.data.invitations", List.class);
+        List objectList = graphQLResponse.get("$.data.invitations", List.class);
         List<Invitation> actualInvitations = new ObjectMapper().convertValue(objectList, new TypeReference<>() {});
-        List<Invitation> expectedInvitations = new ArrayList(event.getInvitations());
+        List<Invitation> expectedInvitations = event.getInvitations();
 
         assertInvitationListsAreEqual(expectedInvitations, actualInvitations);
     }

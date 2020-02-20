@@ -34,11 +34,14 @@ public interface InvitationMapper {
             @Result(property = "guest", column = "guest_id",
                     one = @One(select = "se.expleostockholm.signup.repository.PersonMapper.getPersonById"))
     })
-    List<Invitation> getInvitationByEventId(Long id);
+    List<Invitation> getInvitationsByEventId(Long id);
 
     @Insert("INSERT INTO invitation (guest_id, event_id, attendance) VALUES (#{guest.id}, #{event_id}, #{attendance}::attendance)")
     @Options(useGeneratedKeys=true, keyProperty="id", keyColumn="id")
     Long saveInvitation(Invitation invitation);
+
+    @Select("SELECT COUNT(*) FROM invitation WHERE event_id=#{event_id} and guest_id=#{guest.id}")
+    Long invitationExists(Invitation invitation);
 
     @Delete("DELETE FROM invitation WHERE event_id = #{id}")
     void removeInvitationByEventId(Long id);

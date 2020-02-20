@@ -13,7 +13,6 @@ import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.event.annotation.AfterTestClass;
 import org.testcontainers.junit.jupiter.Testcontainers;
 import se.expleostockholm.signup.domain.Attendance;
 import se.expleostockholm.signup.integrationtests.SignupDbTests;
@@ -39,8 +38,8 @@ public class SetAttendanceTest extends SignupDbTests {
 
     private ObjectNode queryVariables;
 
-    private static Long invitation_id = 1L;
-    private static String expectedMessage_positive = "Attendance was updated!";
+    private final static Long invitation_id = 1L;
+    private final static String expectedMessage_positive = "Attendance was successfully updated!";
 
     @ParameterizedTest
     @Order(1)

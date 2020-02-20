@@ -1,6 +1,8 @@
 package se.expleostockholm.signup.integrationtests;
 
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.Order;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ContextConfiguration;
 import org.testcontainers.junit.jupiter.Testcontainers;
@@ -11,15 +13,14 @@ import se.expleostockholm.signup.domain.Person;
 import se.expleostockholm.signup.repository.EventMapper;
 import se.expleostockholm.signup.repository.InvitationMapper;
 import se.expleostockholm.signup.repository.PersonMapper;
+import se.expleostockholm.signup.utils.InvitationUtils;
 
 import javax.annotation.Resource;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
-import static org.junit.jupiter.api.TestInstance.Lifecycle;
 import static se.expleostockholm.signup.utils.InvitationUtils.assertInvitationsAreEqual;
-import static se.expleostockholm.signup.utils.InvitationUtils.createMockInvitation;
 
 
 @TestMethodOrder(OrderAnnotation.class)
@@ -37,8 +38,8 @@ public class InvitationMapperTest extends SignupDbTests {
     @Resource
     private EventMapper eventMapper;
 
-    private Long eventId = 10L;
-    private Long guestId = 50L;
+    private final Long eventId = 10L;
+    private final Long guestId = 50L;
 
     private Invitation expectedInvitation;
 
@@ -75,9 +76,12 @@ public class InvitationMapperTest extends SignupDbTests {
     @Order(3)
     void invitation_saved_success() {
         Person guest = personMapper.getPersonById(guestId).get();
-        Event event = eventMapper.getEventById(eventId).get();
-        expectedInvitation = createMockInvitation(event, guest);
 
+        Event event = eventMapper.getEventById(eventId).get();
+        expectedInvitation = InvitationUtils.createMockInvitation(event, guest);
+
+        invitationMapper.saveInvitation(expectedInvitation);
+        invitationMapper.saveInvitation(expectedInvitation);
         invitationMapper.saveInvitation(expectedInvitation);
         Invitation actual_invitation = invitationMapper.getInvitationById(expectedInvitation.getId()).get();
 

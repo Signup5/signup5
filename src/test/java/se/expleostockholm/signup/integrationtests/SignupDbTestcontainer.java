@@ -24,10 +24,10 @@ public class SignupDbTestcontainer extends PostgreSQLContainer<SignupDbTestconta
         return container;
     }
 
-    @Override
-    public void start() {
-        super.start();
-    }
+//    @Override
+//    public void start() {
+//        super.start();
+//    }
 
     @Override
     public void stop() {

@@ -22,7 +22,7 @@ type Event {
     description: String
     date_of_event: LocalDate!
     time_of_event: LocalTime!
-    location: String
+    location: String!
     invitations: [Invitation]
 }
 
@@ -44,8 +44,8 @@ input EventInput {
     title: String!
     description: String
     date_of_event: LocalDate!
-    time_of_event: LocalTime
-    location: String
+    time_of_event: LocalTime!
+    location: String!
     invitations: [InvitationInput]
 }
 

@@ -6,8 +6,9 @@ import graphql.language.SourceLocation;
 
 import java.util.List;
 
-public class PersonNotFoundException extends RuntimeException implements GraphQLError {
-    public PersonNotFoundException(String message) {
+public class EventAlreadyExistException extends RuntimeException implements GraphQLError {
+
+    public EventAlreadyExistException(String message) {
         super(message);
     }
 

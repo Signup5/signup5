@@ -6,7 +6,7 @@ import graphql.language.SourceLocation;
 
 import java.util.List;
 
-public class InvitationNotFoundException extends RuntimeException implements GraphQLError  {
+public class InvitationNotFoundException extends RuntimeException implements GraphQLError {
     public InvitationNotFoundException(String message) {
         super(message);
     }

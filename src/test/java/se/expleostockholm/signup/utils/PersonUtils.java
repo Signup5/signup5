@@ -3,9 +3,7 @@ package se.expleostockholm.signup.utils;
 import com.github.javafaker.Faker;
 import se.expleostockholm.signup.domain.Person;
 
-import java.nio.charset.Charset;
 import java.util.Locale;
-import java.util.Random;
 
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -17,9 +15,7 @@ public class PersonUtils {
         String randomFirstName = faker.name().firstName();
         String randomLastName = faker.name().lastName();
         String regex = "[^a-zA-Z]+";
-        randomFirstName.replaceAll(regex, "");
-        randomLastName.replaceAll(regex, "");
-        String randomEmail = randomFirstName + "." + randomLastName + "@mail.com";
+        String randomEmail = randomFirstName.replaceAll(regex, "") + "." + randomLastName.replaceAll(regex, "") + "@mail.com";
         return Person.builder()
                 .first_name(randomFirstName)
                 .last_name(randomLastName)

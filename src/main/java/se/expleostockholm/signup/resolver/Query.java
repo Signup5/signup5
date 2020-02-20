@@ -5,49 +5,50 @@ import org.springframework.stereotype.Component;
 import se.expleostockholm.signup.domain.Event;
 import se.expleostockholm.signup.domain.Invitation;
 import se.expleostockholm.signup.domain.Person;
-import se.expleostockholm.signup.exception.EventNotFoundException;
-import se.expleostockholm.signup.exception.InvitationNotFoundException;
-import se.expleostockholm.signup.exception.PersonNotFoundException;
-import se.expleostockholm.signup.repository.EventMapper;
-import se.expleostockholm.signup.repository.InvitationMapper;
-import se.expleostockholm.signup.repository.PersonMapper;
+import se.expleostockholm.signup.service.EventService;
+import se.expleostockholm.signup.service.InvitationService;
+import se.expleostockholm.signup.service.PersonService;
 
 import java.util.List;
 
 @Component
 public class Query implements GraphQLQueryResolver {
 
-    private InvitationMapper invitationMapper;
-    private EventMapper eventMapper;
-    private PersonMapper personMapper;
+    private final PersonService personService;
+    private final EventService eventService;
+    private final InvitationService invitationService;
 
-    public Query(InvitationMapper invitationMapper, EventMapper eventMapper, PersonMapper personMapper) {
-        this.invitationMapper = invitationMapper;
-        this.eventMapper = eventMapper;
-        this.personMapper = personMapper;
+    public Query(PersonService personService, EventService eventService, InvitationService invitationService) {
+        this.personService = personService;
+        this.eventService = eventService;
+        this.invitationService = invitationService;
     }
 
-    public List<Person> getAllPersons() { return personMapper.getAllPersons(); }
-
-    public List<Event> getAllEvents() {
-        return eventMapper.getAllEvents();
-    }
-
-    public List<Invitation> getAllInvitations() {return invitationMapper.getAllInvitations(); }
-
-    public Invitation getInvitationById(Long id) {
-        return invitationMapper.getInvitationById(id).orElseThrow(() -> new InvitationNotFoundException("No invitation found!"));
-    }
-
-    public Event getEventById(Long id) {
-        return eventMapper.getEventById(id).orElseThrow(() -> new EventNotFoundException("No event found!"));
+    public List<Person> getAllPersons() {
+        return personService.getAllPersons();
     }
 
     public Person getPersonById(Long id) {
-        return personMapper.getPersonById(id).orElseThrow(() -> new PersonNotFoundException("No person found!"));
+        return personService.getPersonById(id);
+    }
+
+    public List<Event> getAllEvents() {
+        return eventService.getAllEvents();
+    }
+
+    public Event getEventById(Long id) {
+        return eventService.getEventById(id);
+    }
+
+    public List<Invitation> getAllInvitations() {
+        return invitationService.getAllInvitations();
+    }
+
+    public Invitation getInvitationById(Long id) {
+        return invitationService.getInvitationById(id);
     }
 
     public List<Invitation> getInvitationsByEventId(Long id) {
-        return invitationMapper.getInvitationByEventId(id);
+        return invitationService.getInvitationsByEventId(id);
     }
 }

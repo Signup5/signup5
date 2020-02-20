@@ -1,9 +1,10 @@
 package se.expleostockholm.signup.integrationtests;
 
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.Order;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.event.annotation.AfterTestClass;
 import org.testcontainers.junit.jupiter.Testcontainers;
 import se.expleostockholm.signup.domain.Attendance;
 import se.expleostockholm.signup.domain.Event;
@@ -12,6 +13,7 @@ import se.expleostockholm.signup.domain.Person;
 import se.expleostockholm.signup.repository.EventMapper;
 import se.expleostockholm.signup.repository.InvitationMapper;
 import se.expleostockholm.signup.repository.PersonMapper;
+import se.expleostockholm.signup.utils.InvitationUtils;
 
 import javax.annotation.Resource;
 import java.time.LocalDate;
@@ -20,13 +22,10 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.MethodOrderer.*;
-import static org.junit.jupiter.api.TestInstance.*;
+import static org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
 import static se.expleostockholm.signup.utils.EventUtils.assertEventsAreEqual;
 import static se.expleostockholm.signup.utils.EventUtils.createMockEvent;
-import static se.expleostockholm.signup.utils.InvitationUtils.assertInvitationsAreEqual;
 import static se.expleostockholm.signup.utils.InvitationUtils.createMockInvitation;
-import static se.expleostockholm.signup.utils.PersonUtils.assertPersonsAreEqual;
 
 @TestMethodOrder(OrderAnnotation.class)
 @Testcontainers
@@ -106,20 +105,16 @@ public class EventMapperTest extends SignupDbTests {
         expectedEvent = createMockEvent(expectedHost);
         eventMapper.saveEvent(expectedEvent);
 
-        expectedInvitation = createMockInvitation(expectedEvent, expectedGuest);
+        expectedInvitation = InvitationUtils.createMockInvitation(expectedEvent, expectedGuest);
         invitationMapper.saveInvitation(expectedInvitation);
 
         expectedEvent.setInvitations(List.of(expectedInvitation));
 
         Optional<Event> actualEvent = eventMapper.getEventById(expectedEvent.getId());
         Invitation actualInvitation = actualEvent.get().getInvitations().get(0);
-        Person actualHost = actualEvent.get().getHost();
-        Person actualGuest = actualInvitation.getGuest();
+
 
         assertEventsAreEqual(expectedEvent, actualEvent);
-        assertPersonsAreEqual(expectedHost, actualHost, "Host");
-        assertPersonsAreEqual(expectedGuest, actualGuest, "Guest");
-        assertInvitationsAreEqual(expectedInvitation, actualInvitation);
 
         tearDown();
     }
