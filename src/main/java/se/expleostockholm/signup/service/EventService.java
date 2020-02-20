@@ -16,14 +16,19 @@ public class EventService {
 
     private final EventMapper eventMapper;
     private final InvitationService invitationService;
+    private final PersonService personService;
 
-    public EventService(EventMapper eventMapper, InvitationService invitationService) {
+    public EventService(EventMapper eventMapper, InvitationService invitationService, PersonService personService) {
         this.eventMapper = eventMapper;
         this.invitationService = invitationService;
+        this.personService = personService;
     }
 
     public Event saveEvent(Event event) {
         if (eventMapper.eventExists(event) == 0) {
+
+            personService.getPersonById(event.getHost().getId());
+
             if (isValidDate(event.getDate_of_event())) {
                 eventMapper.saveEvent(event);
                 invitationService.saveInvitations(event.getInvitations(), event.getId());
