@@ -63,6 +63,5 @@ public class InvitationService {
             throw new InvitationNotFoundException("No invitations found for event");
         }
         return invitations;
-
     }
 }
