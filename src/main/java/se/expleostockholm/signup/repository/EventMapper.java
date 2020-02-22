@@ -13,8 +13,11 @@ public interface EventMapper {
 
     @Select("SELECT * FROM event")
     @Results({
+            @Result(property = "id", column = "id"),
             @Result(property = "host", column = "host_id",
-                    one = @One(select = "se.expleostockholm.signup.repository.PersonMapper.getPersonById"))
+                    one = @One(select = "se.expleostockholm.signup.repository.PersonMapper.getPersonById")),
+            @Result(property = "invitations", javaType = List.class, column = "id",
+                    many = @Many(select = "se.expleostockholm.signup.repository.InvitationMapper.getInvitationsByEventId"))
     })
     List<Event> getAllEvents();
 

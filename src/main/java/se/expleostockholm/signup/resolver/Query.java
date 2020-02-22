@@ -1,6 +1,7 @@
 package se.expleostockholm.signup.resolver;
 
 import com.coxautodev.graphql.tools.GraphQLQueryResolver;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 import se.expleostockholm.signup.domain.Event;
 import se.expleostockholm.signup.domain.Invitation;
@@ -12,17 +13,12 @@ import se.expleostockholm.signup.service.PersonService;
 import java.util.List;
 
 @Component
+@AllArgsConstructor
 public class Query implements GraphQLQueryResolver {
 
     private final PersonService personService;
     private final EventService eventService;
     private final InvitationService invitationService;
-
-    public Query(PersonService personService, EventService eventService, InvitationService invitationService) {
-        this.personService = personService;
-        this.eventService = eventService;
-        this.invitationService = invitationService;
-    }
 
     public List<Person> getAllPersons() {
         return personService.getAllPersons();

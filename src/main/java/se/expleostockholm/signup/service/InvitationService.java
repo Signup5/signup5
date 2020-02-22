@@ -1,5 +1,6 @@
 package se.expleostockholm.signup.service;
 
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import se.expleostockholm.signup.domain.Attendance;
 import se.expleostockholm.signup.domain.Invitation;
@@ -12,17 +13,11 @@ import se.expleostockholm.signup.repository.PersonMapper;
 import java.util.List;
 
 @Service
+@AllArgsConstructor
 public class InvitationService {
 
     private final InvitationMapper invitationMapper;
     private final PersonService personService;
-    private final PersonMapper personMapper;
-
-    public InvitationService(InvitationMapper invitationMapper, PersonService personService, PersonMapper personMapper) {
-        this.invitationMapper = invitationMapper;
-        this.personService = personService;
-        this.personMapper = personMapper;
-    }
 
     public void saveInvitations(List<Invitation> invitations, Long eventID) {
         invitations.forEach(invitation -> {

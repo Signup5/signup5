@@ -98,7 +98,7 @@ public class CreateEventTest extends SignupDbTests {
         Response response = graphQLResponse.get("$.data.response", Response.class);
         String responseMessage = response.getMessage();
 
-        assertEquals("Event was successfully saved", responseMessage);
+        assertEquals("Event was successfully saved!", responseMessage);
 
         event.setId(response.getId());
 
