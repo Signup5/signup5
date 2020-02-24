@@ -47,4 +47,8 @@ public class PersonService {
     public boolean doesPersonExist(Person person) {
         return person.getId().equals(personMapper.getPersonById(person.getId()));
     }
+
+    public Person getPersonByEmail(String email) {
+        return personMapper.getPersonByEmail(email).orElseThrow(() -> new PersonNotFoundException("No person found!"));
+    }
 }

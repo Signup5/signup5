@@ -28,6 +28,8 @@ public class Query implements GraphQLQueryResolver {
         return personService.getPersonById(id);
     }
 
+    public Person getPersonByEmail(String email) { return personService.getPersonByEmail(email);}
+
     public List<Event> getAllEvents() {
         return eventService.getAllEvents();
     }

@@ -75,6 +75,7 @@ type Query {
     getAllEvents: [Event]
     getAllInvitations: [Invitation]
     getPersonById(id: Int): Person
+    getPersonByEmail(email: String!): Person
     getEventById(id: Int): Event
     getInvitationById(id: Int): Invitation
     getInvitationsByEventId(id: Int): [Invitation]
