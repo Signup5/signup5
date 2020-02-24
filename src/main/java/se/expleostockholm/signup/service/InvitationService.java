@@ -8,7 +8,6 @@ import se.expleostockholm.signup.exception.InvitationAlreadyExistException;
 import se.expleostockholm.signup.exception.InvitationNotFoundException;
 import se.expleostockholm.signup.exception.SetAttendanceException;
 import se.expleostockholm.signup.repository.InvitationMapper;
-import se.expleostockholm.signup.repository.PersonMapper;
 
 import java.util.List;
 

@@ -51,7 +51,7 @@ public class MutationTest extends SignupDbTests {
 
     @Test
     @Order(1)
-    public void setAttendance() {
+    public void attendance_updated_success() {
         Response response = mutation.setAttendance(Attendance.ATTENDING, invitationId);
         Optional<Invitation> invitation = invitationMapper.getInvitationById(invitationId);
         assertAll(
@@ -63,7 +63,7 @@ public class MutationTest extends SignupDbTests {
 
     @Test
     @Order(2)
-    public void createEvent() {
+    public void createEvent_success() {
         System.out.println(hostId);
         expectedHost = personMapper.getPersonById(hostId).get();
         expectedEvent = createMockEvent(expectedHost);
@@ -77,7 +77,7 @@ public class MutationTest extends SignupDbTests {
 
     @Test
     @Order(3)
-    public void create_Duplicate_Event_fail() {
+    public void createEvent_duplicate_fail() {
         assertThrows(EventAlreadyExistException.class, () ->
                 mutation.createEvent(eventMapper.getEventById(1L).get())
         );

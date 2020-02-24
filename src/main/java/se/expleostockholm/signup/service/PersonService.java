@@ -20,8 +20,7 @@ import static se.expleostockholm.signup.service.ServiceUtil.isValidEmail;
 @AllArgsConstructor
 public class PersonService {
 
-    @Resource
-    private PersonMapper personMapper;
+    private final PersonMapper personMapper;
 
     public Person savePerson(Person person) {
         if (isValidEmail(person.getEmail())) {
@@ -43,5 +42,9 @@ public class PersonService {
 
     public Person getPersonById(Long id) {
         return personMapper.getPersonById(id).orElseThrow(() -> new PersonNotFoundException("No person found!"));
+    }
+
+    public boolean doesPersonExist(Person person) {
+        return person.getId().equals(personMapper.getPersonById(person.getId()));
     }
 }

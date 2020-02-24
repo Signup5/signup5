@@ -41,5 +41,5 @@ public interface EventMapper {
     void removeEventById(Long id);
 
     @Select("SELECT COUNT(*) FROM event WHERE host_id=#{host.id} and title=#{title} and date_of_event=#{date_of_event} and time_of_event=#{time_of_event} and location=#{location}")
-    Long eventExists(Event event);
+    Long isDuplicateEvent(Event event);
 }
