@@ -1,116 +1,104 @@
-import React from "react";
-
-import { createStyles, Theme, makeStyles } from "@material-ui/core/styles";
-import IconButton from "@material-ui/core/IconButton";
-import InputAdornment from "@material-ui/core/InputAdornment";
-import TextField from "@material-ui/core/TextField";
-import Grid from "@material-ui/core/Grid";
+import { Button, Grid, Paper, TextField } from "@material-ui/core";
 import AccountCircle from "@material-ui/icons/AccountCircle";
 import LockIcon from "@material-ui/icons/Lock";
-import Visibility from "@material-ui/icons/Visibility";
-import VisibilityOff from "@material-ui/icons/VisibilityOff";
-import Button from "@material-ui/core/Button";
+import React, { ChangeEvent, FC, FormEvent, useEffect, useState } from "react";
+import Classes from "../App.module.css";
+import GetPersonByEmail from "./GetPersonByEmail";
 
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    root: {
-      display: "flex",
-      flexWrap: "wrap"
-    },
-    margin: {
-      margin: theme.spacing(1)
-    },
-    withoutLabel: {
-      marginTop: theme.spacing(3)
-    },
-    textField: {
-      width: 400
+const LoginForm: FC = () => {
+  const [email, setEmail] = useState<string>("");
+  const [validEmail, setValidEmail] = useState<boolean>(true);
+  const [submitted, setSubmitted] = useState<boolean>(false);
+  const [password, setPassword] = useState<string>("");
+  const [renderPerson, setRenderPerson] = useState<boolean>(false);
+  
+  const regEx = new RegExp(
+    `^[a-zA-Z0-9_#$%&'*+/=?^.-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-_]+\\.)+[a-zA-Z]{2,13}$`
+  );
+
+  const onPasswordChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setPassword(e.target.value);
+  };
+
+  const onEmailChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setEmail(e.target.value);
+  };
+
+  const handleSubmit = (e: FormEvent) => {
+    e.preventDefault();
+    setSubmitted(true);
+
+    setRenderPerson(validEmail && submitted)
+    
+  };
+
+  const validateEmail = () => {
+    setValidEmail(email.match(regEx)? true: false);
+  };
+
+  useEffect(() => {
+    if (submitted) {
+      validateEmail();
     }
   })
-);
 
-interface State {
-  password: string;
-  showPassword: boolean;
-}
-
-export default function InputAdornments() {
-  const classes = useStyles();
-
-  const [values, setValues] = React.useState<State>({
-    password: "",
-    showPassword: false
-  });
-
-  const handleChange = (prop: keyof State) => (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    setValues({ ...values, [prop]: event.target.value });
-  };
-
-  const handleClickShowPassword = () => {
-    setValues({ ...values, showPassword: !values.showPassword });
-  };
-
-  const handleMouseDownPassword = (
-    event: React.MouseEvent<HTMLButtonElement>
-  ) => {
-    event.preventDefault();
-  };
 
   return (
-    <Grid container spacing={2}>
-      
-      <Grid item xs={12}>
-        <Grid container justify="center" spacing={1} alignItems="flex-end">
-          <Grid item>
+    <div>
+      <form onSubmit={handleSubmit} noValidate className={Classes.LoginForm}>
+        <h2>Sign in</h2>
+        <Grid container spacing={1} alignItems="flex-end">
+          <Grid item xs={1}>
             <AccountCircle />
           </Grid>
-
-          <Grid item>
-            <TextField id="input-email" label="Email" />
-          </Grid>
-        </Grid>
-      </Grid>
-
-      <Grid item xs={12}>
-        <Grid container justify="center" spacing={1} alignItems="flex-end">
-          <Grid item>
-            <LockIcon />
-          </Grid>
-
-          <Grid item>
+          <Grid item xs={11}>
             <TextField
-              id="input-password"
-              label="Password"
-              type={values.showPassword ? "text" : "password"}
-              InputProps={{
-                endAdornment: (
-                  <InputAdornment position="end">
-                    <IconButton
-                      aria-label="toggle password visibility"
-                      onClick={handleClickShowPassword}
-                      onMouseDown={handleMouseDownPassword}
-                    >
-                      {values.showPassword ? <Visibility /> : <VisibilityOff />}
-                    </IconButton>
-                  </InputAdornment>
-                )
-              }}
+              required
+              className={Classes.InputField}
+              label="Email"
+              onChange={onEmailChange}
+              name="email"
+              type="email"
+              error={!validEmail}
+              helperText={validEmail? "" : "Not a valid email!"}
+              value={email}
             />
           </Grid>
         </Grid>
-      </Grid>
 
-
-     <Grid item xs={12}>
-         <Grid container justify="center">
-         <Button variant="contained" color="primary">
-          Login
+        <br />
+        <Grid container spacing={1} alignItems="flex-end">
+          <Grid item xs={1}>
+            <LockIcon />
+          </Grid>
+          <Grid item xs={11}>
+            <TextField
+              required
+              className={Classes.InputField}
+              label="Password"
+              onChange={onPasswordChange}
+              name="password"
+              type="password"
+              error={(password.length===0) && submitted}
+              helperText={((password.length===0) && submitted)? "Password required!" : ""}
+              value={password}
+            />
+          </Grid>
+        </Grid>
+        <br />
+        <Button
+          className={Classes.Button}
+          color="primary"
+          variant="contained"
+          type="submit"
+          onClick={() => handleSubmit}
+        >
+          Sign in
         </Button>
-         </Grid>
-     </Grid>
-
-    </Grid>
+      </form>
+      <Paper> {renderPerson? <GetPersonByEmail Email={email}/>: ""}</Paper>
+    </div>
   );
-}
+};
+
+export default LoginForm;

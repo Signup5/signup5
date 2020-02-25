@@ -1,27 +1,24 @@
-import React from 'react'
-import LoginForm from './Components/LoginForm'
-import './App.css'
-import { ApolloProvider } from "react-apollo"
-import { useQuery } from '@apollo/react-hooks'
-import ApolloClient from 'apollo-boost'
-import AllPersons from './Components/AllPersons'
-
-const client = new ApolloClient({
-  uri: "https://signup5-dev.herokuapp.com/graphql"
-});
-
+import React from "react";
+import Classes from "./App.module.css";
+import SignupLogo from "./Components/Icons/SignupLogo";
+import LoginForm from "./Components/LoginForm";
 
 function App() {
-
-  return (    
-    <ApolloProvider client={client}>
-    <div className="App">
-
+  return (
+    <div className={Classes.App}>
+      <div className={Classes.AppHeader}>
+        <SignupLogo />
+      </div>
+      <div className={Classes.AppSidebar}>
+        <p>this is a sidebar</p>
+      </div>
+      <div className={Classes.AppMainContent}>
         <LoginForm />
-        <AllPersons />
-       
+      </div>
+      <div className={Classes.AppFooter}>
+        <p>this is a footer</p>
+      </div>
     </div>
-    </ApolloProvider>
   );
 }
 
