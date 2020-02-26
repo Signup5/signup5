@@ -22,10 +22,15 @@ public class EventService {
     private final PersonService personService;
 
     /**
-     * Method for creating a new event. If the title, hostId, date, time and location match an existing event in the
-     * database a EventAlreadyExistException is thrown.
-     * @param event
-     * @return Event
+     * Method for creating a new event. Accepts an Event as an argument to be stored in the database if no duplicates
+     * are found in the database.
+     * <p>
+     * The method uses verifications the Event properties to see if it matches an already existing event.
+     * <p>
+     * Returns an Event object with an updated Id property if no duplicates are found in the database.
+     *
+     * @param   event   the event to be checked for duplicates and saved in the database
+     * @return          an updated Even bean with a Id property
      */
     public Event createNewEvent(Event event) {
         if (!isDuplicateEvent(event)) {
@@ -51,10 +56,25 @@ public class EventService {
         return events;
     }
 
+    /**
+     * Method for retrieving an Event from the Database based on its Id.
+     * <p>
+     * Accepts a Long as an argument representing the Event Id in the database.
+     *
+     * @param   id  a Long value representing an Event Id
+     * @return      an Event if Id was found in the database
+     */
     public Event getEventById(Long id) {
         return eventMapper.getEventById(id).orElseThrow(() -> new EventNotFoundException("No event found!"));
     }
 
+    /**
+     * Method accepting an Event as an argument to check if there is an Event with the same data already found in the
+     * database.
+     *
+     * @param   event   Event to be checked if it's not already in the database
+     * @return          true or false whether a duplicate Event was found
+     */
     public boolean isDuplicateEvent(Event event) {
         return eventMapper.isDuplicateEvent(event) == 1;
     }

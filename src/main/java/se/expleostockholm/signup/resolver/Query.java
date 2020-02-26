@@ -24,16 +24,43 @@ public class Query implements GraphQLQueryResolver {
         return personService.getAllPersons();
     }
 
+
+    /**
+     * GraphQL endpoint for for retrieving a Person based on its Id.
+     * <p>
+     * Accepts a Long as an argument representing the Person Id in the database.
+     *
+     * @param   id  a Long value representing a Person Id
+     * @return      a Person if Person Id was found in the database
+     */
     public Person getPersonById(Long id) {
         return personService.getPersonById(id);
     }
 
+
+    /**
+     * GraphQL endpoint for retrieving a Person based on its email address.
+     * <p>
+     * Accepts email as a String argument to be matched with a Person in the database.
+     *
+     * @param   id  a String representing a Persons email address
+     * @return      a Person if email was found in the database
+     */
     public Person getPersonByEmail(String email) { return personService.getPersonByEmail(email);}
+
 
     public List<Event> getAllEvents() {
         return eventService.getAllEvents();
     }
 
+    /**
+     * GraphQL endpoint for retrieving an Event from the Database based on its Id.
+     * <p>
+     * Accepts a Long as an argument representing the Event Id in the database.
+     *
+     * @param   id  a Long value representing an Event Id
+     * @return      an Event if Id was found in the database
+     */
     public Event getEventById(Long id) {
         return eventService.getEventById(id);
     }
@@ -42,10 +69,28 @@ public class Query implements GraphQLQueryResolver {
         return invitationService.getAllInvitations();
     }
 
+
+    /**
+     * GraphQL endpoint for retrieving an Invitation from the Database based on its Id.
+     * <p>
+     * Accepts a Long as an argument representing the Invitation Id in the database.
+     *
+     * @param   id  a Long value representing an Invitation Id
+     * @return      an Invitation if Id was found in the database
+     */
     public Invitation getInvitationById(Long id) {
         return invitationService.getInvitationById(id);
     }
 
+
+    /**
+     * GraphQL endpoint for retrieving all Invitations for an Event based on the Event Id.
+     * <p>
+     * Accepts a Long as an argument representing the Event Id in the database.
+     *
+     * @param   id  a Long value representing an Event Id
+     * @return      a list of Invitations if Event Id was found in the database
+     */
     public List<Invitation> getInvitationsByEventId(Long id) {
         return invitationService.getInvitationsByEventId(id);
     }
