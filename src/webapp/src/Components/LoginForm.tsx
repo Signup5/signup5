@@ -1,20 +1,24 @@
-import { Button, Grid, Paper, TextField } from "@material-ui/core";
+import { Button, Grid, TextField } from "@material-ui/core";
 import AccountCircle from "@material-ui/icons/AccountCircle";
 import LockIcon from "@material-ui/icons/Lock";
-import React, { ChangeEvent, FC, FormEvent, useEffect, useState } from "react";
+import React, { ChangeEvent, FC, FormEvent, useState } from "react";
 import Classes from "../App.module.css";
-import GetPersonByEmail from "./GetPersonByEmail";
+import { Person } from "../Types";
+import { emailRegEx } from "../Utility";
+import ValidatePersonCredentials from "./ValidatePersonCredentials";
 
-const LoginForm: FC = () => {
+interface Props {}
+
+interface StateProps {
+  person?: Person;
+}
+
+const LoginForm: FC<Props> = () => {
   const [email, setEmail] = useState<string>("");
+  const [submittedEmail, setSubmittedEmail] = useState<string>("");
   const [validEmail, setValidEmail] = useState<boolean>(true);
   const [submitted, setSubmitted] = useState<boolean>(false);
   const [password, setPassword] = useState<string>("");
-  const [renderPerson, setRenderPerson] = useState<boolean>(false);
-  
-  const regEx = new RegExp(
-    `^[a-zA-Z0-9_#$%&'*+/=?^.-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-_]+\\.)+[a-zA-Z]{2,13}$`
-  );
 
   const onPasswordChange = (e: ChangeEvent<HTMLInputElement>) => {
     setPassword(e.target.value);
@@ -27,21 +31,13 @@ const LoginForm: FC = () => {
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
     setSubmitted(true);
-
-    setRenderPerson(validEmail && submitted)
-    
+    validateEmail();
+    setSubmittedEmail(email);
   };
 
   const validateEmail = () => {
-    setValidEmail(email.match(regEx)? true: false);
+    setValidEmail(email.match(emailRegEx) ? true : false);
   };
-
-  useEffect(() => {
-    if (submitted) {
-      validateEmail();
-    }
-  })
-
 
   return (
     <div>
@@ -60,7 +56,7 @@ const LoginForm: FC = () => {
               name="email"
               type="email"
               error={!validEmail}
-              helperText={validEmail? "" : "Not a valid email!"}
+              helperText={validEmail ? "" : "Not a valid email!"}
               value={email}
             />
           </Grid>
@@ -79,8 +75,10 @@ const LoginForm: FC = () => {
               onChange={onPasswordChange}
               name="password"
               type="password"
-              error={(password.length===0) && submitted}
-              helperText={((password.length===0) && submitted)? "Password required!" : ""}
+              error={password.length === 0 && submitted}
+              helperText={
+                password.length === 0 && submitted ? "Password required!" : ""
+              }
               value={password}
             />
           </Grid>
@@ -96,7 +94,11 @@ const LoginForm: FC = () => {
           Sign in
         </Button>
       </form>
-      <Paper> {renderPerson? <GetPersonByEmail Email={email}/>: ""}</Paper>
+      {submitted && validEmail ? (
+        <ValidatePersonCredentials Email={submittedEmail} />
+      ) : (
+        ""
+      )}
     </div>
   );
 };
