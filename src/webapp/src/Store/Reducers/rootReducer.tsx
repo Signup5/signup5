@@ -3,7 +3,7 @@ import { Person } from "../../Types";
 import * as ActionType from "../Actions/actionTypes";
 
 export interface InitialState {
-  person?: Person;
+  person: Person;
 }
 
 export const initialState: InitialState = {

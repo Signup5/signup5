@@ -1,0 +1,1 @@
+export {GET_PERSON_BY_EMAIL} from "./queries"

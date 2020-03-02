@@ -1,6 +1,5 @@
 .AppHeader {
   padding: 10px;
-
   background-color: f7f7f7;
   grid-area: header;
   border-bottom: 1px solid rgb(135, 135, 135);
@@ -8,13 +7,12 @@
   margin: 10px 30px 0 30px;
 }
 .AppMainContent {
-  background-color:f7f7f7;
+  background-color: f7f7f7;
   grid-area: main;
   overflow-y: scroll;
   overflow-x: hidden;
   padding: 30px 50px;
-  margin-bottom: 30px ;
-
+  margin-bottom: 30px;
 }
 .AppSidebar {
   background-color: f7f7f7;
@@ -24,18 +22,17 @@
   padding-left: 30px;
 }
 .AppFooter {
-  background-color:f7f7f7;
+  background-color: f7f7f7;
   grid-area: footer;
   border-top: 1px solid rgb(135, 135, 135);
   margin: 0 30px 0 30px;
   padding-left: 30px;
-
 }
 
 .App {
   display: grid;
   grid-template-columns: 1.5fr 10.5fr;
-  
+
   grid-template-rows: 1fr 10.5fr 0.5fr;
   grid-template-areas:
     "header header"
@@ -46,9 +43,8 @@
 }
 
 .SignupLogo {
-  font-family: acumin-pro,sans-serif;
-  font-weight: 700;
-  font-style: normal;
+  max-width: 15%;
+  min-width: 215px;
 }
 
 .InputField {

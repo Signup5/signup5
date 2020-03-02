@@ -1,17 +1,12 @@
 import { Button, Grid, TextField } from "@material-ui/core";
 import AccountCircle from "@material-ui/icons/AccountCircle";
 import LockIcon from "@material-ui/icons/Lock";
-import React, { ChangeEvent, FC, FormEvent, useState } from "react";
+import React, { ChangeEvent, FC, FormEvent, useState, useEffect } from "react";
 import Classes from "../App.module.css";
-import { Person } from "../Types";
 import { emailRegEx } from "../Utility";
 import ValidatePersonCredentials from "./ValidatePersonCredentials";
 
 interface Props {}
-
-interface StateProps {
-  person?: Person;
-}
 
 const LoginForm: FC<Props> = () => {
   const [email, setEmail] = useState<string>("");
@@ -19,6 +14,7 @@ const LoginForm: FC<Props> = () => {
   const [validEmail, setValidEmail] = useState<boolean>(true);
   const [submitted, setSubmitted] = useState<boolean>(false);
   const [password, setPassword] = useState<string>("");
+  const [loggedIn, login] = useState<boolean>(false);
 
   const onPasswordChange = (e: ChangeEvent<HTMLInputElement>) => {
     setPassword(e.target.value);
@@ -28,16 +24,21 @@ const LoginForm: FC<Props> = () => {
     setEmail(e.target.value);
   };
 
-  const handleSubmit = (e: FormEvent) => {
+  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setSubmitted(true);
     validateEmail();
     setSubmittedEmail(email);
+    login(true);
   };
 
   const validateEmail = () => {
     setValidEmail(email.match(emailRegEx) ? true : false);
   };
+
+  useEffect(() => {
+    if (submitted) validateEmail();
+  });
 
   return (
     <div>
@@ -94,8 +95,8 @@ const LoginForm: FC<Props> = () => {
           Sign in
         </Button>
       </form>
-      {submitted && validEmail ? (
-        <ValidatePersonCredentials Email={submittedEmail} />
+      {loggedIn && validEmail ? (
+        <ValidatePersonCredentials email={submittedEmail} checkLogin={login} />
       ) : (
         ""
       )}
