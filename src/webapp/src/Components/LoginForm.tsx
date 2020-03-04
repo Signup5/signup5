@@ -1,4 +1,4 @@
-import { Button, Grid, TextField } from "@material-ui/core";
+import { Button, Grid, TextField, Paper, Card } from "@material-ui/core";
 import AccountCircle from "@material-ui/icons/AccountCircle";
 import LockIcon from "@material-ui/icons/Lock";
 import React, { ChangeEvent, FC, FormEvent, useState, useEffect } from "react";
@@ -41,7 +41,7 @@ const LoginForm: FC<Props> = () => {
   });
 
   return (
-    <div>
+    <Card className={Classes.MainPaper}>
       <form onSubmit={handleSubmit} noValidate className={Classes.LoginForm}>
         <h2>Sign in</h2>
         <Grid container spacing={1} alignItems="flex-end">
@@ -100,7 +100,7 @@ const LoginForm: FC<Props> = () => {
       ) : (
         ""
       )}
-    </div>
+    </Card>
   );
 };
 

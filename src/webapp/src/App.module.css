@@ -13,6 +13,8 @@
   overflow-x: hidden;
   padding: 30px 50px;
   margin-bottom: 30px;
+  display: flexbox;
+  flex-basis: 50%;
 }
 .AppSidebar {
   background-color: f7f7f7;
@@ -58,4 +60,12 @@
 
 .Button {
   margin-top: 16px !important;
+}
+
+.MainPaper {
+  width: 50%;
+}
+
+.CreateEventForm {
+  flex-grow: 1;
 }

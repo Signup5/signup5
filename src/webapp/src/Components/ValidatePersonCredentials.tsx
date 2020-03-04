@@ -3,7 +3,7 @@ import React, { Dispatch, FC, SetStateAction } from "react";
 import { useDispatch } from "react-redux";
 import { GET_PERSON_BY_EMAIL } from "../Store/GQL";
 import { RootDispatcher } from "../Store/Reducers/rootReducer";
-import { Person } from "../Types";
+import { Person, QueryResponse } from "../Types";
 import { useHistory } from "react-router-dom";
 
 interface Props {
@@ -17,18 +17,18 @@ const ValidatePersonCredentials: FC<Props> = props => {
 
   const history = useHistory();
 
-  console.log(props.email);
-
-  const { loading, error, data } = useQuery(GET_PERSON_BY_EMAIL, {
-    variables: { email: props.email }
+  const response: QueryResponse = useQuery(GET_PERSON_BY_EMAIL, {
+    variables: {
+      email: props.email
+    }
   });
 
-  if (loading) return <p>Loading...</p>;
-  if (error) {
+  if (response.loading) return <p>Loading...</p>;
+  if (response.error) {
     return <p>Email and/or password did not match!</p>;
   }
 
-  const person: Person = data.person;
+  const person: Person = response.data.person;
 
   rootDispatcher.updatePerson(person);
 

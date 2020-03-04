@@ -1,25 +1,24 @@
 import React, { FC } from "react";
+import { useSelector } from "react-redux";
+import { BrowserRouter, Route } from "react-router-dom";
 import Classes from "./App.module.css";
+import { Form } from "./Components/Dashboard";
 import SignupLogo from "./Components/Icons/SignupLogo";
 import LoginForm from "./Components/LoginForm";
-import { BrowserRouter, Route } from "react-router-dom";
-import { useSelector } from "react-redux";
-import { Person } from "./Types";
 import { InitialState } from "./Store/Reducers/rootReducer";
-import { Form } from "./Components/Dashboard";
+import { Person } from "./Types";
+import { Paper } from "@material-ui/core";
 
 interface StateProps {
   person: Person;
 }
 
 const App: FC = () => {
-  const { person } = useSelector<InitialState, StateProps>(
-    (state: InitialState) => {
-      return {
-        person: state.person
-      };
-    }
-  );
+  useSelector<InitialState, StateProps>((state: InitialState) => {
+    return {
+      person: state.person
+    };
+  });
 
   return (
     <div className={Classes.App}>

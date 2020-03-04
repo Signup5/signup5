@@ -2,7 +2,6 @@ import { useQuery } from '@apollo/react-hooks';
 import { gql } from 'apollo-boost';
 import React from 'react';
 
-
 const PERSONS_QUERY = gql`
   {
     getAllPersons {
@@ -13,7 +12,6 @@ const PERSONS_QUERY = gql`
     }
   }
 `;
-
 
 export default function AllPersons() {
   const { loading, error, data } = useQuery(PERSONS_QUERY);
