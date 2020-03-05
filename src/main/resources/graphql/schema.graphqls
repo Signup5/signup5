@@ -61,6 +61,7 @@ input HostInput {
     email: String
     first_name: String
     last_name: String
+    __typename: String
 }
 
 input GuestInput {
