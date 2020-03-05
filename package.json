@@ -1,0 +1,29 @@
+{
+  "name": "webapp",
+  "version": "3.0.0",
+  "description": "How to use create-react-app with a custom Node API on Heroku",
+  "engines": {
+    "node": "10.x"
+  },
+  "scripts": {
+    "start": "cd src/webapp/ && npm start",
+    "build": "cd src/webapp/ && npm install && npm run build"
+  },
+  "cacheDirectories": [
+    "node_modules",
+    "react-ui/node_modules"
+  ],
+  
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Signup5/signup5"
+  },
+  "keywords": [
+    "node",
+    "heroku",
+    "create-react-app",
+    "react"
+  ],
+  "license": "MIT",
+  "devDependencies": {}
+}
