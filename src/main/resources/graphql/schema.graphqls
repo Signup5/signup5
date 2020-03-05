@@ -61,7 +61,11 @@ input HostInput {
     email: String
     first_name: String
     last_name: String
+<<<<<<< HEAD
 	__typename: String
+=======
+    __typename: String
+>>>>>>> 6a4f10bb5927ed2ac517ea7b621319ef6516c8d3
 }
 
 input GuestInput {
