@@ -25,4 +25,5 @@ public class Event {
     private LocalDate date_of_event;
     private LocalTime time_of_event;
     private String location;
+
 }
