@@ -1,7 +1,6 @@
-import { Card, CardContent, TextField } from "@material-ui/core";
-import React, { FC, useEffect, useState } from "react";
+import { Card, CardContent } from "@material-ui/core";
+import React, { FC } from "react";
 import Classes from "../../App.module.css";
-import { Person } from "../../Types";
 
 interface Props {
   guestList: Array<string>;
