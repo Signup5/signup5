@@ -1,1 +1,0 @@
-export const UPDATE_PERSON = "UPDATE_PERSON";
