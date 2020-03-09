@@ -24,6 +24,9 @@ public class Query implements GraphQLQueryResolver {
         return personService.getAllPersons();
     }
 
+    public List<Invitation> getInvitationsByGuestId(Long id) {
+        return invitationService.getInvitationsByGuestId(id);
+    }
 
     /**
      * GraphQL endpoint for for retrieving a Person based on its Id.
@@ -46,7 +49,8 @@ public class Query implements GraphQLQueryResolver {
      * @param   id  a String representing a Persons email address
      * @return      a Person if email was found in the database
      */
-    public Person getPersonByEmail(String email) { return personService.getPersonByEmail(email);}
+    public Person getPersonByEmail(String email) throws InterruptedException {
+        return personService.getPersonByEmail(email);}
 
 
     public List<Event> getAllEvents() {

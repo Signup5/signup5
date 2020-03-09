@@ -98,4 +98,9 @@ public class InvitationService {
         }
         return invitations;
     }
+
+    public List<Invitation> getInvitationsByGuestId(Long id) {
+        return invitationMapper.getInvitationsByGuestId(id);
+    }
+
 }

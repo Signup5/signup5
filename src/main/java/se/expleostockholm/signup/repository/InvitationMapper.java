@@ -45,4 +45,7 @@ public interface InvitationMapper {
 
     @Delete("DELETE FROM invitation WHERE event_id = #{id}")
     void removeInvitationByEventId(Long id);
+
+    @Select("SELECT * FROM invitation WHERE guest_id = #{id}")
+    List<Invitation> getInvitationsByGuestId(Long id);
 }

@@ -28,6 +28,7 @@ public class Mutation implements GraphQLMutationResolver {
      */
     public Response setAttendance(Attendance attendance, Long invitation_id) {
         invitationService.setAttendance(attendance, invitation_id);
+
         return Response.builder()
                 .message("Attendance was successfully updated!")
                 .build();
