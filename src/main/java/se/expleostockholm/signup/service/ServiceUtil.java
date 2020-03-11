@@ -11,8 +11,8 @@ public class ServiceUtil {
      * <p>
      * Returns a Boolean if the email argument matches a RegEx pattern.
      *
-     * @param email a String representing the email address to be validated
-     * @return true or false whether email is in a valid format or not
+     * @param   email   a String representing the email address to be validated
+     * @return          true or false whether email is in a valid format or not
      */
     public static boolean isValidEmail(String email) {
 
@@ -20,18 +20,18 @@ public class ServiceUtil {
             InternetAddress internetAddress = new InternetAddress(email);
             internetAddress.validate();
             return true;
-        } catch (AddressException ex) {
+        }  catch (AddressException ex) {
             return false;
-        }
+         }
     }
 
     /**
      * Method for validating a date.
-     * <p>
+     *<p>
      * Returns a boolean if the date argument matches a RegEx pattern.
      *
-     * @param date a LocalDate to be validated
-     * @return true or false whether the date is in a valid format or not
+     * @param   date    a LocalDate to be validated
+     * @return          true or false whether the date is in a valid format or not
      */
     public static boolean isValidDate(LocalDate date) {
         return date.isAfter(LocalDate.now().minusDays(1));

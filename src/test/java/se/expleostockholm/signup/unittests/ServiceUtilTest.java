@@ -39,8 +39,8 @@ class ServiceUtilTest {
                 Arguments.of("*<@!||>.com", false),
                 Arguments.of("", false),
                 Arguments.of(".@..com", false),
-                Arguments.of("test@åäö.se", false),
-                Arguments.of("test@åäö.se", false)
+                Arguments.of("test@åäö.se", true),
+                Arguments.of("test@åäö.se", true)
         );
     }
 
