@@ -77,9 +77,11 @@ type Query {
     getPersonById(id: Int): Person
     getPersonByEmail(email: String!): Person
     getEventById(id: Int): Event
+    getEventsByHostId(id: Int!): [Event]
     getInvitationById(id: Int): Invitation
     getInvitationsByEventId(id: Int): [Invitation]
     getInvitationsByGuestId(id: Int!): [Invitation]
+
 }
 
 type Mutation {

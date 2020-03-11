@@ -79,4 +79,12 @@ public class EventService {
         return eventMapper.isDuplicateEvent(event) == 1;
     }
 
+    public List<Event> getEventsByHostId(Long id) {
+
+        List<Event> events = eventMapper.getEventsByHostId(id);
+        if (events.size() == 0) {
+            throw new EventNotFoundException("No events found!");
+        }
+        return events;
+    }
 }

@@ -42,4 +42,14 @@ public interface EventMapper {
 
     @Select("SELECT COUNT(*) FROM event WHERE host_id=#{host.id} and title=#{title} and date_of_event=#{date_of_event} and time_of_event=#{time_of_event} and location=#{location}")
     Long isDuplicateEvent(Event event);
+
+    @Select("SELECT * FROM event WHERE host_id = #{id}")
+    @Results({
+            @Result(property = "id", column = "id"),
+            @Result(property = "host", column = "host_id",
+                    one = @One(select = "se.expleostockholm.signup.repository.PersonMapper.getPersonById")),
+            @Result(property = "invitations", javaType = List.class, column = "id",
+                    many = @Many(select = "se.expleostockholm.signup.repository.InvitationMapper.getInvitationsByEventId"))
+    })
+    List<Event> getEventsByHostId(Long id);
 }

@@ -24,6 +24,10 @@ public class Query implements GraphQLQueryResolver {
         return personService.getAllPersons();
     }
 
+    public List<Event> getEventsByHostId(Long id) {
+        return eventService.getEventsByHostId(id);
+    }
+
     public List<Invitation> getInvitationsByGuestId(Long id) {
         return invitationService.getInvitationsByGuestId(id);
     }
