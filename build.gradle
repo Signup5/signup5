@@ -53,6 +53,7 @@ dependencies {
 
     compile group: 'com.sun.mail', name: 'javax.mail', version: '1.6.2'
     compile group: 'com.zhokhov.graphql', name: 'graphql-datetime-autoconfigure', version: '1.6.0'
+    compile group: 'org.mnode.ical4j', name: 'ical4j', version: '3.0.15'
 
 }
 

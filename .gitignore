@@ -156,4 +156,4 @@ psd
 thumb
 sketch
 
-# End of https://www.gitignore.io/api/react
+/mycalendar.ics
