@@ -44,7 +44,6 @@ public class EventService {
             }
             throw new PersonNotFoundException("Event host not found!");
         }
-
         throw new EventAlreadyExistException("'" + event.getTitle() + "': " + event.getDate_of_event() + ": " + event.getTime_of_event() + " - Event already exists");
     }
 

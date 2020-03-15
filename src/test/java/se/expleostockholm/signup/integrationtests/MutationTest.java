@@ -64,7 +64,6 @@ public class MutationTest extends SignupDbTests {
     @Test
     @Order(2)
     public void createEvent_success() {
-        System.out.println(hostId);
         expectedHost = personMapper.getPersonById(hostId).get();
         expectedEvent = createMockEvent(expectedHost);
 

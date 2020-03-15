@@ -37,8 +37,7 @@ public class EmailService {
 
     public static Message createEmail(List<String> recipients, Calendar calendar) {
 
-        String from = "signup5@kristiangrundstrom.se";
-        final String username = System.getenv("MAIL_USERNAME");
+        final String mail_username = System.getenv("MAIL_USERNAME");
         final String password = System.getenv("MAIL_PASSWORD");
         final String host = System.getenv("MAIL_SMTP_HOST");
 
@@ -50,24 +49,18 @@ public class EmailService {
         Session session = Session.getInstance(props,
                 new javax.mail.Authenticator() {
                     protected PasswordAuthentication getPasswordAuthentication() {
-                        return new PasswordAuthentication(username, password);
+                        return new PasswordAuthentication(mail_username, password);
                     }
                 });
-
         try {
-
             Message message = new MimeMessage(session);
-            message.setFrom(new InternetAddress(from));
+            message.setFrom(new InternetAddress(mail_username));
             message.setSubject("Signup5 release party!");
 
             for (String recipient : recipients) {
                 message.addRecipients(Message.RecipientType.CC,
                         InternetAddress.parse(recipient));
             }
-
-//            BodyPart messageBodyPart = new MimeBodyPart();
-//            messageBodyPart.setText("Nu får ni ett fint mail som är autogenererat från vår egen datamaskin.");
-
 
             Event testing = new Event();
 
@@ -79,12 +72,9 @@ public class EmailService {
             hoster.setLast_name("kalas");
             hoster.setEmail("kalle@kalas.se");
 
-
             testing.setHost(hoster);
 
             Email email = new Email(testing);
-
-
 
             BodyPart htmlPart = new MimeBodyPart();
             htmlPart.setContent(email.getEmailString(), "text/html; charset=utf-8");
@@ -119,77 +109,6 @@ public class EmailService {
 
         return null;
     }
-
-    // Event
-    public static Calendar createCalendar() throws SocketException {
-
-        java.util.Calendar startDate = new GregorianCalendar();
-        startDate.set(java.util.Calendar.MONTH, java.util.Calendar.MARCH);
-        startDate.set(java.util.Calendar.DAY_OF_MONTH, 14);
-        startDate.set(java.util.Calendar.YEAR, 2020);
-        startDate.set(java.util.Calendar.HOUR_OF_DAY, 12);
-        startDate.set(java.util.Calendar.MINUTE, 0);
-        startDate.set(java.util.Calendar.SECOND, 0);
-
-        java.util.Calendar endDate = new GregorianCalendar();
-        endDate.set(java.util.Calendar.MONTH, java.util.Calendar.MARCH);
-        endDate.set(java.util.Calendar.DAY_OF_MONTH, 16);
-        endDate.set(java.util.Calendar.YEAR, 2020);
-        endDate.set(java.util.Calendar.HOUR_OF_DAY, 21);
-        endDate.set(java.util.Calendar.MINUTE, 0);
-        endDate.set(java.util.Calendar.SECOND, 3);
-
-        String eventName = "Signup5 release party! Free champagne!";
-        DateTime start = new DateTime(startDate.getTime());
-        DateTime end = new DateTime(endDate.getTime());
-        VEvent meeting = new VEvent(start, end, eventName);
-
-
-
-        UidGenerator ug = new FixedUidGenerator("191");
-        Uid uid = ug.generateUid();
-        meeting.getProperties().add(uid);
-
-//        Summary summary = new Summary();
-//        summary.setValue("this is a summary of the event");
-//        meeting.getProperties().add(summary);
-
-        Description description = new Description();
-        description.setValue("this is the description of the event!");
-        meeting.getProperties().add(description);
-
-        System.out.println(uid);
-
-        Organizer org = new Organizer(URI.create("mailto:marcus8209@gmail.com"));
-        org.getParameters().add(Role.REQ_PARTICIPANT);
-        org.getParameters().add(Rsvp.TRUE);
-        org.getParameters().add(new Cn("org"));
-        meeting.getProperties().add(org);
-
-
-
-//        Attendee dev1 = new Attendee(URI.create("mailto:marcus8209@gmail.com"));
-//        dev1.getParameters().add(Role.REQ_PARTICIPANT);
-//        dev1.getParameters().add(Rsvp.TRUE);
-//        dev1.getParameters().add(new Cn("Developer 1"));
-//        meeting.getProperties().add(dev1);
-//
-//        Attendee dev2 = new Attendee(URI.create("mailto:dev2@mycompany.com"));
-//        dev2.getParameters().add(Role.OPT_PARTICIPANT);
-//        dev2.getParameters().add(new Cn("Developer 2"));
-//        meeting.getProperties().add(dev2);
-
-        net.fortuna.ical4j.model.Calendar icsCalendar = new net.fortuna.ical4j.model.Calendar();
-        icsCalendar.getProperties().add(new ProdId("-//Events Calendar//iCal4j 1.0//EN"));
-        icsCalendar.getProperties().add(CalScale.GREGORIAN);
-        icsCalendar.getProperties().add(Version.VERSION_2_0);
-
-        icsCalendar.getComponents().add(meeting);
-
-        return icsCalendar;
-
-    }
-
 
     public static void sendEmail(Message message) throws MessagingException {
         Transport.send(message);
