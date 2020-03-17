@@ -6,8 +6,12 @@ import org.springframework.stereotype.Component;
 import se.expleostockholm.signup.domain.Attendance;
 import se.expleostockholm.signup.domain.Event;
 import se.expleostockholm.signup.domain.Response;
+import se.expleostockholm.signup.service.EmailService;
 import se.expleostockholm.signup.service.EventService;
 import se.expleostockholm.signup.service.InvitationService;
+
+import javax.mail.MessagingException;
+import javax.mail.internet.MimeMessage;
 
 @Component
 @AllArgsConstructor
@@ -15,6 +19,7 @@ public class Mutation implements GraphQLMutationResolver {
 
     private final EventService eventService;
     private final InvitationService invitationService;
+    private final EmailService emailService;
 
 
     /**
@@ -44,7 +49,19 @@ public class Mutation implements GraphQLMutationResolver {
      * @return          a Response with info if Event was saved or not
      */
     public Response createEvent(Event event) {
-        eventService.createNewEvent(event);
+        Event test = eventService.createNewEvent(event);
+
+
+        event.getInvitations().forEach(invitation -> {
+            MimeMessage message = emailService.createMail(invitation.getGuest().getEmail(), test);
+            try {
+                emailService.sendMail(message);
+            } catch (MessagingException e) {
+                e.printStackTrace();
+            }
+        });
+
+
 
         return Response.builder()
                 .message("Event was successfully saved!")

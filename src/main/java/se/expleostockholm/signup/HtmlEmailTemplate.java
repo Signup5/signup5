@@ -2,17 +2,17 @@ package se.expleostockholm.signup;
 
 import se.expleostockholm.signup.domain.Event;
 
-public class Email {
+public class HtmlEmailTemplate {
 
     private Event event;
     private String emailString;
 
-    public Email(Event event) {
+    public HtmlEmailTemplate(Event event) {
         this.event = event;
         createEmailString();
     }
 
-    public String getEmailString() {
+    public String getEmailAsString() {
         return emailString;
     }
 
@@ -180,6 +180,8 @@ public class Email {
                 "                         <b>Time of event: " + event.getTime_of_event() + "</b> <!-- ---------------time of event---------- --><br/>\n" +
                 "                         <b>Description: " + event.getDescription() + "</b>  <!-- ---------------Description---------- --><br/>\n" +
                 "                         <br/>\n" +
+                "                         <br/>\n" +
+                "                         <h3>Temporary password: " + "password123" + "</h3> <br />\n" +
                 "                        </p>\n" +
                 "                        <table\n" +
                 "                          border=\"0\"\n" +

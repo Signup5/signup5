@@ -1,5 +1,6 @@
 package se.expleostockholm.signup.service;
 
+import net.fortuna.ical4j.data.CalendarOutputter;
 import net.fortuna.ical4j.model.DateTime;
 import net.fortuna.ical4j.model.component.VEvent;
 import net.fortuna.ical4j.model.parameter.Cn;
@@ -7,21 +8,30 @@ import net.fortuna.ical4j.model.parameter.Role;
 import net.fortuna.ical4j.model.parameter.Rsvp;
 import net.fortuna.ical4j.model.property.*;
 import net.fortuna.ical4j.util.FixedUidGenerator;
-import net.fortuna.ical4j.util.RandomUidGenerator;
 import se.expleostockholm.signup.domain.Event;
 import se.expleostockholm.signup.domain.Invitation;
 import se.expleostockholm.signup.domain.Person;
 
+import javax.activation.DataHandler;
+import javax.activation.DataSource;
+import javax.activation.FileDataSource;
+import javax.mail.BodyPart;
+import javax.mail.MessagingException;
+import javax.mail.internet.MimeBodyPart;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.net.SocketException;
 import java.net.URI;
 import java.util.GregorianCalendar;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class CalendarService {
 
     private static VEvent meeting;
 
-    public static net.fortuna.ical4j.model.Calendar createIcsCalendar(Event event) throws SocketException {
+    public static net.fortuna.ical4j.model.Calendar createIcsCalendar(Event event) throws IOException, MessagingException {
         meeting = createMeeting(event);
 
         net.fortuna.ical4j.model.Calendar calendar = new net.fortuna.ical4j.model.Calendar();
@@ -30,6 +40,14 @@ public class CalendarService {
         calendar.getProperties().add(Version.VERSION_2_0);
         calendar.getComponents().add(meeting);
         calendar.validate();
+
+        String filename = "mycalendar.ics";
+        FileOutputStream fout = new FileOutputStream(filename);
+        CalendarOutputter outputter = new CalendarOutputter();
+        outputter.output(calendar, fout);
+
+        DataSource source = new FileDataSource(filename);
+
 
         return calendar;
     }
@@ -47,7 +65,7 @@ public class CalendarService {
         final DateTime end = new DateTime(endDate.getTime());
 
         meeting = new VEvent(start, end, event.getTitle());
-        meeting.getProperties().add(new FixedUidGenerator(event.getId().toString()).generateUid());
+        meeting.getProperties().add(new FixedUidGenerator("11").generateUid());
 
         meeting.getProperties().add(new Description(event.getDescription()));
         setMeetingOrganizer(event.getHost());

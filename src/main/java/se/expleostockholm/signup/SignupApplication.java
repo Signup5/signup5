@@ -2,6 +2,7 @@ package se.expleostockholm.signup;
 
 import com.github.javafaker.Faker;
 import net.fortuna.ical4j.data.ParserException;
+import net.fortuna.ical4j.model.Calendar;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import se.expleostockholm.signup.domain.Event;
@@ -16,7 +17,6 @@ import java.time.LocalTime;
 import java.util.List;
 import java.util.Locale;
 
-import static se.expleostockholm.signup.service.EmailService.*;
 
 
 @SpringBootApplication
@@ -26,12 +26,12 @@ public class SignupApplication {
         SpringApplication.run(SignupApplication.class, args);
 
 
-//        CalendarService.createIcsCalendar(createMockEvent(createMockPerson()));
-
+//        Calendar calendar = CalendarService.createIcsCalendar(createMockEvent(createMockPerson()));
+////
 //        List<String> emails = List.of("marcus8209@gmail.com");
-//
-//        Message message = createEmail(emails, createCalendar());
-//
+////
+//        Message message = createEmail(emails, calendar);
+////
 //        sendEmail(message);
     }
 

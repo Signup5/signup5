@@ -9,6 +9,7 @@ import se.expleostockholm.signup.exception.InvalidDateException;
 import se.expleostockholm.signup.exception.PersonNotFoundException;
 import se.expleostockholm.signup.repository.EventMapper;
 
+import javax.mail.internet.MimeMessage;
 import java.util.List;
 
 import static se.expleostockholm.signup.service.ServiceUtil.isValidDate;
@@ -20,6 +21,7 @@ public class EventService {
     private final EventMapper eventMapper;
     private final InvitationService invitationService;
     private final PersonService personService;
+    private final EmailService emailService;
 
     /**
      * Method for creating a new event. Accepts an Event as an argument to be stored in the database if no duplicates
@@ -38,6 +40,7 @@ public class EventService {
                 if (isValidDate(event.getDate_of_event())) {
                     eventMapper.saveEvent(event);
                     invitationService.saveInvitations(event.getInvitations(), event.getId());
+
                     return event;
                 }
                 throw new InvalidDateException("Invalid date. Start of event cannot be in the past!");

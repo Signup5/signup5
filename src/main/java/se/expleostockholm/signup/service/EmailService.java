@@ -1,118 +1,48 @@
 package se.expleostockholm.signup.service;
 
-import net.fortuna.ical4j.data.CalendarOutputter;
+import lombok.AllArgsConstructor;
 import net.fortuna.ical4j.model.Calendar;
-import net.fortuna.ical4j.model.DateTime;
-import net.fortuna.ical4j.model.component.VEvent;
-import net.fortuna.ical4j.model.parameter.Cn;
-import net.fortuna.ical4j.model.parameter.Role;
-import net.fortuna.ical4j.model.parameter.Rsvp;
-import net.fortuna.ical4j.model.property.*;
-import net.fortuna.ical4j.util.FixedUidGenerator;
-import net.fortuna.ical4j.util.UidGenerator;
-import org.apache.catalina.Host;
-import se.expleostockholm.signup.Email;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.stereotype.Service;
+import se.expleostockholm.signup.HtmlEmailTemplate;
 import se.expleostockholm.signup.domain.Event;
-import se.expleostockholm.signup.domain.Person;
 
-import javax.activation.DataHandler;
-import javax.activation.DataSource;
-import javax.activation.FileDataSource;
-import javax.mail.*;
-import javax.mail.internet.*;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
+import javax.mail.MessagingException;
+import javax.mail.internet.MimeMessage;
+import javax.mail.util.ByteArrayDataSource;
 import java.io.IOException;
-import java.net.SocketException;
-import java.net.URI;
-import java.time.LocalDate;
-import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.List;
-import java.util.Properties;
 
-import static net.fortuna.ical4j.model.Parameter.RSVP;
-
+@Service
+@AllArgsConstructor
 public class EmailService {
 
-    public static Message createEmail(List<String> recipients, Calendar calendar) {
+    private final JavaMailSender javaMailSender;
 
-        final String mail_username = System.getenv("MAIL_USERNAME");
-        final String password = System.getenv("MAIL_PASSWORD");
-        final String host = System.getenv("MAIL_SMTP_HOST");
+    public MimeMessage createMail(String recipient, Event event) {
 
-        Properties props = new Properties();
-        props.put("mail.smtp.auth", "true");
-        props.put("mail.smtp.host", host);
-        props.put("mail.smtp.port", "587");
+        HtmlEmailTemplate emailTemplate = new HtmlEmailTemplate(event);
+        MimeMessage message = javaMailSender.createMimeMessage();
 
-        Session session = Session.getInstance(props,
-                new javax.mail.Authenticator() {
-                    protected PasswordAuthentication getPasswordAuthentication() {
-                        return new PasswordAuthentication(mail_username, password);
-                    }
-                });
         try {
-            Message message = new MimeMessage(session);
-            message.setFrom(new InternetAddress(mail_username));
-            message.setSubject("Signup5 release party!");
+            MimeMessageHelper helper = new MimeMessageHelper(message, true);
+            Calendar calendar = CalendarService.createIcsCalendar(event);
+            helper.setFrom("signup5@kristiangrundstrom.se");
+            helper.setTo(recipient);
+            helper.setSubject(event.getTitle());
+            helper.setText(emailTemplate.getEmailAsString(), true);
+            helper.addAttachment("myCalendar.ics", new ByteArrayDataSource(String.valueOf(calendar), "text/calendar"));
 
-            for (String recipient : recipients) {
-                message.addRecipients(Message.RecipientType.CC,
-                        InternetAddress.parse(recipient));
-            }
-
-            Event testing = new Event();
-
-            testing.setTitle("duude");
-            testing.setDate_of_event(LocalDate.of(2020, 4, 21));
-
-            Person hoster = new Person();
-            hoster.setFirst_name("kalle");
-            hoster.setLast_name("kalas");
-            hoster.setEmail("kalle@kalas.se");
-
-            testing.setHost(hoster);
-
-            Email email = new Email(testing);
-
-            BodyPart htmlPart = new MimeBodyPart();
-            htmlPart.setContent(email.getEmailString(), "text/html; charset=utf-8");
-            Multipart multipart = new MimeMultipart();
-            multipart.addBodyPart(htmlPart);
-
-
-            BodyPart attachment = new MimeBodyPart();
-            String filename = "mycalendar.ics";
-            FileOutputStream fout = new FileOutputStream(filename);
-            CalendarOutputter outputter = new CalendarOutputter();
-            outputter.output(calendar, fout);
-
-            DataSource source = new FileDataSource(filename);
-            attachment.setDataHandler(new DataHandler(source));
-            attachment.setFileName(filename);
-
-            multipart.addBodyPart(attachment);
-            message.setContent(multipart);
-
-            return message;
-
-        } catch (AddressException e) {
-            e.printStackTrace();
         } catch (MessagingException e) {
-            e.printStackTrace();
-        } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }
 
-        return null;
+        return message;
     }
 
-    public static void sendEmail(Message message) throws MessagingException {
-        Transport.send(message);
-        System.out.println("Epost skickat!");
+    public void sendMail(MimeMessage message) throws MessagingException {
+        javaMailSender.send(message);
     }
 }
-

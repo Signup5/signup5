@@ -55,6 +55,9 @@ dependencies {
     compile group: 'com.zhokhov.graphql', name: 'graphql-datetime-autoconfigure', version: '1.6.0'
     compile group: 'org.mnode.ical4j', name: 'ical4j', version: '3.0.15'
 
+    compile group: 'org.springframework.boot', name: 'spring-boot-starter-mail', version: '2.2.5.RELEASE'
+
+
 }
 
 test {
