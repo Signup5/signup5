@@ -32,7 +32,7 @@ public class Mutation implements GraphQLMutationResolver {
      * @param   attendance      new Attendance status to be updated
      * @param   invitation_id   Id for the Invitation
      */
-    public Response setAttendance(Attendance attendance, Long invitation_id) throws MessagingException {
+    public Response setAttendance(Attendance attendance, Long invitation_id) {
 
         invitationService.setAttendance(attendance, invitation_id);
 
@@ -42,7 +42,11 @@ public class Mutation implements GraphQLMutationResolver {
             Event event = eventService.getEventById(invitation.getEvent_id());
 
             MimeMessage message = emailService.createAcceptanceEmail(invitation.getGuest().getEmail(), event);
-            emailService.sendMail(message);
+            try {
+                emailService.sendMail(message);
+            } catch (MessagingException e) {
+                e.printStackTrace();
+            }
         }
         return Response.builder()
                 .message("Attendance was successfully updated!")
