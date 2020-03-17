@@ -9,7 +9,6 @@ import se.expleostockholm.signup.exception.InvalidDateException;
 import se.expleostockholm.signup.exception.PersonNotFoundException;
 import se.expleostockholm.signup.repository.EventMapper;
 
-import javax.mail.internet.MimeMessage;
 import java.util.List;
 
 import static se.expleostockholm.signup.service.ServiceUtil.isValidDate;

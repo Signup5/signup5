@@ -38,8 +38,8 @@ public class InvitationUtils {
         assertEquals(expectedInvitationList.size(), actualInvitationList.size(), "Number of invitations did not match!");
 
         if (expectedInvitationList.size() > 1 && actualInvitationList.size() > 1) {
-            Collections.sort(expectedInvitationList, COMPARE_BY_GUEST_EMAIL);
-            Collections.sort(actualInvitationList, COMPARE_BY_GUEST_EMAIL);
+            expectedInvitationList.sort(COMPARE_BY_GUEST_EMAIL);
+            actualInvitationList.sort(COMPARE_BY_GUEST_EMAIL);
         }
 
         for (int i = 0; i < expectedInvitationList.size(); i++) {

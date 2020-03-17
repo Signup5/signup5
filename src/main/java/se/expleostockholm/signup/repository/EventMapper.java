@@ -52,4 +52,5 @@ public interface EventMapper {
                     many = @Many(select = "se.expleostockholm.signup.repository.InvitationMapper.getInvitationsByEventId"))
     })
     List<Event> getEventsByHostId(Long id);
+
 }

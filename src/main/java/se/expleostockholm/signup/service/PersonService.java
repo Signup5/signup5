@@ -1,7 +1,6 @@
 package se.expleostockholm.signup.service;
 
 import lombok.AllArgsConstructor;
-import org.hibernate.validator.internal.constraintvalidators.hv.EmailValidator;
 import org.springframework.stereotype.Service;
 import se.expleostockholm.signup.domain.Person;
 import se.expleostockholm.signup.exception.PersonNotFoundException;

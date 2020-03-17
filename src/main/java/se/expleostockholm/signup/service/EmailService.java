@@ -19,7 +19,26 @@ public class EmailService {
 
     private final JavaMailSender javaMailSender;
 
-    public MimeMessage createMail(String recipient, Event event) {
+    public MimeMessage createInvitationEmail(String recipient, Event event) {
+
+        HtmlEmailTemplate emailTemplate = new HtmlEmailTemplate(event);
+        MimeMessage message = javaMailSender.createMimeMessage();
+
+        try {
+            MimeMessageHelper helper = new MimeMessageHelper(message);
+            helper.setFrom(System.getenv("MAIL_FROM"));
+            helper.setTo(recipient);
+            helper.setSubject(event.getTitle());
+            helper.setText(emailTemplate.getInvitationEmail(), true);
+
+        } catch (MessagingException e) {
+            e.printStackTrace();
+        }
+
+        return message;
+    }
+
+    public MimeMessage createAcceptanceEmail(String recipient, Event event) {
 
         HtmlEmailTemplate emailTemplate = new HtmlEmailTemplate(event);
         MimeMessage message = javaMailSender.createMimeMessage();
@@ -27,15 +46,13 @@ public class EmailService {
         try {
             MimeMessageHelper helper = new MimeMessageHelper(message, true);
             Calendar calendar = CalendarService.createIcsCalendar(event);
-            helper.setFrom("signup5@kristiangrundstrom.se");
+            helper.setFrom(System.getenv("MAIL_FROM"));
             helper.setTo(recipient);
             helper.setSubject(event.getTitle());
-            helper.setText(emailTemplate.getEmailAsString(), true);
+            helper.setText(emailTemplate.getAcceptanceEmail(), true);
             helper.addAttachment("myCalendar.ics", new ByteArrayDataSource(String.valueOf(calendar), "text/calendar"));
 
-        } catch (MessagingException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
+        } catch (MessagingException | IOException e) {
             e.printStackTrace();
         }
 

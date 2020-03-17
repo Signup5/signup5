@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 import se.expleostockholm.signup.domain.Attendance;
 import se.expleostockholm.signup.domain.Event;
+import se.expleostockholm.signup.domain.Invitation;
 import se.expleostockholm.signup.domain.Response;
 import se.expleostockholm.signup.service.EmailService;
 import se.expleostockholm.signup.service.EventService;
@@ -31,9 +32,18 @@ public class Mutation implements GraphQLMutationResolver {
      * @param   attendance      new Attendance status to be updated
      * @param   invitation_id   Id for the Invitation
      */
-    public Response setAttendance(Attendance attendance, Long invitation_id) {
+    public Response setAttendance(Attendance attendance, Long invitation_id) throws MessagingException {
+
         invitationService.setAttendance(attendance, invitation_id);
 
+        if (attendance == Attendance.ATTENDING) {
+            Invitation invitation = invitationService.getInvitationById(invitation_id);
+
+            Event event = eventService.getEventById(invitation.getEvent_id());
+
+            MimeMessage message = emailService.createAcceptanceEmail(invitation.getGuest().getEmail(), event);
+            emailService.sendMail(message);
+        }
         return Response.builder()
                 .message("Attendance was successfully updated!")
                 .build();
@@ -53,7 +63,7 @@ public class Mutation implements GraphQLMutationResolver {
 
 
         event.getInvitations().forEach(invitation -> {
-            MimeMessage message = emailService.createMail(invitation.getGuest().getEmail(), test);
+            MimeMessage message = emailService.createInvitationEmail(invitation.getGuest().getEmail(), test);
             try {
                 emailService.sendMail(message);
             } catch (MessagingException e) {

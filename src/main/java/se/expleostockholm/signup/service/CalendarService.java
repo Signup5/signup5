@@ -7,25 +7,18 @@ import net.fortuna.ical4j.model.parameter.Cn;
 import net.fortuna.ical4j.model.parameter.Role;
 import net.fortuna.ical4j.model.parameter.Rsvp;
 import net.fortuna.ical4j.model.property.*;
-import net.fortuna.ical4j.util.FixedUidGenerator;
 import se.expleostockholm.signup.domain.Event;
 import se.expleostockholm.signup.domain.Invitation;
 import se.expleostockholm.signup.domain.Person;
 
-import javax.activation.DataHandler;
 import javax.activation.DataSource;
 import javax.activation.FileDataSource;
-import javax.mail.BodyPart;
 import javax.mail.MessagingException;
-import javax.mail.internet.MimeBodyPart;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.net.SocketException;
 import java.net.URI;
 import java.util.GregorianCalendar;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class CalendarService {
 
@@ -52,7 +45,7 @@ public class CalendarService {
         return calendar;
     }
 
-    private static VEvent createMeeting(Event event) throws SocketException {
+    private static VEvent createMeeting(Event event) {
         final int year = event.getDate_of_event().getYear();
         final int month = event.getDate_of_event().getMonthValue();
         final int day = event.getDate_of_event().getDayOfMonth();
@@ -65,11 +58,12 @@ public class CalendarService {
         final DateTime end = new DateTime(endDate.getTime());
 
         meeting = new VEvent(start, end, event.getTitle());
-        meeting.getProperties().add(new FixedUidGenerator("11").generateUid());
+        meeting.getProperties().add( new Uid( event.getId() + "@" + event.getHost().getEmail() + "-" + event.getDate_of_event()));
 
         meeting.getProperties().add(new Description(event.getDescription()));
         setMeetingOrganizer(event.getHost());
         setMeetingAttendees(event.getInvitations());
+        meeting.getProperties().add(new Location(event.getLocation()));
         return meeting;
     }
 

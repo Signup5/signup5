@@ -25,7 +25,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
 import static se.expleostockholm.signup.utils.EventUtils.assertEventsAreEqual;
 import static se.expleostockholm.signup.utils.EventUtils.createMockEvent;
-import static se.expleostockholm.signup.utils.InvitationUtils.createMockInvitation;
 
 @TestMethodOrder(OrderAnnotation.class)
 @Testcontainers

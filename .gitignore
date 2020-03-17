@@ -142,7 +142,6 @@ gradle-app.setting
 
 ### react ###
 .DS_*
-*.log
 logs
 **/*.backup.*
 **/*.back.*
@@ -156,4 +155,3 @@ psd
 thumb
 sketch
 
-/mycalendar.ics

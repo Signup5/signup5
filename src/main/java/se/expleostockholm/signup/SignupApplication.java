@@ -2,19 +2,15 @@ package se.expleostockholm.signup;
 
 import com.github.javafaker.Faker;
 import net.fortuna.ical4j.data.ParserException;
-import net.fortuna.ical4j.model.Calendar;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import se.expleostockholm.signup.domain.Event;
 import se.expleostockholm.signup.domain.Person;
-import se.expleostockholm.signup.service.CalendarService;
 
-import javax.mail.Message;
 import javax.mail.MessagingException;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.List;
 import java.util.Locale;
 
 
