@@ -1,6 +1,5 @@
 package se.expleostockholm.signup.service;
 
-import net.fortuna.ical4j.data.CalendarOutputter;
 import net.fortuna.ical4j.model.DateTime;
 import net.fortuna.ical4j.model.component.VEvent;
 import net.fortuna.ical4j.model.parameter.Cn;
@@ -11,10 +10,7 @@ import se.expleostockholm.signup.domain.Event;
 import se.expleostockholm.signup.domain.Invitation;
 import se.expleostockholm.signup.domain.Person;
 
-import javax.activation.DataSource;
-import javax.activation.FileDataSource;
 import javax.mail.MessagingException;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.URI;
 import java.util.GregorianCalendar;
@@ -33,14 +29,6 @@ public class CalendarService {
         calendar.getProperties().add(Version.VERSION_2_0);
         calendar.getComponents().add(meeting);
         calendar.validate();
-
-        String filename = "mycalendar.ics";
-        FileOutputStream fout = new FileOutputStream(filename);
-        CalendarOutputter outputter = new CalendarOutputter();
-        outputter.output(calendar, fout);
-
-        DataSource source = new FileDataSource(filename);
-
 
         return calendar;
     }

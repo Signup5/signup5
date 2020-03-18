@@ -5,7 +5,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.graphql.spring.boot.test.GraphQLResponse;
 import com.graphql.spring.boot.test.GraphQLTestTemplate;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
+import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ContextConfiguration;
@@ -18,8 +19,10 @@ import se.expleostockholm.signup.integrationtests.SignupDbTests;
 import se.expleostockholm.signup.repository.EventMapper;
 import se.expleostockholm.signup.repository.InvitationMapper;
 import se.expleostockholm.signup.repository.PersonMapper;
+import se.expleostockholm.signup.service.EmailService;
 
 import javax.annotation.Resource;
+import javax.mail.internet.MimeMessage;
 import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
@@ -28,11 +31,15 @@ import java.util.stream.IntStream;
 import static java.util.stream.Collectors.toList;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.isA;
+import static org.mockito.Mockito.doNothing;
 import static se.expleostockholm.signup.utils.EventUtils.createMockEvent;
 import static se.expleostockholm.signup.utils.InvitationUtils.assertInvitationListsAreEqual;
 import static se.expleostockholm.signup.utils.InvitationUtils.createMockInvitation;
 import static se.expleostockholm.signup.utils.PersonUtils.createMockPerson;
 
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @Testcontainers
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ContextConfiguration(initializers = {SignupDbTests.Initializer.class})
@@ -79,7 +86,7 @@ public class CreateEventTest extends SignupDbTests {
     public Event when_host_creates_new_event_and_invites_guests(Person host) throws IOException {
         event = createMockEvent(host);
 
-        event.setInvitations(IntStream.range(0, 35)
+        event.setInvitations(IntStream.range(0, 2)
                 .mapToObj(i -> createMockInvitation(createMockPerson())).collect(toList()));
 
         eventVariables = new ObjectMapper().createObjectNode();

@@ -3,12 +3,16 @@ package se.expleostockholm.signup.service;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import se.expleostockholm.signup.domain.Attendance;
+import se.expleostockholm.signup.domain.Event;
 import se.expleostockholm.signup.domain.Invitation;
+import se.expleostockholm.signup.exception.EventNotFoundException;
 import se.expleostockholm.signup.exception.InvitationAlreadyExistException;
 import se.expleostockholm.signup.exception.InvitationNotFoundException;
 import se.expleostockholm.signup.exception.SetAttendanceException;
+import se.expleostockholm.signup.repository.EventMapper;
 import se.expleostockholm.signup.repository.InvitationMapper;
 
+import javax.mail.internet.MimeMessage;
 import java.util.List;
 
 @Service
@@ -16,7 +20,10 @@ import java.util.List;
 public class InvitationService {
 
     private final InvitationMapper invitationMapper;
+    private final EventMapper eventMapper;
     private final PersonService personService;
+    private final EmailService emailService;
+
 
     /**
      * Method for saving all Invitations, and the guests associated with each Invitation, for an Event.
@@ -24,8 +31,8 @@ public class InvitationService {
      * Accepts two arguments; a collection of Invitations and a Long representing the Event Id.
      * <p>>
      *
-     * @param   invitations   a list of Invitations with an associated Guest for each Invitation
-     * @param   eventId       a Long value representing the Event Id that holds all Invitations
+     * @param invitations a list of Invitations with an associated Guest for each Invitation
+     * @param eventId     a Long value representing the Event Id that holds all Invitations
      */
     public void saveInvitations(List<Invitation> invitations, Long eventId) {
         invitations.forEach(invitation -> {
@@ -41,7 +48,7 @@ public class InvitationService {
      * <p>
      * Takes an Invitation as an argument and checks if a Person (Guest) already has been invited to an Event.
      *
-     * @param   invitation  an Invitation that has a Guest and an Event to be checked against the database
+     * @param invitation an Invitation that has a Guest and an Event to be checked against the database
      */
     public void invitationExists(Invitation invitation) {
         if (invitationMapper.invitationExists(invitation) == 1) {
@@ -53,14 +60,28 @@ public class InvitationService {
      * Method for updating an invited Guest's Attendance status.
      * <p>
      * Accepts an Attendance and Invitation Id arguments for updating the Attendance status.
+     * <p>
+     * If Guest sets their attendance to "ATTENDING" an email is sent out with a ICS Calendar attachment
+     * for the recipient to update their own calendar.
      *
-     * @param   attendance      new Attendance status to be updated
-     * @param   invitation_id   Id for the Invitation
+     * @param attendance    new Attendance status to be updated
+     * @param invitation_id Id for the Invitation
      */
     public void setAttendance(Attendance attendance, Long invitation_id) {
-        if (invitationMapper.setAttendance(attendance, invitation_id) != 1) {
+
+        if (invitationMapper.setAttendance(attendance, invitation_id) != 1)
             throw new SetAttendanceException("Something went wrong while updating attendance.");
-        }
+
+        Invitation invitation = getInvitationById(invitation_id);
+        Event event = eventMapper.getEventById(invitation.getEvent_id()).orElseThrow(() -> new EventNotFoundException("No event found!"));
+
+        if (attendance == Attendance.ATTENDING)
+            sendCalendarInvitation(invitation, event);
+    }
+
+    protected void sendCalendarInvitation(Invitation invitation, Event event) {
+        MimeMessage ICSCalendarEmail = emailService.createICSCalendarEmail(invitation.getGuest().getEmail(), event);
+        emailService.sendMail(ICSCalendarEmail);
     }
 
     public List<Invitation> getAllInvitations() {
@@ -76,8 +97,8 @@ public class InvitationService {
      * <p>
      * Accepts a Long as an argument representing the Invitation Id in the database.
      *
-     * @param   id  a Long value representing an Invitation Id
-     * @return      an Invitation if Id was found in the database
+     * @param id a Long value representing an Invitation Id
+     * @return an Invitation if Id was found in the database
      */
     public Invitation getInvitationById(Long id) {
         return invitationMapper.getInvitationById(id).orElseThrow(() -> new InvitationNotFoundException("No invitation found!"));
@@ -88,8 +109,8 @@ public class InvitationService {
      * <p>
      * Accepts a Long as an argument representing the Event Id in the database.
      *
-     * @param   id  a Long value representing an Event Id
-     * @return      a list of Invitations if Event Id was found in the database
+     * @param id a Long value representing an Event Id
+     * @return a list of Invitations if Event Id was found in the database
      */
     public List<Invitation> getInvitationsByEventId(Long id) {
         List<Invitation> invitations = invitationMapper.getInvitationsByEventId(id);

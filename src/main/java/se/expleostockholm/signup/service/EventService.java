@@ -9,6 +9,7 @@ import se.expleostockholm.signup.exception.InvalidDateException;
 import se.expleostockholm.signup.exception.PersonNotFoundException;
 import se.expleostockholm.signup.repository.EventMapper;
 
+import javax.mail.internet.MimeMessage;
 import java.util.List;
 
 import static se.expleostockholm.signup.service.ServiceUtil.isValidDate;
@@ -30,8 +31,8 @@ public class EventService {
      * <p>
      * Returns an Event object with an updated Id property if no duplicates are found in the database.
      *
-     * @param   event   the event to be checked for duplicates and saved in the database
-     * @return          an updated Even bean with a Id property
+     * @param event the event to be checked for duplicates and saved in the database
+     * @return an updated Even bean with a Id property
      */
     public Event createNewEvent(Event event) {
         if (!isDuplicateEvent(event)) {
@@ -39,7 +40,7 @@ public class EventService {
                 if (isValidDate(event.getDate_of_event())) {
                     eventMapper.saveEvent(event);
                     invitationService.saveInvitations(event.getInvitations(), event.getId());
-
+                        sendInvitationEmail(event);
                     return event;
                 }
                 throw new InvalidDateException("Invalid date. Start of event cannot be in the past!");
@@ -47,6 +48,13 @@ public class EventService {
             throw new PersonNotFoundException("Event host not found!");
         }
         throw new EventAlreadyExistException("'" + event.getTitle() + "': " + event.getDate_of_event() + ": " + event.getTime_of_event() + " - Event already exists");
+    }
+
+    protected void sendInvitationEmail(Event event) {
+        event.getInvitations().forEach(invitation -> {
+            MimeMessage message = emailService.createInvitationEmail(invitation.getGuest().getEmail(), event);
+            emailService.sendMail(message);
+        });
     }
 
     public List<Event> getAllEvents() {
@@ -62,8 +70,8 @@ public class EventService {
      * <p>
      * Accepts a Long as an argument representing the Event Id in the database.
      *
-     * @param   id  a Long value representing an Event Id
-     * @return      an Event if Id was found in the database
+     * @param id a Long value representing an Event Id
+     * @return an Event if Id was found in the database
      */
     public Event getEventById(Long id) {
         return eventMapper.getEventById(id).orElseThrow(() -> new EventNotFoundException("No event found!"));
@@ -73,8 +81,8 @@ public class EventService {
      * Method accepting an Event as an argument to check if there is an Event with the same data already found in the
      * database.
      *
-     * @param   event   Event to be checked if it's not already in the database
-     * @return          true or false whether a duplicate Event was found
+     * @param event Event to be checked if it's not already in the database
+     * @return true or false whether a duplicate Event was found
      */
     public boolean isDuplicateEvent(Event event) {
         return eventMapper.isDuplicateEvent(event) == 1;
