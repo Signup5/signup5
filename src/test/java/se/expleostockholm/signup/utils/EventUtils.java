@@ -21,6 +21,7 @@ public class EventUtils {
                 .host(host)
                 .date_of_event(LocalDate.now())
                 .time_of_event(LocalTime.NOON)
+                .duration((short) 60)
                 .description(faker.book().genre())
                 .location(faker.rickAndMorty().location())
                 .title(faker.rickAndMorty().character())
