@@ -49,5 +49,14 @@ public interface InvitationMapper {
     @Select("SELECT * FROM invitation WHERE guest_id = #{id}")
     List<Invitation> getInvitationsByGuestId(Long id);
 
+    @Select("SELECT * FROM invitation WHERE guest_id = #{id} " +
+            "AND attendance = 'NO_RESPONSE' OR attendance = 'MAYBE' " +
+            "AND (SELECT date_of_event FROM event WHERE event.id = invitation.event_id) >= now()::DATE " +
+            "ORDER BY (SELECT date_of_event FROM event WHERE event.id = invitation.event_id) ASC")
+    @Results({
+            @Result(property = "guest", column = "guest_id",
+                    one = @One(select = "se.expleostockholm.signup.repository.PersonMapper.getPersonById"))
+    })
+    List<Invitation> getUpcomingUnRepliedInvitationsByGuestId(Long id);
 
 }

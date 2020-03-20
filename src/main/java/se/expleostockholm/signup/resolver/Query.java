@@ -90,6 +90,10 @@ public class Query implements GraphQLQueryResolver {
         return invitationService.getInvitationById(id);
     }
 
+    public List<Invitation> getUpcomingUnRepliedInvitationsByGuestId(Long id) {
+        return invitationService.getUpcomingUnRepliedInvitationsByGuestId(id);
+    }
+
 
     /**
      * GraphQL endpoint for retrieving all Invitations for an Event based on the Event Id.

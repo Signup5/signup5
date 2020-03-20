@@ -12,7 +12,6 @@ import se.expleostockholm.signup.exception.SetAttendanceException;
 import se.expleostockholm.signup.repository.EventMapper;
 import se.expleostockholm.signup.repository.InvitationMapper;
 
-import javax.mail.internet.MimeMessage;
 import java.util.List;
 
 @Service
@@ -116,4 +115,10 @@ public class InvitationService {
         return invitationMapper.getInvitationsByGuestId(id);
     }
 
+
+    public List<Invitation> getUpcomingUnRepliedInvitationsByGuestId(Long id) {
+        List<Invitation> invitations = invitationMapper.getUpcomingUnRepliedInvitationsByGuestId(id);
+        if (invitations.size() == 0 ) throw new InvitationNotFoundException("No invitations found for event");
+        return invitations;
+    }
 }
