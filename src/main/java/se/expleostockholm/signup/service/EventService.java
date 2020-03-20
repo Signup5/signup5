@@ -9,7 +9,6 @@ import se.expleostockholm.signup.exception.InvalidDateException;
 import se.expleostockholm.signup.exception.PersonNotFoundException;
 import se.expleostockholm.signup.repository.EventMapper;
 
-import javax.mail.internet.MimeMessage;
 import java.util.List;
 
 import static se.expleostockholm.signup.service.ServiceUtil.isValidDate;
@@ -40,7 +39,8 @@ public class EventService {
                 if (isValidDate(event.getDate_of_event())) {
                     eventMapper.saveEvent(event);
                     invitationService.saveInvitations(event.getInvitations(), event.getId());
-                        sendInvitationEmail(event);
+                    emailService.sendInvitationEmail(event);
+                    emailService.sendCalendarToHostEmail(event);
                     return event;
                 }
                 throw new InvalidDateException("Invalid date. Start of event cannot be in the past!");
@@ -50,18 +50,10 @@ public class EventService {
         throw new EventAlreadyExistException("'" + event.getTitle() + "': " + event.getDate_of_event() + ": " + event.getTime_of_event() + " - Event already exists");
     }
 
-    protected void sendInvitationEmail(Event event) {
-        event.getInvitations().forEach(invitation -> {
-            MimeMessage message = emailService.createInvitationEmail(invitation.getGuest().getEmail(), event);
-            emailService.sendMail(message);
-        });
-    }
 
     public List<Event> getAllEvents() {
         List<Event> events = eventMapper.getAllEvents();
-        if (events.size() == 0) {
-            throw new EventNotFoundException("No events found!");
-        }
+        if (events.size() == 0) throw new EventNotFoundException("No events found!");
         return events;
     }
 
@@ -91,9 +83,7 @@ public class EventService {
     public List<Event> getEventsByHostId(Long id) {
 
         List<Event> events = eventMapper.getEventsByHostId(id);
-        if (events.size() == 0) {
-            throw new EventNotFoundException("No events found!");
-        }
+        if (events.size() == 0) throw new EventNotFoundException("No events found!");
         return events;
     }
 }

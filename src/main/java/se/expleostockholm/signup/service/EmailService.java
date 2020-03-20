@@ -7,11 +7,13 @@ import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 import se.expleostockholm.signup.HtmlEmailTemplate;
 import se.expleostockholm.signup.domain.Event;
+import se.expleostockholm.signup.domain.Invitation;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 import javax.mail.util.ByteArrayDataSource;
 import java.io.IOException;
+import java.text.ParseException;
 
 @Service
 @AllArgsConstructor
@@ -38,7 +40,7 @@ public class EmailService {
         return message;
     }
 
-    public MimeMessage createICSCalendarEmail(String recipient, Event event) {
+    public void sendEmailWithCalendarAttachment(String recipient, Event event) {
 
         HtmlEmailTemplate emailTemplate = new HtmlEmailTemplate(event);
         MimeMessage message = javaMailSender.createMimeMessage();
@@ -52,15 +54,23 @@ public class EmailService {
             helper.setText(emailTemplate.getAcceptanceEmail(), true);
             helper.addAttachment("myCalendar.ics", new ByteArrayDataSource(String.valueOf(calendar), "text/calendar"));
 
-        } catch (MessagingException | IOException e) {
+        } catch (MessagingException | IOException | ParseException e) {
             e.printStackTrace();
         }
 
-        return message;
+        javaMailSender.send(message);
+
     }
 
-    public void sendMail(MimeMessage message) {
-        javaMailSender.send(message);
+    public void sendInvitationEmail(Event event) {
+        event.getInvitations().forEach(invitation -> {
+            MimeMessage message = createInvitationEmail(invitation.getGuest().getEmail(), event);
+            javaMailSender.send(message);
+        });
+    }
+
+    public void sendCalendarToHostEmail(Event event) {
+        sendEmailWithCalendarAttachment(event.getHost().getEmail(), event);
     }
 
 }

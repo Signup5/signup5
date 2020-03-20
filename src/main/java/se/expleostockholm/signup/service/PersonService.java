@@ -75,7 +75,7 @@ public class PersonService {
      * <p>
      * Accepts email as a String argument to be matched with a Person in the database.
      *
-     * @param id a String representing a Persons email address
+     * @param email a String representing a Persons email address
      * @return a Person if email was found in the database
      */
     public Person getPersonByEmail(String email) {

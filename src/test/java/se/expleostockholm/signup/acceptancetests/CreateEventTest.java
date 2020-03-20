@@ -86,7 +86,7 @@ public class CreateEventTest extends SignupDbTests {
     public Event when_host_creates_new_event_and_invites_guests(Person host) throws IOException {
         event = createMockEvent(host);
 
-        event.setInvitations(IntStream.range(0, 2)
+        event.setInvitations(IntStream.range(0, 1)
                 .mapToObj(i -> createMockInvitation(createMockPerson())).collect(toList()));
 
         eventVariables = new ObjectMapper().createObjectNode();

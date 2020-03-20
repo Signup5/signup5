@@ -14,7 +14,6 @@ public abstract class SignupDbTests {
     @Container
     protected static final SignupDbTestcontainer dbTestContainer = SignupDbTestcontainer.getInstance();
 
-
     @Test
     @Order(0)
     void verifyThatTestDbIsRunning() {

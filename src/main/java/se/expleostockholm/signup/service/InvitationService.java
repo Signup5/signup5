@@ -51,9 +51,8 @@ public class InvitationService {
      * @param invitation an Invitation that has a Guest and an Event to be checked against the database
      */
     public void invitationExists(Invitation invitation) {
-        if (invitationMapper.invitationExists(invitation) == 1) {
+        if (invitationMapper.invitationExists(invitation) == 1)
             throw new InvitationAlreadyExistException(invitation.getGuest().getEmail() + " has already been invited to this event!");
-        }
     }
 
     /**
@@ -76,19 +75,13 @@ public class InvitationService {
         Event event = eventMapper.getEventById(invitation.getEvent_id()).orElseThrow(() -> new EventNotFoundException("No event found!"));
 
         if (attendance == Attendance.ATTENDING)
-            sendCalendarInvitation(invitation, event);
+            emailService.sendEmailWithCalendarAttachment(invitation.getGuest().getEmail(), event);
     }
 
-    protected void sendCalendarInvitation(Invitation invitation, Event event) {
-        MimeMessage ICSCalendarEmail = emailService.createICSCalendarEmail(invitation.getGuest().getEmail(), event);
-        emailService.sendMail(ICSCalendarEmail);
-    }
 
     public List<Invitation> getAllInvitations() {
         List<Invitation> invitations = invitationMapper.getAllInvitations();
-        if (invitations.size() == 0) {
-            throw new InvitationNotFoundException("No invitations found!");
-        }
+        if (invitations.size() == 0) throw new InvitationNotFoundException("No invitations found!");
         return invitations;
     }
 
@@ -114,9 +107,8 @@ public class InvitationService {
      */
     public List<Invitation> getInvitationsByEventId(Long id) {
         List<Invitation> invitations = invitationMapper.getInvitationsByEventId(id);
-        if (invitations.size() == 0) {
-            throw new InvitationNotFoundException("No invitations found for event");
-        }
+        if (invitations.size() == 0) throw new InvitationNotFoundException("No invitations found for event");
+
         return invitations;
     }
 

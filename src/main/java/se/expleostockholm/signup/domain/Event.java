@@ -3,8 +3,7 @@ package se.expleostockholm.signup.domain;
 import lombok.*;
 import lombok.Builder.Default;
 
-import java.time.LocalDate;
-import java.time.LocalTime;
+import java.time.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,5 +21,10 @@ public class Event {
     private String description;
     private LocalDate date_of_event;
     private LocalTime time_of_event;
+    private Short duration;
     private String location;
+
+    public LocalDateTime toLocalDateTime() {
+        return LocalDateTime.of(this.date_of_event, this.time_of_event);
+    }
 }

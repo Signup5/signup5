@@ -48,4 +48,6 @@ public interface InvitationMapper {
 
     @Select("SELECT * FROM invitation WHERE guest_id = #{id}")
     List<Invitation> getInvitationsByGuestId(Long id);
+
+
 }

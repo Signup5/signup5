@@ -1,6 +1,9 @@
 package se.expleostockholm.signup.service;
 
 import net.fortuna.ical4j.model.DateTime;
+import net.fortuna.ical4j.model.TimeZone;
+import net.fortuna.ical4j.model.TimeZoneRegistry;
+import net.fortuna.ical4j.model.TimeZoneRegistryFactory;
 import net.fortuna.ical4j.model.component.VEvent;
 import net.fortuna.ical4j.model.parameter.Cn;
 import net.fortuna.ical4j.model.parameter.Role;
@@ -13,6 +16,11 @@ import se.expleostockholm.signup.domain.Person;
 import javax.mail.MessagingException;
 import java.io.IOException;
 import java.net.URI;
+import java.text.ParseException;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
 
@@ -20,7 +28,7 @@ public class CalendarService {
 
     private static VEvent meeting;
 
-    public static net.fortuna.ical4j.model.Calendar createIcsCalendar(Event event) throws IOException, MessagingException {
+    public static net.fortuna.ical4j.model.Calendar createIcsCalendar(Event event) throws IOException, MessagingException, ParseException {
         meeting = createMeeting(event);
 
         net.fortuna.ical4j.model.Calendar calendar = new net.fortuna.ical4j.model.Calendar();
@@ -33,23 +41,44 @@ public class CalendarService {
         return calendar;
     }
 
-    private static VEvent createMeeting(Event event) {
-        final int year = event.getDate_of_event().getYear();
-        final int month = event.getDate_of_event().getMonthValue();
-        final int day = event.getDate_of_event().getDayOfMonth();
-        final int hour = event.getTime_of_event().getHour();
-        final int minute = event.getTime_of_event().getMinute();
+    private static VEvent createMeeting(Event event) throws ParseException {
+        final TimeZoneRegistry registry = TimeZoneRegistryFactory.getInstance().createRegistry();
+        final TimeZone eventTimeZone = registry.getTimeZone("UTC");
+        final TzId timeZoneId = eventTimeZone.getVTimeZone().getTimeZoneId();
+        final java.util.TimeZone calendarTimeZone = java.util.TimeZone.getTimeZone("UTC");
 
-        final java.util.Calendar startDate = new GregorianCalendar(year, month, day, hour, minute);
-        final java.util.Calendar endDate = new GregorianCalendar(year, month, day, hour + 1, minute);
-        final DateTime start = new DateTime(startDate.getTime());
-        final DateTime end = new DateTime(endDate.getTime());
+        final LocalDateTime startDateTime = event.toLocalDateTime();
+        final LocalDateTime endDateTime = startDateTime.plusMinutes(event.getDuration());
+
+        final java.util.Calendar startDate = new GregorianCalendar(
+                startDateTime.getYear(),
+                startDateTime.minusMonths(1).getMonthValue(),
+                startDateTime.getDayOfMonth(),
+                startDateTime.minusHours(1).getHour(),
+                startDateTime.getMinute());
+
+        final java.util.Calendar endDate = new GregorianCalendar(
+                endDateTime.getYear(),
+                endDateTime.minusMonths(1).getMonthValue(),
+                endDateTime.getDayOfMonth(),
+                endDateTime.minusHours(1).getHour(),
+                endDateTime.getMinute());
+
+        startDate.setTimeZone(calendarTimeZone);
+        endDate.setTimeZone(calendarTimeZone);
+
+        String s = "20200101T101010";
+
+        final DateTime start = new DateTime("20200101T101010");
+
+        final DateTime end = new DateTime("20200101T111010");
 
         meeting = new VEvent(start, end, event.getTitle());
         meeting.getProperties().add( new Uid( event.getId() + "@" + event.getHost().getEmail() + "-" + event.getDate_of_event()));
 
         meeting.getProperties().add(new Description(event.getDescription()));
         setMeetingOrganizer(event.getHost());
+        meeting.getProperties().add(timeZoneId);
         setMeetingAttendees(event.getInvitations());
         meeting.getProperties().add(new Location(event.getLocation()));
         return meeting;
@@ -72,4 +101,6 @@ public class CalendarService {
             meeting.getProperties().add(attendee);
         });
     }
+
+
 }

@@ -286,7 +286,9 @@ public class HtmlEmailTemplate {
                 "</html>\n";
     }
 
+
     private void acceptanceEmail() {
+
         this.acceptanceEmail = "<!DOCTYPE html>\n" +
                 "<html>\n" +
                 "  <head>\n" +
@@ -439,7 +441,7 @@ public class HtmlEmailTemplate {
                 "                          style=\"font-family: sans-serif; font-size: 18px; font-weight: bold; margin: 0; Margin-bottom: 15px;\"\n" +
                 "                        >\n" +
                 "                          " +event.getTitle() + "<!-- ---------Event Title----------- -->\n" +
-                "                    </h3>\n" +
+                "                       </h3>\n" +
                 "                        <p\n" +
                 "                          style=\"font-family: sans-serif; font-size: 14px; font-weight: normal; margin: 0; Margin-bottom: 15px;\"\n" +
                 "                        >\n" +

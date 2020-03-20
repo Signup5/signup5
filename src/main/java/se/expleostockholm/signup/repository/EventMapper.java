@@ -33,7 +33,7 @@ public interface EventMapper {
     Optional<Event> getEventById(Long event_id);
 
 
-    @Insert("INSERT INTO event (host_id, title, description, date_of_event, time_of_event, location) VALUES (#{host.id}, #{title}, #{description}, #{date_of_event}, #{time_of_event}, #{location})")
+    @Insert("INSERT INTO event (host_id, title, description, date_of_event, time_of_event, duration, location) VALUES (#{host.id}, #{title}, #{description}, #{date_of_event}, #{time_of_event}, #{duration}, #{location})")
     @Options(useGeneratedKeys = true, keyProperty = "id", keyColumn = "id")
     Long saveEvent(Event event);
 
