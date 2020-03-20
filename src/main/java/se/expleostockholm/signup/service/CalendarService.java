@@ -17,10 +17,8 @@ import javax.mail.MessagingException;
 import java.io.IOException;
 import java.net.URI;
 import java.text.ParseException;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
 
@@ -56,6 +54,7 @@ public class CalendarService {
                 startDateTime.getDayOfMonth(),
                 startDateTime.minusHours(1).getHour(),
                 startDateTime.getMinute());
+        startDate.setTimeZone(calendarTimeZone);
 
         final java.util.Calendar endDate = new GregorianCalendar(
                 endDateTime.getYear(),
@@ -63,18 +62,13 @@ public class CalendarService {
                 endDateTime.getDayOfMonth(),
                 endDateTime.minusHours(1).getHour(),
                 endDateTime.getMinute());
-
-        startDate.setTimeZone(calendarTimeZone);
         endDate.setTimeZone(calendarTimeZone);
 
-        String s = "20200101T101010";
-
-        final DateTime start = new DateTime("20200101T101010");
-
-        final DateTime end = new DateTime("20200101T111010");
+        final DateTime start = new DateTime(localDateTimeToString(startDateTime));
+        final DateTime end = new DateTime(localDateTimeToString(endDateTime));
 
         meeting = new VEvent(start, end, event.getTitle());
-        meeting.getProperties().add( new Uid( event.getId() + "@" + event.getHost().getEmail() + "-" + event.getDate_of_event()));
+        meeting.getProperties().add(new Uid(event.getId() + "@" + event.getHost().getEmail() + "-" + event.getDate_of_event()));
 
         meeting.getProperties().add(new Description(event.getDescription()));
         setMeetingOrganizer(event.getHost());
@@ -82,6 +76,16 @@ public class CalendarService {
         setMeetingAttendees(event.getInvitations());
         meeting.getProperties().add(new Location(event.getLocation()));
         return meeting;
+    }
+
+    public static String localDateTimeToString(LocalDateTime localDateTime) {
+        StringBuilder sb = new StringBuilder();
+        DateTimeFormatter dtfDate = DateTimeFormatter.ofPattern("yyyyMMdd");
+        DateTimeFormatter dtfTime = DateTimeFormatter.ofPattern("HHmmss");
+
+        return sb.append(localDateTime.format(dtfDate))
+                .append("T")
+                .append(localDateTime.format(dtfTime)).toString();
     }
 
     private static void setMeetingOrganizer(Person host) {
