@@ -7,7 +7,6 @@ import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 import se.expleostockholm.signup.HtmlEmailTemplate;
 import se.expleostockholm.signup.domain.Event;
-import se.expleostockholm.signup.domain.Invitation;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
@@ -21,6 +20,16 @@ public class EmailService {
 
     private final JavaMailSender javaMailSender;
 
+    /**
+     * Method for creating an invitation email to be sent to the recipient.
+     * <p>
+     * Accepts two arguments; a Recipient who will be getting an invitation to an event and the Event to which the
+     * recipient will be invited to.
+     *
+     * @param recipient the person who will be getting an invitation to an event
+     * @param event     the Event to which the Recipient is invited to
+     * @return an email with details to what Event the person is invited to
+     */
     public MimeMessage createInvitationEmail(String recipient, Event event) {
 
         HtmlEmailTemplate emailTemplate = new HtmlEmailTemplate(event);
@@ -40,6 +49,15 @@ public class EmailService {
         return message;
     }
 
+    /**
+     * Method for sending an email to a recipient with an ICS Calendar invitation attachment.
+     * <p>
+     * This method is called when a guest responds to an invitation with the Attendance values;
+     * "Attending" or "NOT_ATTENDING".
+     *
+     * @param recipient person who has responded "Attending" or "NOT_ATTENDING"
+     * @param event the event which recipient has previously been invited to
+     */
     public void sendEmailWithCalendarAttachment(String recipient, Event event) {
 
         HtmlEmailTemplate emailTemplate = new HtmlEmailTemplate(event);

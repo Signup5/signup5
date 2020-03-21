@@ -13,8 +13,6 @@ import se.expleostockholm.signup.domain.Event;
 import se.expleostockholm.signup.domain.Invitation;
 import se.expleostockholm.signup.domain.Person;
 
-import javax.mail.MessagingException;
-import java.io.IOException;
 import java.net.URI;
 import java.text.ParseException;
 import java.time.LocalDateTime;
@@ -26,11 +24,20 @@ public class CalendarService {
 
     private static VEvent meeting;
 
-    public static net.fortuna.ical4j.model.Calendar createIcsCalendar(Event event) throws IOException, MessagingException, ParseException {
+    /**
+     * Method for creating an iCal4J v2.0 ICS Calendar specified as a Gregorian calendar.
+     * <p>
+     * Accepts an Event as argument for creating a VEvent and adding it to the retuning ICS Calendar object.
+     *
+     * @param event the Event argument for extracting the event details
+     * @return a new ICS Calendar
+     * @throws ParseException exception is thrown if LocalDateTime fails to convert.
+     */
+    public static net.fortuna.ical4j.model.Calendar createIcsCalendar(Event event) throws ParseException {
         meeting = createMeeting(event);
 
         net.fortuna.ical4j.model.Calendar calendar = new net.fortuna.ical4j.model.Calendar();
-        calendar.getProperties().add(new ProdId("-//Events Calendar//iCal4j 1.0//EN"));
+        calendar.getProperties().add(new ProdId("-//SignUp5 Calendar//iCal4j 1.0//EN"));
         calendar.getProperties().add(CalScale.GREGORIAN);
         calendar.getProperties().add(Version.VERSION_2_0);
         calendar.getComponents().add(meeting);
@@ -39,6 +46,15 @@ public class CalendarService {
         return calendar;
     }
 
+    /**
+     * Method for creating a VEvent to be added to an ICS Calendar.
+     * <p>
+     * Takes in an Event as argument and uses its details to create a VEvent.
+     *
+     * @param event the Event with invitation details used in the event
+     * @return a VEvent used to be used in an ICS Calendar
+     * @throws ParseException throws exception if LocalDateTime conversion fails
+     */
     private static VEvent createMeeting(Event event) throws ParseException {
         final TimeZoneRegistry registry = TimeZoneRegistryFactory.getInstance().createRegistry();
         final TimeZone eventTimeZone = registry.getTimeZone("UTC");
@@ -78,6 +94,13 @@ public class CalendarService {
         return meeting;
     }
 
+    /**
+     * Method for converting a LocalDateTime object to a string for a VEvent to be able to write correct Date and Time
+     * to a ICS calendar invitation.
+     *
+     * @param localDateTime object to be converted
+     * @return localDateTime as a string
+     */
     public static String localDateTimeToString(LocalDateTime localDateTime) {
         StringBuilder sb = new StringBuilder();
         DateTimeFormatter dtfDate = DateTimeFormatter.ofPattern("yyyyMMdd");
@@ -88,6 +111,11 @@ public class CalendarService {
                 .append(localDateTime.format(dtfTime)).toString();
     }
 
+    /**
+     * Method for setting the Organizer for a VEvent.
+     *
+     * @param host Person to be set as VEvent organizer
+     */
     private static void setMeetingOrganizer(Person host) {
         Organizer org = new Organizer(URI.create("mailto:" + host.getEmail()));
         org.getParameters().add(Role.REQ_PARTICIPANT);
@@ -96,6 +124,13 @@ public class CalendarService {
         meeting.getProperties().add(org);
     }
 
+    /**
+     * Method for adding guests to a VEvent.
+     * <p>
+     * Accepts a list of guests as argument for adding guests to a VEvent.
+     *
+     * @param guests a collection of guests to be invited to a VEvent
+     */
     private static void setMeetingAttendees(List<Invitation> guests) {
         guests.forEach(invitation -> {
             Attendee attendee = new Attendee(URI.create("mailto:" + invitation.getGuest().getEmail()));
@@ -105,6 +140,5 @@ public class CalendarService {
             meeting.getProperties().add(attendee);
         });
     }
-
 
 }
