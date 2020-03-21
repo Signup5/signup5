@@ -2,10 +2,8 @@ package se.expleostockholm.signup.filter;
 
 
 import io.jsonwebtoken.ExpiredJwtException;
-import io.jsonwebtoken.SignatureException;
 import java.io.IOException;
 import java.util.HashSet;
-import java.util.Optional;
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;

@@ -18,7 +18,7 @@ public class JwtUtil {
 
   @Value("${jwt.secret}")
   private String secretKey;
-  public static final long EXPIRATION_TIME = 864_000_000; // 10 days
+  public static final long EXPIRATION_TIME = 999_000_000; // 10 days
 
 
   public String extractUsername(String token) throws ExpiredJwtException {

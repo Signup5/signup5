@@ -5,9 +5,11 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 import se.expleostockholm.signup.domain.Attendance;
 import se.expleostockholm.signup.domain.Event;
+import se.expleostockholm.signup.domain.Person;
 import se.expleostockholm.signup.domain.Response;
 import se.expleostockholm.signup.service.EventService;
 import se.expleostockholm.signup.service.InvitationService;
+import se.expleostockholm.signup.service.PersonService;
 
 @Component
 @AllArgsConstructor
@@ -15,6 +17,7 @@ public class Mutation implements GraphQLMutationResolver {
 
     private final EventService eventService;
     private final InvitationService invitationService;
+    private final PersonService personService;
 
 
     /**
@@ -50,6 +53,10 @@ public class Mutation implements GraphQLMutationResolver {
                 .message("Event was successfully saved!")
                 .id(event.getId())
                 .build();
+    }
+
+    public Person createPerson(Person person) {
+        return personService.createPerson(person);
     }
 
 }

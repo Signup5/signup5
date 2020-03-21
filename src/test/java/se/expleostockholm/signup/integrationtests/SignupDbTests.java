@@ -31,7 +31,8 @@ public abstract class SignupDbTests {
                     "spring.mail.port=" + System.getenv("MAIL_SMTP_PORT"),
                     "spring.mail.username=" + System.getenv("MAIL_USERNAME"),
                     "spring.mail.password=" + System.getenv("MAIL_PASSWORD"),
-                    "spring.mail.properties.mail.smtp.auth=" + System.getenv("MAIL_SMTP_AUTH")
+                    "spring.mail.properties.mail.smtp.auth=" + System.getenv("MAIL_SMTP_AUTH"),
+                    "jwt.secret=" + System.getenv("jwt.secret")
             ).applyTo(configurableApplicationContext.getEnvironment());
         }
     }

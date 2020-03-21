@@ -17,8 +17,6 @@ import se.expleostockholm.signup.filter.JwtRequestFilter;
 @EnableWebSecurity
 public class SecurityConfigurer extends WebSecurityConfigurerAdapter {
 
-
-
   @Autowired
   private JwtRequestFilter jwtRequestFilter;
 
@@ -32,7 +30,7 @@ public class SecurityConfigurer extends WebSecurityConfigurerAdapter {
 
     http.csrf().disable()
         .authorizeRequests()
-        .antMatchers("/login")
+        .antMatchers("/login", "/graphiql")
         .permitAll()
         .anyRequest()
         .authenticated()
