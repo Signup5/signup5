@@ -96,7 +96,7 @@ type Query {
 type Mutation {
     setAttendance(attendance: Attendance, invitation_id: Int): Response
     createEvent(input: EventInput): Response
-    createPerson(person: PersonInput): Person
+    createPerson(input: PersonInput): Person
 }
 
 schema {

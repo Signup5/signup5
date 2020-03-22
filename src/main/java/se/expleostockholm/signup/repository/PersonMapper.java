@@ -20,7 +20,7 @@ public interface PersonMapper {
     @Select("SELECT * FROM person")
     List<Person> getAllPersons();
 
-    @Insert("INSERT INTO person (first_name, last_name, email) VALUES(#{first_name}, #{last_name}, #{email})")
+    @Insert("INSERT INTO person (first_name, last_name, email, password) VALUES(#{first_name}, #{last_name}, #{email}, #{password})")
     @Options(useGeneratedKeys=true, keyProperty="id", keyColumn="id")
     Long savePerson(Person person);
 

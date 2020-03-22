@@ -1,9 +1,12 @@
 package se.expleostockholm.signup.service;
 
 import lombok.AllArgsConstructor;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import se.expleostockholm.signup.domain.Person;
+import se.expleostockholm.signup.exception.InvalidEmailException;
+import se.expleostockholm.signup.exception.PersonAlreadyExistException;
 import se.expleostockholm.signup.exception.PersonNotFoundException;
 import se.expleostockholm.signup.exception.SavePersonException;
 import se.expleostockholm.signup.repository.PersonMapper;
@@ -84,8 +87,16 @@ public class PersonService {
     return personMapper.getPersonByEmail(email).orElseThrow(() -> new PersonNotFoundException("No person found!"));
   }
 
-  public Person createPerson(Person person) {
+  public Person createNewPerson(Person person) {
+    if (!isValidEmail(person.getEmail())) {
+      throw new InvalidEmailException("The provided email: " + person.getEmail() + " was not valid");
+    }
     person.setPassword(passwordEncoder.encode(person.getPassword()));
-    return savePerson(person);
+    try {
+      Long newPersonId = personMapper.savePerson(person);
+      return personMapper.getPersonById(newPersonId).get();
+    } catch (DuplicateKeyException exception) {
+      throw new PersonAlreadyExistException("The person with this email already exists");
+    }
   }
 }

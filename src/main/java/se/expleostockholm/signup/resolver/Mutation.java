@@ -56,7 +56,7 @@ public class Mutation implements GraphQLMutationResolver {
     }
 
     public Person createPerson(Person person) {
-        return personService.createPerson(person);
+        return personService.createNewPerson(person);
     }
 
 }

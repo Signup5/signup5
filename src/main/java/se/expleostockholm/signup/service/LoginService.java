@@ -24,11 +24,11 @@ public class LoginService {
     Person person = userRepository.getPersonByEmail(email)
         .orElseThrow(() ->
             new LoginException("Username or password incorrect"));
-    //if (passwordEncoder.matches(loginPassword, person.getPassword())) {
+    if(passwordEncoder.matches(loginPassword, person.getPassword())) {
       return new User(person.getEmail(), "", new HashSet<>());
-    //}
-    // else {
-    //  throw new LoginException("Username or password not correct");
-    //}
+    }
+     else {
+      throw new LoginException("Username or password not correct");
+    }
   }
 }
