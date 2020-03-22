@@ -1,7 +1,7 @@
 package se.expleostockholm.signup.service;
 
-import lombok.AllArgsConstructor;
 import net.fortuna.ical4j.model.Calendar;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
@@ -15,10 +15,16 @@ import java.io.IOException;
 import java.text.ParseException;
 
 @Service
-@AllArgsConstructor
 public class EmailService {
 
     private final JavaMailSender javaMailSender;
+
+    @Value("${mail.from.default}")
+    private String MAIL_FROM;
+
+    public EmailService(JavaMailSender javaMailSender) {
+        this.javaMailSender = javaMailSender;
+    }
 
     /**
      * Method for creating an invitation email to be sent to the recipient.
@@ -37,7 +43,7 @@ public class EmailService {
 
         try {
             MimeMessageHelper helper = new MimeMessageHelper(message);
-            helper.setFrom(System.getenv("MAIL_FROM"));
+            helper.setFrom(MAIL_FROM);
             helper.setTo(recipient);
             helper.setSubject(event.getTitle());
             helper.setText(emailTemplate.getInvitationEmail(), true);
@@ -66,7 +72,7 @@ public class EmailService {
         try {
             MimeMessageHelper helper = new MimeMessageHelper(message, true);
             Calendar calendar = CalendarService.createIcsCalendar(event);
-            helper.setFrom(System.getenv("MAIL_FROM"));
+            helper.setFrom(MAIL_FROM);
             helper.setTo(recipient);
             helper.setSubject(event.getTitle());
             helper.setText(emailTemplate.getAcceptanceEmail(), true);
