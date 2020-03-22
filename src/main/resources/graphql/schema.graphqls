@@ -84,6 +84,7 @@ type Query {
     getInvitationsByEventId(id: Int): [Invitation]
     getInvitationsByGuestId(id: Int!): [Invitation]
     getUpcomingUnRepliedInvitationsByGuestId(id: Int!): [Invitation]
+    getHostedAndInvitedEventsByPersonId(id: Int!): [Event]
 }
 
 type Mutation {

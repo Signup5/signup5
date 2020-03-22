@@ -53,4 +53,13 @@ public interface EventMapper {
     })
     List<Event> getEventsByHostId(Long id);
 
+    @Select("SELECT * FROM event WHERE (SELECT invitation.guest_id FROM invitation WHERE invitation.event_id = event.id AND invitation.guest_id = ${id}) = ${id}")
+    @Results({
+            @Result(property = "id", column = "id"),
+            @Result(property = "host", column = "host_id",
+                    one = @One(select = "se.expleostockholm.signup.repository.PersonMapper.getPersonById")),
+            @Result(property = "invitations", javaType = List.class, column = "id",
+                    many = @Many(select = "se.expleostockholm.signup.repository.InvitationMapper.getInvitationsByEventId"))
+    })
+    List<Event> getEventsByGuestId(Long id);
 }

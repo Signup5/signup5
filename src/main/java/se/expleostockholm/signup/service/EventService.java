@@ -9,7 +9,11 @@ import se.expleostockholm.signup.exception.InvalidDateException;
 import se.expleostockholm.signup.exception.PersonNotFoundException;
 import se.expleostockholm.signup.repository.EventMapper;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static se.expleostockholm.signup.service.ServiceUtil.isValidDate;
 
@@ -81,9 +85,15 @@ public class EventService {
     }
 
     public List<Event> getEventsByHostId(Long id) {
+        return eventMapper.getEventsByHostId(id);
+    }
 
-        List<Event> events = eventMapper.getEventsByHostId(id);
-        if (events.size() == 0) throw new EventNotFoundException("No events found!");
-        return events;
+    public List<Event> getHostedAndInvitedEventsByPersonId(Long id) {
+        return Stream.of(getEventsByHostId(id),getEventByGuestId(id)).flatMap(Collection::stream).collect(Collectors.toList());
+
+    }
+
+    public List<Event> getEventByGuestId(Long id) {
+        return eventMapper.getEventsByGuestId(id);
     }
 }

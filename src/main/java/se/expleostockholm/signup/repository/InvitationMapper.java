@@ -58,5 +58,4 @@ public interface InvitationMapper {
                     one = @One(select = "se.expleostockholm.signup.repository.PersonMapper.getPersonById"))
     })
     List<Invitation> getUpcomingUnRepliedInvitationsByGuestId(Long id);
-
 }
