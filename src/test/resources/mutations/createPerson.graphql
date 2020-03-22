@@ -1,0 +1,6 @@
+mutation createPerson ($person: PersonInput) {
+    response: createPerson(input: $person) {
+        id
+        message
+    }
+}

@@ -13,7 +13,6 @@ import se.expleostockholm.signup.domain.Person;
 import se.expleostockholm.signup.repository.EventMapper;
 import se.expleostockholm.signup.repository.InvitationMapper;
 import se.expleostockholm.signup.repository.PersonMapper;
-import se.expleostockholm.signup.service.EmailService;
 import se.expleostockholm.signup.utils.InvitationUtils;
 
 import javax.annotation.Resource;
