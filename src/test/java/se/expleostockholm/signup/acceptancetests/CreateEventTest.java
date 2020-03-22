@@ -15,7 +15,7 @@ import org.testcontainers.junit.jupiter.Testcontainers;
 import se.expleostockholm.signup.domain.Event;
 import se.expleostockholm.signup.domain.Invitation;
 import se.expleostockholm.signup.domain.Person;
-import se.expleostockholm.signup.domain.Response;
+import se.expleostockholm.signup.domain.web.Response;
 import se.expleostockholm.signup.integrationtests.SignupDbTests;
 import se.expleostockholm.signup.repository.EventMapper;
 import se.expleostockholm.signup.repository.InvitationMapper;

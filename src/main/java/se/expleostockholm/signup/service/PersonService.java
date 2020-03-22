@@ -5,6 +5,7 @@ import org.springframework.dao.DuplicateKeyException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import se.expleostockholm.signup.domain.Person;
+import se.expleostockholm.signup.domain.web.Response;
 import se.expleostockholm.signup.exception.InvalidEmailException;
 import se.expleostockholm.signup.exception.PersonAlreadyExistException;
 import se.expleostockholm.signup.exception.PersonNotFoundException;
@@ -87,14 +88,14 @@ public class PersonService {
     return personMapper.getPersonByEmail(email).orElseThrow(() -> new PersonNotFoundException("No person found!"));
   }
 
-  public Person createNewPerson(Person person) {
+  public Response createNewPerson(Person person) {
     if (!isValidEmail(person.getEmail())) {
       throw new InvalidEmailException("The provided email: " + person.getEmail() + " was not valid");
     }
     person.setPassword(passwordEncoder.encode(person.getPassword()));
     try {
-      Long newPersonId = personMapper.savePerson(person);
-      return personMapper.getPersonById(newPersonId).get();
+       personMapper.savePerson(person);
+      return new Response("New person saved", person.getId());
     } catch (DuplicateKeyException exception) {
       throw new PersonAlreadyExistException("The person with this email already exists");
     }

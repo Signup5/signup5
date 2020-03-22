@@ -1,4 +1,4 @@
-package se.expleostockholm.signup.domain;
+package se.expleostockholm.signup.domain.web;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
