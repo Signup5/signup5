@@ -33,7 +33,7 @@ public interface EventMapper {
     Optional<Event> getEventById(Long event_id);
 
 
-    @Insert("INSERT INTO event (host_id, title, description, date_of_event, time_of_event, duration, location) VALUES (#{host.id}, #{title}, #{description}, #{date_of_event}, #{time_of_event}, #{duration}, #{location})")
+    @Insert("INSERT INTO event (host_id, title, description, date_of_event, time_of_event, duration, location, isDraft) VALUES (#{host.id}, #{title}, #{description}, #{date_of_event}, #{time_of_event}, #{duration}, #{location}, #{isDraft})")
     @Options(useGeneratedKeys = true, keyProperty = "id", keyColumn = "id")
     Long saveEvent(Event event);
 
@@ -53,7 +53,7 @@ public interface EventMapper {
     })
     List<Event> getEventsByHostId(Long id);
 
-    @Select("SELECT * FROM event WHERE (SELECT invitation.guest_id FROM invitation WHERE invitation.event_id = event.id AND invitation.guest_id = ${id}) = ${id}")
+    @Select("SELECT * FROM event WHERE (SELECT invitation.guest_id FROM invitation WHERE invitation.event_id = event.id AND invitation.guest_id = ${id} AND attendance != 'NOT_ATTENDING') = ${id} AND isDraft = false")
     @Results({
             @Result(property = "id", column = "id"),
             @Result(property = "host", column = "host_id",
@@ -62,4 +62,14 @@ public interface EventMapper {
                     many = @Many(select = "se.expleostockholm.signup.repository.InvitationMapper.getInvitationsByEventId"))
     })
     List<Event> getEventsByGuestId(Long id);
+
+    @Update("UPDATE event SET title = #{title}, " +
+            "host_id = #{host.id}, " +
+            "description = #{description}, " +
+            "date_of_event = #{date_of_event}, " +
+            "time_of_event = #{time_of_event}, " +
+            "location = #{location}, " +
+            "duration = #{duration}, " +
+            "isDraft = #{isDraft}")
+    Long updateEvent(Event event);
 }

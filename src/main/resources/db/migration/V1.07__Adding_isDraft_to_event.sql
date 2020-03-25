@@ -1,0 +1,3 @@
+ALTER TABLE event ADD COLUMN isDraft BOOLEAN;
+
+UPDATE event SET isDraft = FALSE;

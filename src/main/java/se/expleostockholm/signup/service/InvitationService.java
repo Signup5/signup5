@@ -121,4 +121,8 @@ public class InvitationService {
         if (invitations.size() == 0 ) throw new InvitationNotFoundException("No invitations found for event");
         return invitations;
     }
+
+    public void deleteInvitations(List<Invitation> invitationsToRemove) {
+        invitationsToRemove.forEach(i -> invitationMapper.removeInvitationById(i.getId()));
+    }
 }

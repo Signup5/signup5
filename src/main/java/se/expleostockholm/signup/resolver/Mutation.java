@@ -52,4 +52,15 @@ public class Mutation implements GraphQLMutationResolver {
                 .build();
     }
 
+    public Response updateEvent(Event event) {
+
+
+
+        eventService.updateEvent(event);
+
+        return Response.builder()
+                .message("Event was successfully updated!")
+                .id(event.getId())
+                .build();
+    }
 }
