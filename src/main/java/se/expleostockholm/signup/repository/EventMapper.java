@@ -68,8 +68,9 @@ public interface EventMapper {
             "description = #{description}, " +
             "date_of_event = #{date_of_event}, " +
             "time_of_event = #{time_of_event}, " +
-            "location = #{location}, " +
+            "location = #{location},  " +
             "duration = #{duration}, " +
-            "isDraft = #{isDraft}")
+            "isDraft = #{isDraft} " +
+            "WHERE id = #{id}")
     Long updateEvent(Event event);
 }

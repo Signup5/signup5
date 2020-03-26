@@ -23,7 +23,7 @@ public class Event {
     private LocalTime time_of_event;
     private Short duration;
     private String location;
-    private boolean isDraft;
+    private Boolean isDraft;
 
     public LocalDateTime toLocalDateTime() {
         return LocalDateTime.of(this.date_of_event, this.time_of_event);

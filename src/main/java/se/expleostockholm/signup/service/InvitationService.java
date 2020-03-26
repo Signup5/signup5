@@ -5,10 +5,7 @@ import org.springframework.stereotype.Service;
 import se.expleostockholm.signup.domain.Attendance;
 import se.expleostockholm.signup.domain.Event;
 import se.expleostockholm.signup.domain.Invitation;
-import se.expleostockholm.signup.exception.EventNotFoundException;
-import se.expleostockholm.signup.exception.InvitationAlreadyExistException;
-import se.expleostockholm.signup.exception.InvitationNotFoundException;
-import se.expleostockholm.signup.exception.SetAttendanceException;
+import se.expleostockholm.signup.exception.*;
 import se.expleostockholm.signup.repository.EventMapper;
 import se.expleostockholm.signup.repository.InvitationMapper;
 
@@ -38,7 +35,7 @@ public class InvitationService {
             invitation.setEvent_id(eventId);
             invitation.setGuest(personService.savePerson(invitation.getGuest()));
             invitationExists(invitation);
-            invitationMapper.saveInvitation(invitation);
+            if (invitationMapper.saveInvitation(invitation) == 0) throw new InvitationException("Something went wrong while saving invitation");
         });
     }
 
@@ -79,9 +76,7 @@ public class InvitationService {
 
 
     public List<Invitation> getAllInvitations() {
-        List<Invitation> invitations = invitationMapper.getAllInvitations();
-        if (invitations.size() == 0) throw new InvitationNotFoundException("No invitations found!");
-        return invitations;
+        return invitationMapper.getAllInvitations();
     }
 
     /**
@@ -93,7 +88,7 @@ public class InvitationService {
      * @return an Invitation if Id was found in the database
      */
     public Invitation getInvitationById(Long id) {
-        return invitationMapper.getInvitationById(id).orElseThrow(() -> new InvitationNotFoundException("No invitation found!"));
+        return invitationMapper.getInvitationById(id).orElseThrow(() -> new InvitationException("No invitation found!"));
     }
 
     /**
@@ -105,10 +100,7 @@ public class InvitationService {
      * @return a list of Invitations if Event Id was found in the database
      */
     public List<Invitation> getInvitationsByEventId(Long id) {
-        List<Invitation> invitations = invitationMapper.getInvitationsByEventId(id);
-        if (invitations.size() == 0) throw new InvitationNotFoundException("No invitations found for event");
-
-        return invitations;
+        return  invitationMapper.getInvitationsByEventId(id);
     }
 
     public List<Invitation> getInvitationsByGuestId(Long id) {
@@ -117,12 +109,15 @@ public class InvitationService {
 
 
     public List<Invitation> getUpcomingUnRepliedInvitationsByGuestId(Long id) {
-        List<Invitation> invitations = invitationMapper.getUpcomingUnRepliedInvitationsByGuestId(id);
-        if (invitations.size() == 0 ) throw new InvitationNotFoundException("No invitations found for event");
-        return invitations;
+        return  invitationMapper.getUpcomingUnRepliedInvitationsByGuestId(id);
     }
 
     public void deleteInvitations(List<Invitation> invitationsToRemove) {
-        invitationsToRemove.forEach(i -> invitationMapper.removeInvitationById(i.getId()));
+        try {
+            invitationsToRemove.forEach(i -> invitationMapper.removeInvitationById(i.getId()));
+        } catch (Exception ex){
+            throw new InvitationException("Deleting invitation failed!");
+        }
+
     }
 }

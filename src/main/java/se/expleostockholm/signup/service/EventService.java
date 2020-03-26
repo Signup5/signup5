@@ -1,6 +1,5 @@
 package se.expleostockholm.signup.service;
 
-import io.micrometer.core.instrument.util.JsonUtils;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import se.expleostockholm.signup.domain.Event;
@@ -8,15 +7,13 @@ import se.expleostockholm.signup.domain.Invitation;
 import se.expleostockholm.signup.exception.*;
 import se.expleostockholm.signup.repository.EventMapper;
 
-import java.sql.SQLOutput;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.List;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import static se.expleostockholm.signup.service.ServiceUtil.personNotInInvitationList;
 import static se.expleostockholm.signup.service.ServiceUtil.isValidDate;
 
 @Service
@@ -58,9 +55,7 @@ public class EventService {
 
 
     public List<Event> getAllEvents() {
-        List<Event> events = eventMapper.getAllEvents();
-        if (events.size() == 0) throw new EventNotFoundException("No events found!");
-        return events;
+        return eventMapper.getAllEvents();
     }
 
     /**
@@ -91,7 +86,7 @@ public class EventService {
     }
 
     public List<Event> getHostedAndInvitedEventsByPersonId(Long id) {
-        return Stream.of(getEventsByHostId(id),getEventByGuestId(id))
+        return Stream.of(getEventsByHostId(id), getEventByGuestId(id))
                 .flatMap(Collection::stream)
                 .sorted(Comparator.comparing(Event::getDate_of_event))
                 .collect(Collectors.toList());
@@ -102,29 +97,25 @@ public class EventService {
     }
 
     public void updateEvent(Event event) {
-
         if (eventMapper.updateEvent(event) == 0) throw new EventNotUpdatedException("No event updated!");
 
         List<Invitation> updatedInvitationList = event.getInvitations();
-
         List<Invitation> existingInvitations = invitationService.getInvitationsByEventId(event.getId());
 
-        List<Invitation> invitationsToSave = updatedInvitationList.stream()
-                .filter(e -> existingInvitations.stream()
-                        .noneMatch(i -> i.getGuest().getEmail().equalsIgnoreCase(e.getGuest().getEmail())))
-                .collect(Collectors.toList());
-
-        List<Invitation> duplicates = updatedInvitationList.stream()
-                .filter(e -> existingInvitations.stream()
-                        .anyMatch(test -> test.getGuest().getEmail().equalsIgnoreCase(e.getGuest().getEmail())))
+        List<Invitation> invitationsToAdd = updatedInvitationList.stream()
+                .filter(personNotInInvitationList(existingInvitations))
                 .collect(Collectors.toList());
 
         List<Invitation> invitationsToRemove = existingInvitations.stream()
-                .filter(e -> duplicates.stream()
-                        .noneMatch(i -> i.getGuest().getEmail().equalsIgnoreCase(e.getGuest().getEmail())))
+                .filter(personNotInInvitationList(updatedInvitationList))
                 .collect(Collectors.toList());
 
-        invitationService.saveInvitations(invitationsToSave, event.getId());
+        invitationService.saveInvitations(invitationsToAdd, event.getId());
         invitationService.deleteInvitations(invitationsToRemove);
+
+        if (!event.getIsDraft()) {
+            emailService.sendInvitationEmail(event);
+            emailService.sendCalendarToHostEmail(event);
+        }
     }
 }
