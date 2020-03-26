@@ -26,12 +26,7 @@ public abstract class SignupDbTests {
             TestPropertyValues.of(
                     "spring.datasource.url=" + dbTestContainer.getJdbcUrl(),
                     "spring.datasource.username=" + dbTestContainer.getUsername(),
-                    "spring.datasource.password=" + dbTestContainer.getPassword(),
-                    "spring.mail.host=" + System.getenv("MAIL_SMTP_HOST"),
-                    "spring.mail.port=" + System.getenv("MAIL_SMTP_PORT"),
-                    "spring.mail.username=" + System.getenv("MAIL_USERNAME"),
-                    "spring.mail.password=" + System.getenv("MAIL_PASSWORD"),
-                    "spring.mail.properties.mail.smtp.auth=" + System.getenv("MAIL_SMTP_AUTH")
+                    "spring.datasource.password=" + dbTestContainer.getPassword()
             ).applyTo(configurableApplicationContext.getEnvironment());
         }
     }
