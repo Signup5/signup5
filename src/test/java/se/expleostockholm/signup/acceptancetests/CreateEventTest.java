@@ -95,6 +95,7 @@ public class CreateEventTest extends SignupDbTests {
         eventVariables.putPOJO("location", event.getLocation());
         eventVariables.putPOJO("duration", event.getDuration());
         eventVariables.putPOJO("invitations", event.getInvitations());
+        eventVariables.putPOJO("isDraft", true);
 
         eventInput.putPOJO("eventInput", eventVariables);
 

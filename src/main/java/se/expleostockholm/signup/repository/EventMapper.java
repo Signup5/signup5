@@ -21,7 +21,6 @@ public interface EventMapper {
     })
     List<Event> getAllEvents();
 
-
     @Select("SELECT * FROM event WHERE id = #{event_id}")
     @Results({
             @Result(property = "id", column = "id"),
@@ -31,7 +30,6 @@ public interface EventMapper {
                     many = @Many(select = "se.expleostockholm.signup.repository.InvitationMapper.getInvitationsByEventId"))
     })
     Optional<Event> getEventById(Long event_id);
-
 
     @Insert("INSERT INTO event (host_id, title, description, date_of_event, time_of_event, duration, location, isDraft) VALUES (#{host.id}, #{title}, #{description}, #{date_of_event}, #{time_of_event}, #{duration}, #{location}, #{isDraft})")
     @Options(useGeneratedKeys = true, keyProperty = "id", keyColumn = "id")
