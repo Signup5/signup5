@@ -38,10 +38,10 @@ public interface EventMapper {
     @Delete("DELETE FROM event WHERE id = #{id}")
     void removeEventById(Long id);
 
-    @Select("SELECT COUNT(*) FROM event WHERE host_id=#{host.id} and title=#{title} and date_of_event=#{date_of_event} and time_of_event=#{time_of_event} and location=#{location}")
+    @Select("SELECT COUNT(*) FROM event WHERE host_id=#{host.id} AND title=#{title} AND date_of_event=#{date_of_event} AND time_of_event=#{time_of_event} AND location=#{location}")
     Long isDuplicateEvent(Event event);
 
-    @Select("SELECT * FROM event WHERE host_id = #{id}")
+    @Select("SELECT * FROM event WHERE host_id = #{id} AND isCanceled = false")
     @Results({
             @Result(property = "id", column = "id"),
             @Result(property = "host", column = "host_id",
@@ -51,7 +51,9 @@ public interface EventMapper {
     })
     List<Event> getEventsByHostId(Long id);
 
-    @Select("SELECT * FROM event WHERE (SELECT invitation.guest_id FROM invitation WHERE invitation.event_id = event.id AND invitation.guest_id = ${id} AND attendance != 'NOT_ATTENDING') = ${id} AND isDraft = false")
+    @Select("SELECT * FROM event " +
+            "WHERE (SELECT invitation.guest_id FROM invitation WHERE invitation.event_id = event.id AND invitation.guest_id = ${id} AND attendance != 'NOT_ATTENDING') = ${id} " +
+            "AND isDraft = FALSE AND isCanceled = false")
     @Results({
             @Result(property = "id", column = "id"),
             @Result(property = "host", column = "host_id",
@@ -71,4 +73,7 @@ public interface EventMapper {
             "isDraft = #{isDraft} " +
             "WHERE id = #{id}")
     Long updateEvent(Event event);
+
+    @Update("UPDATE event SET isCanceled = TRUE WHERE id = #{id}")
+    Long cancelEvent(Long id);
 }

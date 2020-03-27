@@ -26,6 +26,7 @@ type Event {
     location: String!
     invitations: [Invitation]
     isDraft: Boolean!
+    isCanceled: Boolean
 }
 
 type Invitation {
@@ -104,7 +105,8 @@ type Query {
 type Mutation {
     setAttendance(attendance: Attendance, invitation_id: Int): Response
     createEvent(input: EventInput): Response
-    updateEvent(input: UpdateEventInput): Response
+    updateEvent(input: UpdateEventInput): Event
+    cancelEvent(event_id: Int): Response
 }
 
 schema {

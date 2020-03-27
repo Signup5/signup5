@@ -13,8 +13,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static se.expleostockholm.signup.service.ServiceUtil.personNotInInvitationList;
 import static se.expleostockholm.signup.service.ServiceUtil.isValidDate;
+import static se.expleostockholm.signup.service.ServiceUtil.personNotInInvitationList;
 
 @Service
 @AllArgsConstructor
@@ -117,5 +117,10 @@ public class EventService {
             emailService.sendInvitationEmail(event);
             emailService.sendCalendarToHostEmail(event);
         }
+    }
+
+    public void cancelEvent(Long id) {
+        if (eventMapper.cancelEvent(id) == 0)
+            throw new EventException("Error updating event!");
     }
 }

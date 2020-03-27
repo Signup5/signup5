@@ -6,7 +6,6 @@ import org.springframework.stereotype.Component;
 import se.expleostockholm.signup.domain.Attendance;
 import se.expleostockholm.signup.domain.Event;
 import se.expleostockholm.signup.domain.Response;
-import se.expleostockholm.signup.exception.EventNotUpdatedException;
 import se.expleostockholm.signup.service.EmailService;
 import se.expleostockholm.signup.service.EventService;
 import se.expleostockholm.signup.service.InvitationService;
@@ -55,11 +54,16 @@ public class Mutation implements GraphQLMutationResolver {
                 .build();
     }
 
-    public Response updateEvent(Event event) {
+    public Event updateEvent(Event event) {
         eventService.updateEvent(event);
-        return Response.builder()
-                .message("Event was successfully updated!")
-                .build();
+        return event;
+    }
 
+    public Response cancelEvent(Long id) {
+        eventService.cancelEvent(id);
+
+        return Response.builder()
+                .message("Event was successfully canceled!")
+                .build();
     }
 }
