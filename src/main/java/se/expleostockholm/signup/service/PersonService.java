@@ -8,8 +8,7 @@ import se.expleostockholm.signup.domain.Person;
 import se.expleostockholm.signup.domain.web.Response;
 import se.expleostockholm.signup.exception.InvalidEmailException;
 import se.expleostockholm.signup.exception.PersonAlreadyExistException;
-import se.expleostockholm.signup.exception.PersonNotFoundException;
-import se.expleostockholm.signup.exception.SavePersonException;
+import se.expleostockholm.signup.exception.PersonException;
 import se.expleostockholm.signup.repository.PersonMapper;
 
 import java.util.List;
@@ -37,32 +36,31 @@ public class PersonService {
 
     if (isValidEmail(person.getEmail())) {
       Optional<Person> optionalPerson = personMapper.getPersonByEmail(person.getEmail());
-
-      if (optionalPerson.isEmpty()) {
-        personMapper.savePerson(person);
-        return person;
-      } else {
-        return optionalPerson.get();
-      }
+            if (optionalPerson.isEmpty()) {
+                personMapper.savePerson(person);
+                return person;
+            } else {
+                return optionalPerson.get();
+            }
+        }
+        throw new PersonException("Invalid email provided!");
     }
-    throw new SavePersonException("Invalid email provided!");
-  }
 
   public List<Person> getAllPersons() {
     return personMapper.getAllPersons();
   }
 
-  /**
-   * Method for retrieving a Person based on its Id.
-   * <p>
-   * Accepts a Long as an argument representing the Person Id in the database.
-   *
-   * @param id a Long value representing a Person Id
-   * @return a Person if Person Id was found in the database
-   */
-  public Person getPersonById(Long id) {
-    return personMapper.getPersonById(id).orElseThrow(() -> new PersonNotFoundException("No person found!"));
-  }
+    /**
+     * Method for retrieving a Person based on its Id.
+     * <p>
+     * Accepts a Long as an argument representing the Person Id in the database.
+     *
+     * @param id a Long value representing a Person Id
+     * @return a Person if Person Id was found in the database
+     */
+    public Person getPersonById(Long id) {
+        return personMapper.getPersonById(id).orElseThrow(() -> new PersonException("No person found!"));
+    }
 
   /**
    * Method to check if a Person exists in the database.
@@ -85,7 +83,7 @@ public class PersonService {
    * @return a Person if email was found in the database
    */
   public Person getPersonByEmail(String email) {
-    return personMapper.getPersonByEmail(email).orElseThrow(() -> new PersonNotFoundException("No person found!"));
+    return personMapper.getPersonByEmail(email).orElseThrow(() -> new PersonException("No person found!"));
   }
 
   public Response createNewPerson(Person person) {
@@ -94,10 +92,11 @@ public class PersonService {
     }
     person.setPassword(passwordEncoder.encode(person.getPassword()));
     try {
-       personMapper.savePerson(person);
+      personMapper.savePerson(person);
       return new Response("New person saved", person.getId());
     } catch (DuplicateKeyException exception) {
       throw new PersonAlreadyExistException("The person with this email already exists");
     }
   }
+
 }

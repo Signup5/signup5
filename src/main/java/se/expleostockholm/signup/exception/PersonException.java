@@ -6,9 +6,9 @@ import graphql.language.SourceLocation;
 
 import java.util.List;
 
-public class InvitationAlreadyExistException extends RuntimeException implements GraphQLError {
+public class PersonException extends RuntimeException implements GraphQLError {
 
-    public InvitationAlreadyExistException(String message) {
+    public PersonException(String message) {
         super(message);
     }
 
@@ -21,4 +21,5 @@ public class InvitationAlreadyExistException extends RuntimeException implements
     public ErrorClassification getErrorType() {
         return null;
     }
+
 }

@@ -25,6 +25,8 @@ type Event {
     duration: Int!
     location: String!
     invitations: [Invitation]
+    isDraft: Boolean!
+    isCanceled: Boolean
 }
 
 type Invitation {
@@ -56,6 +58,19 @@ input EventInput {
     duration: Int!
     location: String!
     invitations: [InvitationInput]
+    isDraft: Boolean!
+}
+input UpdateEventInput {
+    id: Int!
+    host: HostInput!
+    title: String!
+    description: String
+    date_of_event: LocalDate!
+    time_of_event: LocalTime!
+    duration: Int!
+    location: String!
+    invitations: [InvitationInput]
+    isDraft: Boolean!
 }
 
 input InvitationInput {
@@ -93,12 +108,15 @@ type Query {
     getInvitationsByEventId(id: Int): [Invitation]
     getInvitationsByGuestId(id: Int!): [Invitation]
     getUpcomingUnRepliedInvitationsByGuestId(id: Int!): [Invitation]
+    getHostedAndInvitedEventsByPersonId(id: Int!): [Event]
 }
 
 type Mutation {
     setAttendance(attendance: Attendance, invitation_id: Int): Response
     createEvent(input: EventInput): Response
     createPerson(input: PersonInput): Response
+    updateEvent(input: UpdateEventInput): Event
+    cancelEvent(event_id: Int): Response
 }
 
 schema {

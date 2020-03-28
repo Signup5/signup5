@@ -61,6 +61,10 @@ public class Query implements GraphQLQueryResolver {
         return eventService.getAllEvents();
     }
 
+    public List<Event> getHostedAndInvitedEventsByPersonId(Long id) {
+        return eventService.getHostedAndInvitedEventsByPersonId(id);
+    }
+
     /**
      * GraphQL endpoint for retrieving an Event from the Database based on its Id.
      * <p>
@@ -94,7 +98,6 @@ public class Query implements GraphQLQueryResolver {
         return invitationService.getUpcomingUnRepliedInvitationsByGuestId(id);
     }
 
-
     /**
      * GraphQL endpoint for retrieving all Invitations for an Event based on the Event Id.
      * <p>
@@ -106,4 +109,5 @@ public class Query implements GraphQLQueryResolver {
     public List<Invitation> getInvitationsByEventId(Long id) {
         return invitationService.getInvitationsByEventId(id);
     }
+
 }

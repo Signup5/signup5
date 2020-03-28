@@ -1,8 +1,13 @@
 package se.expleostockholm.signup.service;
 
+import org.jetbrains.annotations.NotNull;
+import se.expleostockholm.signup.domain.Invitation;
+
 import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 import java.time.LocalDate;
+import java.util.List;
+import java.util.function.Predicate;
 
 public class ServiceUtil {
 
@@ -33,9 +38,12 @@ public class ServiceUtil {
      * @param date a LocalDate to be validated
      * @return true or false whether the date is in a valid format or not
      */
-    public static boolean isValidDate(LocalDate date) {
+    public static boolean isValidDate(@NotNull LocalDate date) {
         return date.isAfter(LocalDate.now().minusDays(1));
     }
 
 
+    public static Predicate<Invitation> personNotInInvitationList(List<Invitation> invitations) {
+        return p -> invitations.stream().noneMatch(invitation -> invitation.getGuest().getEmail().equalsIgnoreCase(p.getGuest().getEmail()));
+    }
 }

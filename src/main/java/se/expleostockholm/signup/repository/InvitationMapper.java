@@ -46,7 +46,10 @@ public interface InvitationMapper {
     @Delete("DELETE FROM invitation WHERE event_id = #{id}")
     void removeInvitationByEventId(Long id);
 
-    @Select("SELECT * FROM invitation WHERE guest_id = #{id}")
+    @Delete("DELETE FROM invitation WHERE invitation.id = #{id}")
+    Long removeInvitationById(Long id);
+
+    @Select("SELECT * FROM invitation WHERE guest_id = #{id} AND (SELECT isDraft FROM event WHERE event_id = event.id) = false")
     List<Invitation> getInvitationsByGuestId(Long id);
 
     @Select("SELECT * FROM invitation WHERE guest_id = #{id} " +
@@ -58,5 +61,4 @@ public interface InvitationMapper {
                     one = @One(select = "se.expleostockholm.signup.repository.PersonMapper.getPersonById"))
     })
     List<Invitation> getUpcomingUnRepliedInvitationsByGuestId(Long id);
-
 }
