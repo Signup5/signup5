@@ -41,6 +41,13 @@ type Response {
     message: String
 }
 
+input PersonInput {
+    email: String!
+    first_name: String!
+    last_name: String!
+    password: String!
+}
+
 input EventInput {
     id: Int
     host: HostInput!
@@ -78,6 +85,7 @@ input HostInput {
     email: String!
     first_name: String!
     last_name: String!
+    password: String
 }
 
 input GuestInput {
@@ -85,6 +93,7 @@ input GuestInput {
     email: String!
     first_name: String
     last_name: String
+    password: String
 }
 
 type Query {
@@ -104,6 +113,7 @@ type Query {
 
 type Mutation {
     setAttendance(attendance: Attendance, invitation_id: Int): Response
+    createPerson(input: PersonInput): Response
     createEvent(input: EventInput): Event
     updateEvent(input: UpdateEventInput): Event
     cancelEvent(event_id: Int): Response

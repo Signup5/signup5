@@ -4,7 +4,6 @@ import se.expleostockholm.signup.domain.Event;
 import se.expleostockholm.signup.domain.Invitation;
 import se.expleostockholm.signup.domain.Person;
 
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 

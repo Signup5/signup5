@@ -3,28 +3,27 @@ package se.expleostockholm.signup.acceptancetests;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.graphql.spring.boot.test.GraphQLTestTemplate;
+import java.util.ArrayList;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
-import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.test.context.ContextConfiguration;
 import org.testcontainers.junit.jupiter.Testcontainers;
+import se.expleostockholm.signup.constant.JwtFilterConstant;
 import se.expleostockholm.signup.domain.Attendance;
 import se.expleostockholm.signup.integrationtests.SignupDbTests;
 import se.expleostockholm.signup.repository.InvitationMapper;
-import se.expleostockholm.signup.service.EmailService;
 
 import javax.annotation.Resource;
-import javax.mail.internet.MimeMessage;
 import java.io.IOException;
 import java.util.stream.Stream;
+import se.expleostockholm.signup.util.JwtUtil;
 
 import static org.junit.Assert.assertEquals;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.doNothing;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @Testcontainers
@@ -35,6 +34,9 @@ public class SetAttendanceTest extends SignupDbTests {
     @Autowired
     private GraphQLTestTemplate graphQLTestTemplate;
 
+    @Autowired
+    private JwtUtil jwtUtil;
+
     @Resource
     private InvitationMapper invitationMapper;
 
@@ -42,6 +44,12 @@ public class SetAttendanceTest extends SignupDbTests {
 
     private final static Long invitation_id = 1L;
     private final static String expectedMessage_positive = "Attendance was successfully updated!";
+
+    @BeforeEach
+    void setUp() {
+        final String jwtToken = jwtUtil.generateToken(new User("bla", "", new ArrayList<>()));
+        graphQLTestTemplate.addHeader(JwtFilterConstant.HEADER_STRING, JwtFilterConstant.TOKEN_PREFIX + jwtToken);
+    }
 
     @ParameterizedTest
     @Order(1)

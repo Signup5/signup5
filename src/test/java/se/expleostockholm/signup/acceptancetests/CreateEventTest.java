@@ -5,17 +5,23 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.graphql.spring.boot.test.GraphQLResponse;
 import com.graphql.spring.boot.test.GraphQLTestTemplate;
+import java.util.ArrayList;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.HttpHeaders;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.test.context.ContextConfiguration;
 import org.testcontainers.junit.jupiter.Testcontainers;
+import se.expleostockholm.signup.constant.JwtFilterConstant;
 import se.expleostockholm.signup.domain.Event;
 import se.expleostockholm.signup.domain.Invitation;
 import se.expleostockholm.signup.domain.Person;
-import se.expleostockholm.signup.domain.Response;
+import se.expleostockholm.signup.domain.web.Response;
 import se.expleostockholm.signup.integrationtests.SignupDbTests;
 import se.expleostockholm.signup.repository.EventMapper;
 import se.expleostockholm.signup.repository.InvitationMapper;
@@ -26,6 +32,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.IntStream;
+import se.expleostockholm.signup.util.JwtUtil;
 
 import static java.util.stream.Collectors.toList;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -43,6 +50,9 @@ public class CreateEventTest extends SignupDbTests {
 
     @Autowired
     private GraphQLTestTemplate graphQLTestTemplate;
+
+    @Autowired
+    private JwtUtil jwtUtil;
 
     @Resource
     private PersonMapper personMapper;
@@ -63,6 +73,12 @@ public class CreateEventTest extends SignupDbTests {
         invitationMapper.removeInvitationByEventId(event.getId());
         event.getInvitations().forEach(i -> personMapper.removePersonByEmail(i.getGuest().getEmail()));
         eventMapper.removeEventById(event.getId());
+    }
+
+    @BeforeEach
+    void setUp() {
+        final String jwtToken = jwtUtil.generateToken(new User("bla", "", new ArrayList<>()));
+        graphQLTestTemplate.addHeader(JwtFilterConstant.HEADER_STRING, JwtFilterConstant.TOKEN_PREFIX + jwtToken);
     }
 
     @Test
