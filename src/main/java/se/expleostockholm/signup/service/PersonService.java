@@ -86,6 +86,11 @@ public class PersonService {
     return personMapper.getPersonByEmail(email).orElseThrow(() -> new PersonException("No person found!"));
   }
 
+  public void changePassword(String password, Person person) {
+    String newPassword = passwordEncoder.encode(password);
+    personMapper.updatePasswordById(newPassword, person.getId());
+  }
+
   public Response createNewPerson(Person person) {
     if (!isValidEmail(person.getEmail())) {
       throw new InvalidEmailException("The provided email: " + person.getEmail() + " was not valid");

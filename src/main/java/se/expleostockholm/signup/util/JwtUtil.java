@@ -18,7 +18,7 @@ public class JwtUtil {
 
   @Value("${jwt.secret}")
   private String secretKey;
-  public static final long EXPIRATION_TIME = 999_000_000; // 10 days
+  public static final long EXPIRATION_TIME = 999_000_000;
 
 
   public String extractUsername(String token) throws ExpiredJwtException {
@@ -38,9 +38,10 @@ public class JwtUtil {
     return Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody();
   }
 
-  private Boolean isTokenExpired(String token) {
+  public Boolean isTokenExpired(String token) {
     return extractExpiration(token).before(new Date());
   }
+
 
   public String generateToken(UserDetails userDetails) {
     Map<String, Object> claims = new HashMap<>();
@@ -54,11 +55,18 @@ public class JwtUtil {
         .signWith(SignatureAlgorithm.HS256, secretKey).compact();
   }
 
-  public Boolean validateToken(String token, UserDetails userDetails) {
+  public String createResetPasswordToken(String email) {
+    final long resetPasswordExpirationTime = 1_800_000;
+    return Jwts.builder().setClaims(new HashMap<>()).setSubject(email).setIssuedAt(new Date(System.currentTimeMillis()))
+        .setExpiration(new Date(System.currentTimeMillis() + resetPasswordExpirationTime))
+        .signWith(SignatureAlgorithm.HS256, secretKey).compact();
+  }
 
+  public Boolean validateToken(String token, UserDetails userDetails) {
     Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token);
     final String username = extractUsername(token);
     return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
   }
+
 }
 

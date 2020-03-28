@@ -14,6 +14,9 @@ public interface PersonMapper {
     @Select("SELECT * FROM person WHERE id = #{person_id}")
     Optional<Person> getPersonById(@Param("person_id") Long person_id);
 
+    @Select("UPDATE person SET password = #{new_password} WHERE id = #{person_id}")
+    Optional<Person> updatePasswordById(String new_password , Long person_id);
+
     @Select("SELECT * FROM person WHERE email = #{email}")
     Optional<Person> getPersonByEmail(String email);
 
