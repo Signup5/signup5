@@ -45,13 +45,9 @@ public class Mutation implements GraphQLMutationResolver {
      * @param event an Event with values coming from the frontend
      * @return a Response with info if Event was saved or not
      */
-    public Response createEvent(Event event) {
+    public Event createEvent(Event event) {
         eventService.createNewEvent(event);
-
-        return Response.builder()
-                .message("Event was successfully saved!")
-                .id(event.getId())
-                .build();
+        return event;
     }
 
     public Event updateEvent(Event event) {

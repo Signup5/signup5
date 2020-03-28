@@ -104,7 +104,7 @@ type Query {
 
 type Mutation {
     setAttendance(attendance: Attendance, invitation_id: Int): Response
-    createEvent(input: EventInput): Response
+    createEvent(input: EventInput): Event
     updateEvent(input: UpdateEventInput): Event
     cancelEvent(event_id: Int): Response
 }
