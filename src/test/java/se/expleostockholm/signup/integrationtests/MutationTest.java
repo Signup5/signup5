@@ -8,7 +8,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ContextConfiguration;
 import org.testcontainers.junit.jupiter.Testcontainers;
 import se.expleostockholm.signup.domain.*;
-import se.expleostockholm.signup.exception.EventAlreadyExistException;
+import se.expleostockholm.signup.exception.EventException;
 import se.expleostockholm.signup.repository.EventMapper;
 import se.expleostockholm.signup.repository.InvitationMapper;
 import se.expleostockholm.signup.repository.PersonMapper;
@@ -77,7 +77,7 @@ public class MutationTest extends SignupDbTests {
     @Test
     @Order(3)
     public void createEvent_duplicate_fail() {
-        assertThrows(EventAlreadyExistException.class, () ->
+        assertThrows(EventException.class, () ->
                 mutation.createEvent(eventMapper.getEventById(1L).get())
         );
     }

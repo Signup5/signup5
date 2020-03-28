@@ -5,7 +5,9 @@ import org.springframework.stereotype.Service;
 import se.expleostockholm.signup.domain.Attendance;
 import se.expleostockholm.signup.domain.Event;
 import se.expleostockholm.signup.domain.Invitation;
-import se.expleostockholm.signup.exception.*;
+import se.expleostockholm.signup.exception.AttendanceException;
+import se.expleostockholm.signup.exception.EventException;
+import se.expleostockholm.signup.exception.InvitationException;
 import se.expleostockholm.signup.repository.EventMapper;
 import se.expleostockholm.signup.repository.InvitationMapper;
 
@@ -48,7 +50,7 @@ public class InvitationService {
      */
     public void invitationExists(Invitation invitation) {
         if (invitationMapper.invitationExists(invitation) == 1)
-            throw new InvitationAlreadyExistException(invitation.getGuest().getEmail() + " has already been invited to this event!");
+            throw new InvitationException(invitation.getGuest().getEmail() + " has already been invited to this event!");
     }
 
     /**
@@ -65,10 +67,10 @@ public class InvitationService {
     public void setAttendance(Attendance attendance, Long invitation_id) {
 
         if (invitationMapper.setAttendance(attendance, invitation_id) != 1)
-            throw new SetAttendanceException("Something went wrong while updating attendance.");
+            throw new AttendanceException("Something went wrong while updating attendance.");
 
         Invitation invitation = getInvitationById(invitation_id);
-        Event event = eventMapper.getEventById(invitation.getEvent_id()).orElseThrow(() -> new EventNotFoundException("No event found!"));
+        Event event = eventMapper.getEventById(invitation.getEvent_id()).orElseThrow(() -> new EventException("No event found!"));
 
         if (attendance == Attendance.ATTENDING)
             emailService.sendEmailWithCalendarAttachment(invitation.getGuest().getEmail(), event);

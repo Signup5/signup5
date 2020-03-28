@@ -4,7 +4,9 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import se.expleostockholm.signup.domain.Event;
 import se.expleostockholm.signup.domain.Invitation;
-import se.expleostockholm.signup.exception.*;
+import se.expleostockholm.signup.exception.EventException;
+import se.expleostockholm.signup.exception.InvalidDateException;
+import se.expleostockholm.signup.exception.PersonException;
 import se.expleostockholm.signup.repository.EventMapper;
 
 import java.util.Collection;
@@ -48,9 +50,9 @@ public class EventService {
                 }
                 throw new InvalidDateException("Invalid date. Start of event cannot be in the past!");
             }
-            throw new PersonNotFoundException("Event host not found!");
+            throw new PersonException("Event host not found!");
         }
-        throw new EventAlreadyExistException("'" + event.getTitle() + "': " + event.getDate_of_event() + ": " + event.getTime_of_event() + " - Event already exists");
+        throw new EventException("'" + event.getTitle() + "': " + event.getDate_of_event() + ": " + event.getTime_of_event() + " - Event already exists");
     }
 
 
@@ -67,7 +69,7 @@ public class EventService {
      * @return an Event if Id was found in the database
      */
     public Event getEventById(Long id) {
-        return eventMapper.getEventById(id).orElseThrow(() -> new EventNotFoundException("No event found!"));
+        return eventMapper.getEventById(id).orElseThrow(() -> new EventException("No event found!"));
     }
 
     /**
@@ -97,7 +99,7 @@ public class EventService {
     }
 
     public void updateEvent(Event event) {
-        if (eventMapper.updateEvent(event) == 0) throw new EventNotUpdatedException("No event updated!");
+        if (eventMapper.updateEvent(event) == 0) throw new EventException("No event updated!");
 
         List<Invitation> updatedInvitationList = event.getInvitations();
         List<Invitation> existingInvitations = invitationService.getInvitationsByEventId(event.getId());

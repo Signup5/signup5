@@ -3,8 +3,7 @@ package se.expleostockholm.signup.service;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import se.expleostockholm.signup.domain.Person;
-import se.expleostockholm.signup.exception.PersonNotFoundException;
-import se.expleostockholm.signup.exception.SavePersonException;
+import se.expleostockholm.signup.exception.PersonException;
 import se.expleostockholm.signup.repository.PersonMapper;
 
 import java.util.List;
@@ -39,7 +38,7 @@ public class PersonService {
                 return optionalPerson.get();
             }
         }
-        throw new SavePersonException("Invalid email provided!");
+        throw new PersonException("Invalid email provided!");
     }
 
     public List<Person> getAllPersons() {
@@ -55,7 +54,7 @@ public class PersonService {
      * @return a Person if Person Id was found in the database
      */
     public Person getPersonById(Long id) {
-        return personMapper.getPersonById(id).orElseThrow(() -> new PersonNotFoundException("No person found!"));
+        return personMapper.getPersonById(id).orElseThrow(() -> new PersonException("No person found!"));
     }
 
     /**
@@ -79,6 +78,6 @@ public class PersonService {
      * @return a Person if email was found in the database
      */
     public Person getPersonByEmail(String email) {
-        return personMapper.getPersonByEmail(email).orElseThrow(() -> new PersonNotFoundException("No person found!"));
+        return personMapper.getPersonByEmail(email).orElseThrow(() -> new PersonException("No person found!"));
     }
 }

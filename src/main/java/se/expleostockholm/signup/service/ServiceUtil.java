@@ -1,6 +1,5 @@
 package se.expleostockholm.signup.service;
 
-import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import se.expleostockholm.signup.domain.Invitation;
 
