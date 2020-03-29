@@ -1,7 +1,29 @@
 mutation createEvent($eventInput: EventInput!){
-    response: createEvent(input: $eventInput) {
+    event: createEvent(input: $eventInput) {
         id
-        message
+        host {
+            id
+            email
+            first_name
+            last_name
+        }
+        title
+        description
+        date_of_event
+        time_of_event
+        duration
+        location
+        invitations {
+            id
+            event_id
+            attendance
+            guest {
+                id
+                email
+            }
+        }
+        isDraft
+        isCanceled
     }
 }
 

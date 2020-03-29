@@ -24,8 +24,7 @@ public class Event {
     private Short duration;
     private String location;
     private Boolean isDraft;
-    @Default
-    private boolean isCanceled = Boolean.FALSE;
+    private Boolean isCanceled;
 
     public LocalDateTime toLocalDateTime() {
         return LocalDateTime.of(this.date_of_event, this.time_of_event);

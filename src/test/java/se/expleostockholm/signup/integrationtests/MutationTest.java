@@ -71,9 +71,9 @@ public class MutationTest extends SignupDbTests {
         expectedHost = personMapper.getPersonById(hostId).get();
         expectedEvent = createMockEvent(expectedHost);
 
-        Response response = mutation.createEvent(expectedEvent);
-        expectedEvent.setId(response.getId());
-        assertEventsAreEqual(expectedEvent, eventMapper.getEventById(response.getId()));
+        Event event = mutation.createEvent(expectedEvent);
+        expectedEvent.setId(event.getId());
+        assertEventsAreEqual(expectedEvent, eventMapper.getEventById(event.getId()));
 
         tearDown();
     }

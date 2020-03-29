@@ -59,6 +59,7 @@ input EventInput {
     location: String!
     invitations: [InvitationInput]
     isDraft: Boolean!
+    isCanceled: Boolean!
 }
 input UpdateEventInput {
     id: Int!

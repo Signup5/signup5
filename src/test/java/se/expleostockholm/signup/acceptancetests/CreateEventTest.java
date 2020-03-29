@@ -6,18 +6,17 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.graphql.spring.boot.test.GraphQLResponse;
 import com.graphql.spring.boot.test.GraphQLTestTemplate;
 import java.util.ArrayList;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.http.HttpHeaders;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.test.context.ContextConfiguration;
 import org.testcontainers.junit.jupiter.Testcontainers;
 import se.expleostockholm.signup.constant.JwtFilterConstant;
+import se.expleostockholm.signup.domain.Attendance;
 import se.expleostockholm.signup.domain.Event;
 import se.expleostockholm.signup.domain.Invitation;
 import se.expleostockholm.signup.domain.Person;
@@ -35,6 +34,7 @@ import java.util.stream.IntStream;
 import se.expleostockholm.signup.util.JwtUtil;
 
 import static java.util.stream.Collectors.toList;
+import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static se.expleostockholm.signup.utils.EventUtils.createMockEvent;
@@ -67,12 +67,12 @@ public class CreateEventTest extends SignupDbTests {
     private ObjectNode eventVariables;
     private ObjectNode variables;
 
-    private Event event;
+    private Event expectedEvent;
 
     public void tearDown() {
-        invitationMapper.removeInvitationByEventId(event.getId());
-        event.getInvitations().forEach(i -> personMapper.removePersonByEmail(i.getGuest().getEmail()));
-        eventMapper.removeEventById(event.getId());
+        invitationMapper.removeInvitationByEventId(expectedEvent.getId());
+        expectedEvent.getInvitations().forEach(i -> personMapper.removePersonByEmail(i.getGuest().getEmail()));
+        eventMapper.removeEventById(expectedEvent.getId());
     }
 
     @BeforeEach
@@ -96,34 +96,32 @@ public class CreateEventTest extends SignupDbTests {
     }
 
     public Event when_host_creates_new_event_and_invites_guests(Person host) throws IOException {
-        event = createMockEvent(host);
+        expectedEvent = createMockEvent(host);
 
-        event.setInvitations(IntStream.range(0, 1)
+        expectedEvent.setInvitations(IntStream.range(0, 1)
                 .mapToObj(i -> createMockInvitation(createMockPerson())).collect(toList()));
 
         eventVariables = new ObjectMapper().createObjectNode();
         eventInput = new ObjectMapper().createObjectNode();
 
-        eventVariables.putPOJO("host", event.getHost());
-        eventVariables.putPOJO("title", event.getTitle());
-        eventVariables.putPOJO("date_of_event", event.getDate_of_event().toString());
-        eventVariables.putPOJO("time_of_event", event.getTime_of_event().toString());
-        eventVariables.putPOJO("location", event.getLocation());
-        eventVariables.putPOJO("duration", event.getDuration());
-        eventVariables.putPOJO("invitations", event.getInvitations());
+        eventVariables.putPOJO("host", expectedEvent.getHost());
+        eventVariables.putPOJO("title", expectedEvent.getTitle());
+        eventVariables.putPOJO("description", expectedEvent.getDescription());
+        eventVariables.putPOJO("date_of_event", expectedEvent.getDate_of_event().toString());
+        eventVariables.putPOJO("time_of_event", expectedEvent.getTime_of_event().toString());
+        eventVariables.putPOJO("location", expectedEvent.getLocation());
+        eventVariables.putPOJO("duration", expectedEvent.getDuration());
+        eventVariables.putPOJO("invitations", expectedEvent.getInvitations());
         eventVariables.putPOJO("isDraft", true);
+        eventVariables.putPOJO("isCanceled", false);
 
         eventInput.putPOJO("eventInput", eventVariables);
 
         GraphQLResponse graphQLResponse = graphQLTestTemplate.perform("mutations/createEvent.graphql", eventInput);
-        Response response = graphQLResponse.get("$.data.response", Response.class);
-        String responseMessage = response.getMessage();
+        String description = graphQLResponse.get("$.data.event.description", String.class);
 
-        assertEquals("Event was successfully saved!", responseMessage);
-
-        event.setId(response.getId());
-
-        return event;
+        assertEquals(description, expectedEvent.getDescription());
+        return expectedEvent;
     }
 
     public void then_host_can_see_invitation_statistics(Event expectedEvent) throws IOException {
@@ -135,7 +133,7 @@ public class CreateEventTest extends SignupDbTests {
 
         List objectList = graphQLResponse.get("$.data.invitations", List.class);
         List<Invitation> actualInvitations = new ObjectMapper().convertValue(objectList, new TypeReference<>() {});
-        List<Invitation> expectedInvitations = event.getInvitations();
+        List<Invitation> expectedInvitations = this.expectedEvent.getInvitations();
 
         assertInvitationListsAreEqual(expectedInvitations, actualInvitations);
     }
