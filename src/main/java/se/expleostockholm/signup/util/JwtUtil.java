@@ -35,7 +35,7 @@ public class JwtUtil {
   }
 
   private Claims extractAllClaims(String token) throws ExpiredJwtException {
-    return Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody();
+    return Jwts.parser().setSigningKey(secretKey.getBytes()).parseClaimsJws(token).getBody();
   }
 
   public Boolean isTokenExpired(String token) {
@@ -52,18 +52,19 @@ public class JwtUtil {
   private String createToken(Map<String, Object> claims, String subject) {
     return Jwts.builder().setClaims(claims).setSubject(subject).setIssuedAt(new Date(System.currentTimeMillis()))
         .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
-        .signWith(SignatureAlgorithm.HS256, secretKey).compact();
+        .signWith(SignatureAlgorithm.HS512, secretKey.getBytes())
+        .compact();
   }
 
   public String createResetPasswordToken(String email) {
     final long resetPasswordExpirationTime = 1_800_000;
     return Jwts.builder().setClaims(new HashMap<>()).setSubject(email).setIssuedAt(new Date(System.currentTimeMillis()))
         .setExpiration(new Date(System.currentTimeMillis() + resetPasswordExpirationTime))
-        .signWith(SignatureAlgorithm.HS256, secretKey).compact();
+        .signWith(SignatureAlgorithm.HS512, secretKey.getBytes()).compact();
   }
 
   public Boolean validateToken(String token, UserDetails userDetails) {
-    Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token);
+    Jwts.parser().setSigningKey(secretKey.getBytes()).parseClaimsJws(token);
     final String username = extractUsername(token);
     return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
   }

@@ -31,4 +31,16 @@ public class LoginService {
       throw new LoginException("Username or password not correct");
     }
   }
+
+  public Person logiin(String email, String loginPassword) throws LoginException {
+    Person person = userRepository.getPersonByEmail(email)
+        .orElseThrow(() ->
+            new LoginException("Username or password incorrect"));
+    if(passwordEncoder.matches(loginPassword, person.getPassword())) {
+      return person;
+    }
+    else {
+      throw new LoginException("Username or password not correct");
+    }
+  }
 }
