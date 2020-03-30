@@ -20,6 +20,8 @@ mutation createEvent($eventInput: EventInput!){
             guest {
                 id
                 email
+                first_name
+                last_name
             }
         }
         isDraft

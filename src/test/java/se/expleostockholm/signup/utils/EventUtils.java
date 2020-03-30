@@ -7,10 +7,14 @@ import se.expleostockholm.signup.domain.Person;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.Optional;
+import java.util.stream.IntStream;
 
+import static java.util.stream.Collectors.toList;
 import static org.junit.jupiter.api.Assertions.*;
 import static se.expleostockholm.signup.utils.InvitationUtils.assertInvitationListsAreEqual;
+import static se.expleostockholm.signup.utils.InvitationUtils.createMockInvitation;
 import static se.expleostockholm.signup.utils.PersonUtils.assertPersonsAreEqual;
+import static se.expleostockholm.signup.utils.PersonUtils.createMockPerson;
 
 public class EventUtils {
 
@@ -25,6 +29,8 @@ public class EventUtils {
                 .description(faker.book().genre())
                 .location(faker.rickAndMorty().location())
                 .title(faker.rickAndMorty().character())
+                .invitations(IntStream.range(0, 1)
+                        .mapToObj(i -> createMockInvitation(createMockPerson())).collect(toList()))
                 .build();
     }
 

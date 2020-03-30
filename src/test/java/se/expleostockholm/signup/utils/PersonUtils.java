@@ -16,6 +16,7 @@ public class PersonUtils {
         String randomLastName = faker.name().lastName();
         String regex = "[^a-zA-Z]+";
         String randomEmail = randomFirstName.replaceAll(regex, "") + "." + randomLastName.replaceAll(regex, "") + "@mail.com";
+
         return Person.builder()
                 .first_name(randomFirstName)
                 .last_name(randomLastName)

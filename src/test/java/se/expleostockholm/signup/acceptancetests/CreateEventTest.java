@@ -5,7 +5,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.graphql.spring.boot.test.GraphQLResponse;
 import com.graphql.spring.boot.test.GraphQLTestTemplate;
-import java.util.ArrayList;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Test;
@@ -16,31 +15,27 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.test.context.ContextConfiguration;
 import org.testcontainers.junit.jupiter.Testcontainers;
 import se.expleostockholm.signup.constant.JwtFilterConstant;
-import se.expleostockholm.signup.domain.Attendance;
 import se.expleostockholm.signup.domain.Event;
 import se.expleostockholm.signup.domain.Invitation;
 import se.expleostockholm.signup.domain.Person;
-import se.expleostockholm.signup.domain.web.Response;
 import se.expleostockholm.signup.integrationtests.SignupDbTests;
 import se.expleostockholm.signup.repository.EventMapper;
 import se.expleostockholm.signup.repository.InvitationMapper;
 import se.expleostockholm.signup.repository.PersonMapper;
+import se.expleostockholm.signup.util.JwtUtil;
 
 import javax.annotation.Resource;
 import java.io.IOException;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.IntStream;
-import se.expleostockholm.signup.util.JwtUtil;
 
-import static java.util.stream.Collectors.toList;
-import static org.junit.jupiter.api.Assertions.assertAll;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static se.expleostockholm.signup.utils.EventUtils.assertEventsAreEqual;
 import static se.expleostockholm.signup.utils.EventUtils.createMockEvent;
 import static se.expleostockholm.signup.utils.InvitationUtils.assertInvitationListsAreEqual;
-import static se.expleostockholm.signup.utils.InvitationUtils.createMockInvitation;
-import static se.expleostockholm.signup.utils.PersonUtils.createMockPerson;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @Testcontainers
@@ -70,8 +65,8 @@ public class CreateEventTest extends SignupDbTests {
     private Event expectedEvent;
 
     public void tearDown() {
-        invitationMapper.removeInvitationByEventId(expectedEvent.getId());
-        expectedEvent.getInvitations().forEach(i -> personMapper.removePersonByEmail(i.getGuest().getEmail()));
+        expectedEvent.getInvitations().forEach(e -> invitationMapper.removeInvitationByEventId(e.getEvent_id()));
+        expectedEvent.getInvitations().forEach(e -> personMapper.removePersonByEmail(e.getGuest().getEmail()));
         eventMapper.removeEventById(expectedEvent.getId());
     }
 
@@ -84,7 +79,7 @@ public class CreateEventTest extends SignupDbTests {
     @Test
     public void createEvent_test() throws IOException {
         Person host = given_host_exists();
-        Event expectedEvent = when_host_creates_new_event_and_invites_guests(host);
+        expectedEvent = when_host_creates_new_event_and_invites_guests(host);
         then_host_can_see_invitation_statistics(expectedEvent);
         tearDown();
     }
@@ -97,31 +92,51 @@ public class CreateEventTest extends SignupDbTests {
 
     public Event when_host_creates_new_event_and_invites_guests(Person host) throws IOException {
         expectedEvent = createMockEvent(host);
-
-        expectedEvent.setInvitations(IntStream.range(0, 1)
-                .mapToObj(i -> createMockInvitation(createMockPerson())).collect(toList()));
-
+        
         eventVariables = new ObjectMapper().createObjectNode();
         eventInput = new ObjectMapper().createObjectNode();
-
         eventVariables.putPOJO("host", expectedEvent.getHost());
         eventVariables.putPOJO("title", expectedEvent.getTitle());
         eventVariables.putPOJO("description", expectedEvent.getDescription());
         eventVariables.putPOJO("date_of_event", expectedEvent.getDate_of_event().toString());
         eventVariables.putPOJO("time_of_event", expectedEvent.getTime_of_event().toString());
         eventVariables.putPOJO("location", expectedEvent.getLocation());
-        eventVariables.putPOJO("duration", expectedEvent.getDuration());
+        eventVariables.putPOJO("duration", expectedEvent.getDuration().toString());
         eventVariables.putPOJO("invitations", expectedEvent.getInvitations());
         eventVariables.putPOJO("isDraft", true);
         eventVariables.putPOJO("isCanceled", false);
-
         eventInput.putPOJO("eventInput", eventVariables);
 
         GraphQLResponse graphQLResponse = graphQLTestTemplate.perform("mutations/createEvent.graphql", eventInput);
-        String description = graphQLResponse.get("$.data.event.description", String.class);
 
-        assertEquals(description, expectedEvent.getDescription());
-        return expectedEvent;
+        List objectList = graphQLResponse.get("$.data.event.invitations", List.class);
+        List<Invitation> actualInvitations = new ObjectMapper().convertValue(objectList, new TypeReference<>() {
+        });
+
+        Person actualHost = Person.builder()
+                .id(graphQLResponse.get("$.data.event.host.id", Long.class))
+                .email(graphQLResponse.get("$.data.event.host.email", String.class))
+                .first_name(graphQLResponse.get("$.data.event.host.first_name", String.class))
+                .last_name(graphQLResponse.get("$.data.event.host.last_name", String.class))
+                .build();
+
+        Event actualEvent = Event.builder()
+                .id(graphQLResponse.get("$.data.event.id", Long.class))
+                .host(actualHost)
+                .title(graphQLResponse.get("$.data.event.title", String.class))
+                .description(graphQLResponse.get("$.data.event.description", String.class))
+                .date_of_event(LocalDate.parse(graphQLResponse.get("$.data.event.date_of_event", String.class)))
+                .time_of_event(LocalTime.parse(graphQLResponse.get("$.data.event.time_of_event", String.class)))
+                .duration(Short.parseShort(graphQLResponse.get("$.data.event.duration", String.class)))
+                .location(graphQLResponse.get("$.data.event.location", String.class))
+                .isDraft(graphQLResponse.get("$.data.event.isDraft", Boolean.class))
+                .isCanceled(graphQLResponse.get("$.data.event.isCanceled", Boolean.class))
+                .invitations(actualInvitations)
+                .build();
+
+        assertEventsAreEqual(expectedEvent, Optional.ofNullable(actualEvent));
+
+        return actualEvent;
     }
 
     public void then_host_can_see_invitation_statistics(Event expectedEvent) throws IOException {
@@ -132,11 +147,11 @@ public class CreateEventTest extends SignupDbTests {
         GraphQLResponse graphQLResponse = graphQLTestTemplate.perform("queries/getInvitationsByEventId.graphql", variables);
 
         List objectList = graphQLResponse.get("$.data.invitations", List.class);
-        List<Invitation> actualInvitations = new ObjectMapper().convertValue(objectList, new TypeReference<>() {});
+        List<Invitation> actualInvitations = new ObjectMapper().convertValue(objectList, new TypeReference<>() {
+        });
         List<Invitation> expectedInvitations = this.expectedEvent.getInvitations();
 
         assertInvitationListsAreEqual(expectedInvitations, actualInvitations);
     }
-
 
 }

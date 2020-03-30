@@ -1,9 +1,6 @@
 package se.expleostockholm.signup.integrationtests;
 
-import org.junit.jupiter.api.MethodOrderer;
-import org.junit.jupiter.api.Order;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestMethodOrder;
+import org.junit.jupiter.api.*;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ContextConfiguration;
 import org.testcontainers.junit.jupiter.Testcontainers;
@@ -50,6 +47,8 @@ public class MutationTest extends SignupDbTests {
     private Person expectedHost;
 
     public void tearDown() {
+        expectedEvent.getInvitations().forEach(e -> invitationMapper.removeInvitationByEventId(e.getEvent_id()));
+        expectedEvent.getInvitations().forEach(e -> personMapper.removePersonByEmail(e.getGuest().getEmail()));
         eventMapper.removeEventById(expectedEvent.getId());
     }
 
@@ -58,7 +57,7 @@ public class MutationTest extends SignupDbTests {
     public void attendance_updated_success() {
         Response response = mutation.setAttendance(Attendance.ATTENDING, invitationId);
         Optional<Invitation> invitation = invitationMapper.getInvitationById(invitationId);
-        assertAll(
+        Assertions.assertAll(
                 () -> assertEquals("Attendance was successfully updated!", response.getMessage(), "Response message did not match!"),
                 () -> assertTrue(invitation.isPresent(), "Invitation not found!"),
                 () -> assertEquals(Attendance.ATTENDING, invitation.get().getAttendance(), "Attendance did not match!")

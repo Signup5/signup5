@@ -2,7 +2,6 @@ package se.expleostockholm.signup.integrationtests;
 
 import com.graphql.spring.boot.test.GraphQLResponse;
 import com.graphql.spring.boot.test.GraphQLTestTemplate;
-import java.util.ArrayList;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,12 +9,13 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.test.context.ContextConfiguration;
 import org.testcontainers.junit.jupiter.Testcontainers;
+import se.expleostockholm.signup.constant.JwtFilterConstant;
+import se.expleostockholm.signup.util.JwtUtil;
 
 import javax.annotation.Resource;
 import java.io.IOException;
 import java.time.LocalTime;
-import se.expleostockholm.signup.constant.JwtFilterConstant;
-import se.expleostockholm.signup.util.JwtUtil;
+import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -40,7 +40,7 @@ public class QueryTests extends SignupDbTests {
     @Test
     public void getAllEvents() throws IOException {
         GraphQLResponse response = graphQLTestTemplate
-            .perform("queries/getAllEvents.graphql", null);
+                .perform("queries/getAllEvents.graphql", null);
 
         assertAll(
                 () -> assertTrue(response.isOk(), "Response not OK!"),
