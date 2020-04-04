@@ -15,6 +15,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.testcontainers.junit.jupiter.Testcontainers;
 import se.expleostockholm.signup.constant.JwtFilterConstant;
 import se.expleostockholm.signup.domain.web.Response;
+import se.expleostockholm.signup.repository.PersonMapper;
 import se.expleostockholm.signup.util.JwtUtil;
 
 import java.io.IOException;
@@ -32,15 +33,14 @@ public class CreateNewUserTest extends SignupDbTests {
     @Autowired
     private GraphQLTestTemplate graphQLTestTemplate;
 
+    private PersonMapper personMapper;
+
     @Autowired
     private JwtUtil jwtUtil;
 
     private ObjectNode personInput;
     private ObjectNode personVariables;
-
-    public void tearDown() {
-    }
-
+    
     @BeforeEach
     void setUp() {
         final String jwtToken = jwtUtil.generateToken(new User("bla", "", new ArrayList<>()));
