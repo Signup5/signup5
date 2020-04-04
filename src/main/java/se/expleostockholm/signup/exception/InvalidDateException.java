@@ -3,7 +3,6 @@ package se.expleostockholm.signup.exception;
 import graphql.ErrorClassification;
 import graphql.GraphQLError;
 import graphql.language.SourceLocation;
-
 import java.util.List;
 
 public class InvalidDateException extends RuntimeException implements GraphQLError {

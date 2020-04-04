@@ -1,6 +1,18 @@
 package se.expleostockholm.signup.integrationtests;
 
-import org.junit.jupiter.api.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static se.expleostockholm.signup.utils.EventUtils.assertEventsAreEqual;
+import static se.expleostockholm.signup.utils.EventUtils.createMockEvent;
+
+import java.util.Optional;
+import javax.annotation.Resource;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.MethodOrderer;
+import org.junit.jupiter.api.Order;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ContextConfiguration;
 import org.testcontainers.junit.jupiter.Testcontainers;
@@ -14,13 +26,6 @@ import se.expleostockholm.signup.repository.EventMapper;
 import se.expleostockholm.signup.repository.InvitationMapper;
 import se.expleostockholm.signup.repository.PersonMapper;
 import se.expleostockholm.signup.resolver.Mutation;
-
-import javax.annotation.Resource;
-import java.util.Optional;
-
-import static org.junit.jupiter.api.Assertions.*;
-import static se.expleostockholm.signup.utils.EventUtils.assertEventsAreEqual;
-import static se.expleostockholm.signup.utils.EventUtils.createMockEvent;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @Testcontainers

@@ -1,20 +1,21 @@
 package se.expleostockholm.signup.utils;
 
-import com.github.javafaker.Faker;
-import se.expleostockholm.signup.domain.Event;
-import se.expleostockholm.signup.domain.Person;
-
-import java.time.LocalDate;
-import java.time.LocalTime;
-import java.util.Optional;
-import java.util.stream.IntStream;
-
 import static java.util.stream.Collectors.toList;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static se.expleostockholm.signup.utils.InvitationUtils.assertInvitationListsAreEqual;
 import static se.expleostockholm.signup.utils.InvitationUtils.createMockInvitation;
 import static se.expleostockholm.signup.utils.PersonUtils.assertPersonsAreEqual;
 import static se.expleostockholm.signup.utils.PersonUtils.createMockPerson;
+
+import com.github.javafaker.Faker;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.util.Optional;
+import java.util.stream.IntStream;
+import se.expleostockholm.signup.domain.Event;
+import se.expleostockholm.signup.domain.Person;
 
 public class EventUtils {
 

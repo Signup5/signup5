@@ -1,10 +1,22 @@
 package se.expleostockholm.signup.acceptancetests;
 
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static se.expleostockholm.signup.utils.EventUtils.assertEventsAreEqual;
+import static se.expleostockholm.signup.utils.EventUtils.createMockEvent;
+import static se.expleostockholm.signup.utils.InvitationUtils.assertInvitationListsAreEqual;
+
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.graphql.spring.boot.test.GraphQLResponse;
 import com.graphql.spring.boot.test.GraphQLTestTemplate;
+import java.io.IOException;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import javax.annotation.Resource;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Test;
@@ -23,19 +35,6 @@ import se.expleostockholm.signup.repository.EventMapper;
 import se.expleostockholm.signup.repository.InvitationMapper;
 import se.expleostockholm.signup.repository.PersonMapper;
 import se.expleostockholm.signup.util.JwtUtil;
-
-import javax.annotation.Resource;
-import java.io.IOException;
-import java.time.LocalDate;
-import java.time.LocalTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static se.expleostockholm.signup.utils.EventUtils.assertEventsAreEqual;
-import static se.expleostockholm.signup.utils.EventUtils.createMockEvent;
-import static se.expleostockholm.signup.utils.InvitationUtils.assertInvitationListsAreEqual;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @Testcontainers

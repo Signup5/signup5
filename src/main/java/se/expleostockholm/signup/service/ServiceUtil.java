@@ -1,13 +1,12 @@
 package se.expleostockholm.signup.service;
 
-import org.jetbrains.annotations.NotNull;
-import se.expleostockholm.signup.domain.Invitation;
-
-import javax.mail.internet.AddressException;
-import javax.mail.internet.InternetAddress;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.function.Predicate;
+import javax.mail.internet.AddressException;
+import javax.mail.internet.InternetAddress;
+import org.jetbrains.annotations.NotNull;
+import se.expleostockholm.signup.domain.Invitation;
 
 public class ServiceUtil {
 

@@ -1,5 +1,10 @@
 package se.expleostockholm.signup.service;
 
+import java.io.IOException;
+import java.text.ParseException;
+import javax.mail.MessagingException;
+import javax.mail.internet.MimeMessage;
+import javax.mail.util.ByteArrayDataSource;
 import net.fortuna.ical4j.model.Calendar;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -8,12 +13,6 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import se.expleostockholm.signup.HtmlEmailTemplate;
 import se.expleostockholm.signup.domain.Event;
-
-import javax.mail.MessagingException;
-import javax.mail.internet.MimeMessage;
-import javax.mail.util.ByteArrayDataSource;
-import java.io.IOException;
-import java.text.ParseException;
 
 @Service
 public class EmailService {

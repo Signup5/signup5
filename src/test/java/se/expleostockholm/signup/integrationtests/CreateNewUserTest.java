@@ -1,9 +1,13 @@
 package se.expleostockholm.signup.integrationtests;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.graphql.spring.boot.test.GraphQLResponse;
 import com.graphql.spring.boot.test.GraphQLTestTemplate;
+import java.io.IOException;
+import java.util.ArrayList;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Test;
@@ -17,11 +21,6 @@ import se.expleostockholm.signup.constant.JwtFilterConstant;
 import se.expleostockholm.signup.domain.web.Response;
 import se.expleostockholm.signup.repository.PersonMapper;
 import se.expleostockholm.signup.util.JwtUtil;
-
-import java.io.IOException;
-import java.util.ArrayList;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)

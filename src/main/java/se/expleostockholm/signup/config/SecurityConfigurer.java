@@ -28,7 +28,6 @@ public class SecurityConfigurer extends WebSecurityConfigurerAdapter {
   @Override
   protected void configure(HttpSecurity http) throws Exception {
     http.cors();
-
     http.csrf().disable()
         .authorizeRequests()
         .antMatchers("/login", "/password/**", "/graphiql/**", "/vendor/**")
@@ -37,6 +36,8 @@ public class SecurityConfigurer extends WebSecurityConfigurerAdapter {
         .authenticated()
         .and()
         .exceptionHandling()
+        .and()
+        .cors()
         .and()
         .sessionManagement()
         .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
@@ -55,6 +56,5 @@ public class SecurityConfigurer extends WebSecurityConfigurerAdapter {
     PasswordEncoder encoder = new BCryptPasswordEncoder();
     return encoder;
   }
-
 
 }

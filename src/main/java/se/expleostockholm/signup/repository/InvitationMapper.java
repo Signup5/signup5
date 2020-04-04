@@ -1,12 +1,20 @@
 package se.expleostockholm.signup.repository;
 
-import org.apache.ibatis.annotations.*;
+import java.util.List;
+import java.util.Optional;
+import org.apache.ibatis.annotations.Delete;
+import org.apache.ibatis.annotations.Insert;
+import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.One;
+import org.apache.ibatis.annotations.Options;
+import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Result;
+import org.apache.ibatis.annotations.Results;
+import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
 import org.springframework.stereotype.Repository;
 import se.expleostockholm.signup.domain.Attendance;
 import se.expleostockholm.signup.domain.Invitation;
-
-import java.util.List;
-import java.util.Optional;
 
 @Mapper
 @Repository

@@ -1,13 +1,13 @@
 package se.expleostockholm.signup.integrationtests;
 
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.util.TestPropertyValues;
 import org.springframework.context.ApplicationContextInitializer;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.testcontainers.junit.jupiter.Container;
-
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public abstract class SignupDbTests {
 

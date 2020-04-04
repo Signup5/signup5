@@ -1,5 +1,13 @@
 package se.expleostockholm.signup.integrationtests;
 
+import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
+import static se.expleostockholm.signup.utils.InvitationUtils.assertInvitationsAreEqual;
+
+import java.util.Optional;
+import javax.annotation.Resource;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
@@ -14,13 +22,6 @@ import se.expleostockholm.signup.repository.EventMapper;
 import se.expleostockholm.signup.repository.InvitationMapper;
 import se.expleostockholm.signup.repository.PersonMapper;
 import se.expleostockholm.signup.utils.InvitationUtils;
-
-import javax.annotation.Resource;
-import java.util.Optional;
-
-import static org.junit.jupiter.api.Assertions.*;
-import static org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
-import static se.expleostockholm.signup.utils.InvitationUtils.assertInvitationsAreEqual;
 
 
 @TestMethodOrder(OrderAnnotation.class)

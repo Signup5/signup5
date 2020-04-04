@@ -1,15 +1,14 @@
 package se.expleostockholm.signup.utils;
 
-import se.expleostockholm.signup.domain.Event;
-import se.expleostockholm.signup.domain.Invitation;
-import se.expleostockholm.signup.domain.Person;
-
-import java.util.Comparator;
-import java.util.List;
-
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static se.expleostockholm.signup.utils.PersonUtils.assertPersonsAreEqual;
+
+import java.util.Comparator;
+import java.util.List;
+import se.expleostockholm.signup.domain.Event;
+import se.expleostockholm.signup.domain.Invitation;
+import se.expleostockholm.signup.domain.Person;
 
 public class InvitationUtils {
 

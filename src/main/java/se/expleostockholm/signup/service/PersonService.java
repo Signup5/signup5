@@ -1,5 +1,9 @@
 package se.expleostockholm.signup.service;
 
+import static se.expleostockholm.signup.service.ServiceUtil.isValidEmail;
+
+import java.util.List;
+import java.util.Optional;
 import lombok.AllArgsConstructor;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -10,11 +14,6 @@ import se.expleostockholm.signup.exception.InvalidEmailException;
 import se.expleostockholm.signup.exception.PersonAlreadyExistException;
 import se.expleostockholm.signup.exception.PersonException;
 import se.expleostockholm.signup.repository.PersonMapper;
-
-import java.util.List;
-import java.util.Optional;
-
-import static se.expleostockholm.signup.service.ServiceUtil.isValidEmail;
 
 @Service
 @AllArgsConstructor

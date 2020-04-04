@@ -1,6 +1,7 @@
 package se.expleostockholm.signup.resolver;
 
 import com.coxautodev.graphql.tools.GraphQLQueryResolver;
+import java.util.List;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 import se.expleostockholm.signup.domain.Event;
@@ -9,8 +10,6 @@ import se.expleostockholm.signup.domain.Person;
 import se.expleostockholm.signup.service.EventService;
 import se.expleostockholm.signup.service.InvitationService;
 import se.expleostockholm.signup.service.PersonService;
-
-import java.util.List;
 
 @Component
 @AllArgsConstructor

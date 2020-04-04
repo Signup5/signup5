@@ -1,5 +1,6 @@
 package se.expleostockholm.signup.service;
 
+import java.util.List;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import se.expleostockholm.signup.domain.Attendance;
@@ -10,8 +11,6 @@ import se.expleostockholm.signup.exception.EventException;
 import se.expleostockholm.signup.exception.InvitationException;
 import se.expleostockholm.signup.repository.EventMapper;
 import se.expleostockholm.signup.repository.InvitationMapper;
-
-import java.util.List;
 
 @Service
 @AllArgsConstructor

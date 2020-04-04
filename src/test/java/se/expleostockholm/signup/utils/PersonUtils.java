@@ -1,12 +1,11 @@
 package se.expleostockholm.signup.utils;
 
-import com.github.javafaker.Faker;
-import se.expleostockholm.signup.domain.Person;
-
-import java.util.Locale;
-
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import com.github.javafaker.Faker;
+import java.util.Locale;
+import se.expleostockholm.signup.domain.Person;
 
 public class PersonUtils {
 

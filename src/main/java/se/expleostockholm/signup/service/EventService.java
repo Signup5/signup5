@@ -1,5 +1,13 @@
 package se.expleostockholm.signup.service;
 
+import static se.expleostockholm.signup.service.ServiceUtil.isValidDate;
+import static se.expleostockholm.signup.service.ServiceUtil.personNotInInvitationList;
+
+import java.util.Collection;
+import java.util.Comparator;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import se.expleostockholm.signup.domain.Event;
@@ -8,15 +16,6 @@ import se.expleostockholm.signup.exception.EventException;
 import se.expleostockholm.signup.exception.InvalidDateException;
 import se.expleostockholm.signup.exception.PersonException;
 import se.expleostockholm.signup.repository.EventMapper;
-
-import java.util.Collection;
-import java.util.Comparator;
-import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
-import static se.expleostockholm.signup.service.ServiceUtil.isValidDate;
-import static se.expleostockholm.signup.service.ServiceUtil.personNotInInvitationList;
 
 @Service
 @AllArgsConstructor

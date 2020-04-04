@@ -1,15 +1,14 @@
 package se.expleostockholm.signup.unittests;
 
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.Arguments;
-import org.junit.jupiter.params.provider.MethodSource;
-
-import java.time.LocalDate;
-import java.util.stream.Stream;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static se.expleostockholm.signup.service.ServiceUtil.isValidDate;
 import static se.expleostockholm.signup.service.ServiceUtil.isValidEmail;
+
+import java.time.LocalDate;
+import java.util.stream.Stream;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 
 class ServiceUtilTest {
 
