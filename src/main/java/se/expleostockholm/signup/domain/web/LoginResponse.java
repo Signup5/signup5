@@ -10,5 +10,5 @@ import se.expleostockholm.signup.domain.Person;
 @NoArgsConstructor
 public class LoginResponse {
   private String jwt;
-  private Person person;
+  private PersonModel person;
 }

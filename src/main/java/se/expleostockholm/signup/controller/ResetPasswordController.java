@@ -24,12 +24,9 @@ import se.expleostockholm.signup.util.JwtUtil;
 @RequestMapping("/password")
 public class ResetPasswordController {
 
-  private PersonService personService;
-  private EmailService emailService;
-
-
-  @Autowired
-  private JwtUtil jwtUtil;
+  private final PersonService personService;
+  private final EmailService emailService;
+  private final JwtUtil jwtUtil;
 
   @PostMapping(path = "/reset")
   public ResponseEntity<?> sendResetPasswordLink(@RequestBody ResetPassword resetPassword) throws MessagingException {
