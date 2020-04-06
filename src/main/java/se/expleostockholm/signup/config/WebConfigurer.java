@@ -9,13 +9,13 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 public class WebConfigurer implements WebMvcConfigurer {
 
 
-//  @Bean
-//  public WebConfigurer corsConfiguration() {
-//    return new WebConfigurer() {
-//      @Override
-//      public void addCorsMappings(CorsRegistry registry) {
-//        registry.addMapping("/graphql").allowedOrigins("http://localhost:3000", "https://signup5-ui-dev.herokuapp.com/", "https://signup5-ui-stage.herokuapp.com/");
-//      }
-//    };
-//  }
+  @Bean
+  public WebConfigurer corsConfiguration() {
+    return new WebConfigurer() {
+      @Override
+      public void addCorsMappings(CorsRegistry registry) {
+        registry.addMapping("/graphql").allowedOrigins("http://localhost:3000", "https://signup5-ui-dev.herokuapp.com/", "https://signup5-ui-stage.herokuapp.com/");
+      }
+    };
+  }
 }

@@ -53,10 +53,10 @@ public class SecurityConfigurer extends WebSecurityConfigurerAdapter {
   CorsConfigurationSource corsConfigurationSource()
   {
     CorsConfiguration configuration = new CorsConfiguration();
-    configuration.setAllowedOrigins(Arrays.asList("http://localhost:3000", "https://signup5-ui-dev.herokuapp.com/", "https://signup5-ui-stage.herokuapp.com/"));
+    configuration.setAllowedOrigins(Arrays.asList("http://localhost:3000", "https://signup5-ui-dev.herokuapp.com", "https://signup5-ui-stage.herokuapp.com"));
     configuration.setAllowedMethods(Arrays.asList("GET","POST", "PUT", "DELETE", "PATCH"));
     UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-    source.registerCorsConfiguration("/**", configuration);
+    source.registerCorsConfiguration("/graphql", configuration);
     return source;
   }
 
