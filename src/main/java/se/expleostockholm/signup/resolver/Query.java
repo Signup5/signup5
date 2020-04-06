@@ -12,7 +12,6 @@ import se.expleostockholm.signup.service.EventService;
 import se.expleostockholm.signup.service.InvitationService;
 import se.expleostockholm.signup.service.PersonService;
 
-@CrossOrigin
 @Component
 @AllArgsConstructor
 public class Query implements GraphQLQueryResolver {
