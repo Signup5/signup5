@@ -4,6 +4,7 @@ import com.coxautodev.graphql.tools.GraphQLQueryResolver;
 import java.util.List;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import se.expleostockholm.signup.domain.Event;
 import se.expleostockholm.signup.domain.Invitation;
 import se.expleostockholm.signup.domain.Person;
@@ -11,6 +12,7 @@ import se.expleostockholm.signup.service.EventService;
 import se.expleostockholm.signup.service.InvitationService;
 import se.expleostockholm.signup.service.PersonService;
 
+@CrossOrigin
 @Component
 @AllArgsConstructor
 public class Query implements GraphQLQueryResolver {
