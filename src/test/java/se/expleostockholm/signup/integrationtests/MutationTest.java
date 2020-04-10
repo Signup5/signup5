@@ -3,17 +3,24 @@ package se.expleostockholm.signup.integrationtests;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static se.expleostockholm.signup.utils.EventUtils.assertEventsAreEqual;
 import static se.expleostockholm.signup.utils.EventUtils.createMockEvent;
 
 import java.util.Optional;
 import javax.annotation.Resource;
+import org.junit.Before;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
+import org.mockito.Mockito;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.ContextConfiguration;
 import org.testcontainers.junit.jupiter.Testcontainers;
 import se.expleostockholm.signup.domain.Attendance;
@@ -26,6 +33,7 @@ import se.expleostockholm.signup.repository.EventMapper;
 import se.expleostockholm.signup.repository.InvitationMapper;
 import se.expleostockholm.signup.repository.PersonMapper;
 import se.expleostockholm.signup.resolver.Mutation;
+import se.expleostockholm.signup.service.EmailService;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @Testcontainers
@@ -33,7 +41,10 @@ import se.expleostockholm.signup.resolver.Mutation;
 @ContextConfiguration(initializers = {SignupDbTests.Initializer.class})
 public class MutationTest extends SignupDbTests {
 
-    @Resource
+    @MockBean
+    private EmailService emailService;
+
+    @Autowired
     private Mutation mutation;
 
     @Resource
@@ -50,6 +61,13 @@ public class MutationTest extends SignupDbTests {
 
     private Event expectedEvent;
     private Person expectedHost;
+
+
+    @Before
+    private void setUp() {
+        Mockito.doNothing().when(emailService).sendInvitationEmail(any());
+        Mockito.doNothing().when(emailService).sendCalendarToHostEmail(any());
+    }
 
     public void tearDown() {
         expectedEvent.getInvitations().forEach(e -> invitationMapper.removeInvitationByEventId(e.getEvent_id()));
@@ -78,6 +96,8 @@ public class MutationTest extends SignupDbTests {
         Event event = mutation.createEvent(expectedEvent);
         expectedEvent.setId(event.getId());
         assertEventsAreEqual(expectedEvent, eventMapper.getEventById(event.getId()));
+        verify(emailService, times(1)).sendInvitationEmail(event);
+        verify(emailService, times(1)).sendCalendarToHostEmail(event);
 
         tearDown();
     }

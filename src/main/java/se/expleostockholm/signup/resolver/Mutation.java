@@ -7,7 +7,6 @@ import se.expleostockholm.signup.domain.Attendance;
 import se.expleostockholm.signup.domain.Event;
 import se.expleostockholm.signup.domain.Person;
 import se.expleostockholm.signup.domain.web.Response;
-import se.expleostockholm.signup.service.EmailService;
 import se.expleostockholm.signup.service.EventService;
 import se.expleostockholm.signup.service.InvitationService;
 import se.expleostockholm.signup.service.PersonService;
@@ -19,8 +18,6 @@ public class Mutation implements GraphQLMutationResolver {
     private final EventService eventService;
     private final InvitationService invitationService;
     private final PersonService personService;
-    private final EmailService emailService;
-
 
     /**
      * Method for updating an invited Guest's Attendance status.

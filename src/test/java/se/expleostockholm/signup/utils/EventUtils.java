@@ -1,6 +1,5 @@
 package se.expleostockholm.signup.utils;
 
-import static java.util.stream.Collectors.toList;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -14,7 +13,6 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.IntStream;
 import se.expleostockholm.signup.domain.Event;
 import se.expleostockholm.signup.domain.Person;
 

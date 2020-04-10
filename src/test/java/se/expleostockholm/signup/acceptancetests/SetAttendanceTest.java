@@ -1,6 +1,9 @@
 package se.expleostockholm.signup.acceptancetests;
 
 import static org.junit.Assert.assertEquals;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
@@ -17,8 +20,10 @@ import org.junit.jupiter.api.TestMethodOrder;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.test.context.ContextConfiguration;
 import org.testcontainers.junit.jupiter.Testcontainers;
@@ -26,6 +31,7 @@ import se.expleostockholm.signup.constant.JwtFilterConstant;
 import se.expleostockholm.signup.domain.Attendance;
 import se.expleostockholm.signup.integrationtests.SignupDbTests;
 import se.expleostockholm.signup.repository.InvitationMapper;
+import se.expleostockholm.signup.service.EmailService;
 import se.expleostockholm.signup.util.JwtUtil;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
@@ -33,6 +39,10 @@ import se.expleostockholm.signup.util.JwtUtil;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ContextConfiguration(initializers = {SignupDbTests.Initializer.class})
 public class SetAttendanceTest extends SignupDbTests {
+
+
+    @MockBean
+    private EmailService emailService;
 
     @Autowired
     private GraphQLTestTemplate graphQLTestTemplate;
@@ -49,7 +59,8 @@ public class SetAttendanceTest extends SignupDbTests {
     private final static String expectedMessage_positive = "Attendance was successfully updated!";
 
     @BeforeEach
-    void setUp() {
+    private void setUp() {
+        Mockito.doNothing().when(emailService).sendEmailWithCalendarAttachment(any(), any());
         final String jwtToken = jwtUtil.generateToken(new User("bla", "", new ArrayList<>()));
         graphQLTestTemplate.addHeader(JwtFilterConstant.HEADER_STRING, JwtFilterConstant.TOKEN_PREFIX + jwtToken);
     }
@@ -60,10 +71,11 @@ public class SetAttendanceTest extends SignupDbTests {
     public void setAttendance_test(Long invitationId, Attendance attendance, String expectedMessage) throws IOException {
         queryVariables = setQueryVariables(invitationId, attendance);
         String responseMessage = when_person_responds_with_attendance(queryVariables);
-
         then_person_gets_response_message(responseMessage, expectedMessage);
         and_invitation_status_is_updated_to_attendance(attendance);
-
+        if (attendance == Attendance.ATTENDING){
+            verify(emailService, times(1)).sendEmailWithCalendarAttachment(any(), any());
+        }
     }
 
     public String when_person_responds_with_attendance(ObjectNode variables) throws IOException {

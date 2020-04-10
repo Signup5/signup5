@@ -1,6 +1,9 @@
 package se.expleostockholm.signup.acceptancetests;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static se.expleostockholm.signup.utils.EventUtils.assertEventsAreEqual;
 import static se.expleostockholm.signup.utils.EventUtils.createMockEvent;
 import static se.expleostockholm.signup.utils.InvitationUtils.assertInvitationListsAreEqual;
@@ -21,8 +24,10 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.test.context.ContextConfiguration;
 import org.testcontainers.junit.jupiter.Testcontainers;
@@ -34,6 +39,7 @@ import se.expleostockholm.signup.integrationtests.SignupDbTests;
 import se.expleostockholm.signup.repository.EventMapper;
 import se.expleostockholm.signup.repository.InvitationMapper;
 import se.expleostockholm.signup.repository.PersonMapper;
+import se.expleostockholm.signup.service.EmailService;
 import se.expleostockholm.signup.util.JwtUtil;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
@@ -41,6 +47,9 @@ import se.expleostockholm.signup.util.JwtUtil;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ContextConfiguration(initializers = {SignupDbTests.Initializer.class})
 public class CreateEventTest extends SignupDbTests {
+
+    @MockBean
+    private EmailService emailService;
 
     @Autowired
     private GraphQLTestTemplate graphQLTestTemplate;
@@ -70,7 +79,8 @@ public class CreateEventTest extends SignupDbTests {
     }
 
     @BeforeEach
-    void setUp() {
+    private void setUp() {
+        Mockito.doNothing().when(emailService).sendEmailWithCalendarAttachment(any(), any());
         final String jwtToken = jwtUtil.generateToken(new User("bla", "", new ArrayList<>()));
         graphQLTestTemplate.addHeader(JwtFilterConstant.HEADER_STRING, JwtFilterConstant.TOKEN_PREFIX + jwtToken);
     }
@@ -80,6 +90,8 @@ public class CreateEventTest extends SignupDbTests {
         Person host = given_host_exists();
         expectedEvent = when_host_creates_new_event_and_invites_guests(host);
         then_host_can_see_invitation_statistics(expectedEvent);
+        verify(emailService, times(1)).sendInvitationEmail(expectedEvent);
+        verify(emailService, times(1)).sendCalendarToHostEmail(expectedEvent);
         tearDown();
     }
 

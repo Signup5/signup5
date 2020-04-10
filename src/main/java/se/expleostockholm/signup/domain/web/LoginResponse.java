@@ -3,7 +3,6 @@ package se.expleostockholm.signup.domain.web;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import se.expleostockholm.signup.domain.Person;
 
 @Data
 @AllArgsConstructor

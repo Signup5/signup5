@@ -1,7 +1,14 @@
 package se.expleostockholm.signup.integrationtests;
 
 
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
+import java.util.HashSet;
+import java.util.Optional;
 import org.junit.Assert;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -23,14 +30,6 @@ import se.expleostockholm.signup.domain.web.LoginModel;
 import se.expleostockholm.signup.domain.web.LoginResponse;
 import se.expleostockholm.signup.repository.PersonMapper;
 import se.expleostockholm.signup.util.JwtUtil;
-
-import java.util.HashSet;
-import java.util.Optional;
-
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 
 @ActiveProfiles("test")
