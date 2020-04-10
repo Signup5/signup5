@@ -12,6 +12,7 @@ import static se.expleostockholm.signup.utils.PersonUtils.createMockPerson;
 import com.github.javafaker.Faker;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.List;
 import java.util.Optional;
 import java.util.stream.IntStream;
 import se.expleostockholm.signup.domain.Event;
@@ -30,8 +31,7 @@ public class EventUtils {
                 .description(faker.book().genre())
                 .location(faker.rickAndMorty().location())
                 .title(faker.rickAndMorty().character())
-                .invitations(IntStream.range(0, 1)
-                        .mapToObj(i -> createMockInvitation(createMockPerson())).collect(toList()))
+                .invitations(List.of(createMockInvitation(createMockPerson())))
                 .build();
     }
 

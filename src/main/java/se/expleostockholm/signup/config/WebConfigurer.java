@@ -14,7 +14,7 @@ public class WebConfigurer implements WebMvcConfigurer {
     return new WebConfigurer() {
       @Override
       public void addCorsMappings(CorsRegistry registry) {
-        registry.addMapping("/graphql").allowedOrigins("http://localhost:3000");
+        registry.addMapping("/graphql").allowedOrigins("http://localhost:3000", "https://signup5-ui-dev.herokuapp.com/", "https://signup5-ui-stage.herokuapp.com/");
       }
     };
   }
