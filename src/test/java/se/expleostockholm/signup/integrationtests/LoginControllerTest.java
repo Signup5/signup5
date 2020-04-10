@@ -6,6 +6,7 @@ import org.junit.Assert;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
@@ -36,6 +37,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @Testcontainers
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ContextConfiguration(initializers = {SignupDbTests.Initializer.class})
+@AutoConfigureMockMvc
 class LoginControllerTest extends SignupDbTests {
 
   private final String EMAIL = "test@test.com";
@@ -45,6 +47,7 @@ class LoginControllerTest extends SignupDbTests {
 
   private WebApplicationContext webAppContext;
 
+  @Autowired
   private MockMvc mockMvc;
 
   @Autowired
