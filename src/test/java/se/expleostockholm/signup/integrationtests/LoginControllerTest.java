@@ -24,6 +24,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.web.context.WebApplicationContext;
+import org.testcontainers.junit.jupiter.Testcontainers;
 import se.expleostockholm.signup.domain.Person;
 import se.expleostockholm.signup.domain.web.LoginModel;
 import se.expleostockholm.signup.domain.web.LoginResponse;
@@ -32,6 +33,7 @@ import se.expleostockholm.signup.util.JwtUtil;
 
 
 @ActiveProfiles("test")
+@Testcontainers
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ContextConfiguration(initializers = {SignupDbTests.Initializer.class})
 @AutoConfigureMockMvc
