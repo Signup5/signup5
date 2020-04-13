@@ -87,14 +87,14 @@ public class EventService {
     }
 
     public List<Event> getHostedAndInvitedEventsByPersonId(Long id) {
-        return Stream.of(getEventsByHostId(id), getEventByGuestId(id))
+        return Stream.of(getEventsByHostId(id), getEventsByGuestIdWhereGuestAttending(id))
                 .flatMap(Collection::stream)
                 .sorted(Comparator.comparing(Event::getDate_of_event))
                 .collect(Collectors.toList());
     }
 
-    public List<Event> getEventByGuestId(Long id) {
-        return eventMapper.getEventsByGuestId(id);
+    public List<Event> getEventsByGuestIdWhereGuestAttending(Long id) {
+        return eventMapper.getEventsByGuestIdWhereGuestIsAttending(id);
     }
 
     public void updateEvent(Event event) {

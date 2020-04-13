@@ -61,7 +61,7 @@ public interface InvitationMapper {
     List<Invitation> getInvitationsByGuestId(Long id);
 
     @Select("SELECT * FROM invitation WHERE guest_id = #{id} " +
-            "AND attendance = 'NO_RESPONSE' OR attendance = 'MAYBE' " +
+            "AND (attendance = 'NO_RESPONSE' OR attendance = 'MAYBE') " +
             "AND (SELECT date_of_event FROM event WHERE event.id = invitation.event_id) >= now()::DATE " +
             "ORDER BY (SELECT date_of_event FROM event WHERE event.id = invitation.event_id) ASC")
     @Results({
