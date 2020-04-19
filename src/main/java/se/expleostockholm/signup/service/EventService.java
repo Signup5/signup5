@@ -89,7 +89,7 @@ public class EventService {
     public List<Event> getHostedAndInvitedEventsByPersonId(Long id) {
         return Stream.of(getEventsByHostId(id), getEventsByGuestIdWhereGuestAttending(id))
                 .flatMap(Collection::stream)
-                .sorted(Comparator.comparing(Event::getDate_of_event))
+                .sorted(Comparator.comparing(Event::toLocalDateTime))
                 .collect(Collectors.toList());
     }
 
