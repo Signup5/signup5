@@ -185,9 +185,6 @@ public class HtmlEmailTemplate {
                 "                         <b>Date of event: " + event.getDate_of_event() + "</b> <!-- ---------------date of event---------- --> <br/>\n" +
                 "                         <b>Time of event: " + event.getTime_of_event() + "</b> <!-- ---------------time of event---------- --><br/>\n" +
                 "                         <b>Description: " + event.getDescription() + "</b>  <!-- ---------------Description---------- --><br/>\n" +
-                "                         <br/>\n" +
-                "                         <br/>\n" +
-                "                         <h3>Temporary password: " + "password123" + "</h3> <br />\n" +
                 "                        </p>\n" +
                 "                        <table\n" +
                 "                          border=\"0\"\n" +
