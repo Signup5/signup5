@@ -92,8 +92,8 @@ public class EmailService {
     helper.setFrom(MAIL_FROM);
     helper.setTo(email);
     helper.setSubject("Reset password");
-    helper.setText("To reset your password, click the link below:\n" + System.getenv("HOST_URL") + "password/new/" + token
-        , true);
+    helper.setText("To reset your password, click the link below:\n<a href=\"" + System.getenv("HOST_URL") + "password/new/" + token
+        + "\">Reset password</a>", true);
     javaMailSender.send(mimeMessage);
   }
 

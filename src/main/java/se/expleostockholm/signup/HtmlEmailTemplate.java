@@ -7,6 +7,7 @@ public class HtmlEmailTemplate {
     private final Event event;
     private String invitationEmail;
     private String acceptanceEmail;
+    private final String HOST_URL = System.getenv("HOST_URL");
 
     public HtmlEmailTemplate(Event event) {
         this.event = event;
@@ -211,7 +212,7 @@ public class HtmlEmailTemplate {
                 "                                        style=\"font-family: sans-serif; font-size: 14px; vertical-align: top; background-color: #3498db; border-radius: 5px; text-align: center;\"\n" +
                 "                                      >\n" +
                 "                                        <a\n" +
-                "                                          href=\"https://signup5-ui-dev.herokuapp.com/\"\n" +
+                "                                          href=\"" + HOST_URL + " \"\n" +
                 "                                          target=\"_blank\"\n" +
                 "                                          style=\"display: inline-block; color: #ffffff; background-color: #3498db; border: solid 1px #3498db; border-radius: 5px; box-sizing: border-box; cursor: pointer; text-decoration: none; font-size: 14px; font-weight: bold; margin: 0; padding: 12px 25px; text-transform: capitalize; border-color: #3498db;\"\n" +
                 "                                          >Respond</a\n" +

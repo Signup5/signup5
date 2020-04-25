@@ -6,23 +6,14 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.GregorianCalendar;
 import java.util.List;
-import net.fortuna.ical4j.model.DateTime;
-import net.fortuna.ical4j.model.TimeZone;
-import net.fortuna.ical4j.model.TimeZoneRegistry;
-import net.fortuna.ical4j.model.TimeZoneRegistryFactory;
+
+import net.fortuna.ical4j.model.*;
+import net.fortuna.ical4j.model.component.VAlarm;
 import net.fortuna.ical4j.model.component.VEvent;
 import net.fortuna.ical4j.model.parameter.Cn;
 import net.fortuna.ical4j.model.parameter.Role;
 import net.fortuna.ical4j.model.parameter.Rsvp;
-import net.fortuna.ical4j.model.property.Attendee;
-import net.fortuna.ical4j.model.property.CalScale;
-import net.fortuna.ical4j.model.property.Description;
-import net.fortuna.ical4j.model.property.Location;
-import net.fortuna.ical4j.model.property.Organizer;
-import net.fortuna.ical4j.model.property.ProdId;
-import net.fortuna.ical4j.model.property.TzId;
-import net.fortuna.ical4j.model.property.Uid;
-import net.fortuna.ical4j.model.property.Version;
+import net.fortuna.ical4j.model.property.*;
 import se.expleostockholm.signup.domain.Event;
 import se.expleostockholm.signup.domain.Invitation;
 import se.expleostockholm.signup.domain.Person;
@@ -98,6 +89,7 @@ public class CalendarService {
         meeting.getProperties().add(timeZoneId);
         setMeetingAttendees(event.getInvitations());
         meeting.getProperties().add(new Location(event.getLocation()));
+        setMeetingReminders(15L);
         return meeting;
     }
 
@@ -146,6 +138,15 @@ public class CalendarService {
             attendee.getParameters().add(new Cn(invitation.getGuest().getFirst_name() + " " + invitation.getGuest().getLast_name()));
             meeting.getProperties().add(attendee);
         });
+    }
+
+    private static void setMeetingReminders(Long duration) {
+        VAlarm reminder = new VAlarm(java.time.Duration.ofMinutes(duration));
+        reminder.getProperties().add(new Repeat(1));
+        reminder.getProperties().add(new Duration(java.time.Duration.ofMinutes(2)));
+        reminder.getProperties().add(Action.DISPLAY);
+        reminder.getProperties().add(new Description(meeting.getName() + " starts in 1 minute"));
+        meeting.getAlarms().add(reminder);
     }
 
 }
