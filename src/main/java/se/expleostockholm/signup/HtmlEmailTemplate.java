@@ -1,8 +1,14 @@
 package se.expleostockholm.signup;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.env.Environment;
 import se.expleostockholm.signup.domain.Event;
 
 public class HtmlEmailTemplate {
+
+    @Autowired
+    private Environment env;
 
     private final Event event;
     private String invitationEmail;
@@ -212,11 +218,11 @@ public class HtmlEmailTemplate {
                 "                                        style=\"font-family: sans-serif; font-size: 14px; vertical-align: top; background-color: #3498db; border-radius: 5px; text-align: center;\"\n" +
                 "                                      >\n" +
                 "                                        <a\n" +
-                "                                          href=\"" + HOST_URL + " \"\n" +
+                "                                          href=\"" + HOST_URL + "\"\n" +
                 "                                          target=\"_blank\"\n" +
                 "                                          style=\"display: inline-block; color: #ffffff; background-color: #3498db; border: solid 1px #3498db; border-radius: 5px; box-sizing: border-box; cursor: pointer; text-decoration: none; font-size: 14px; font-weight: bold; margin: 0; padding: 12px 25px; text-transform: capitalize; border-color: #3498db;\"\n" +
-                "                                          >Respond</a>\n" +
-                "                                        >\n" +
+                "                                          >Log in to accept invitation</a>\n" +
+                "                                        \n" +
                 "                                      </td>\n" +
                 "                                    </tr>\n" +
                 "                                  </tbody>\n" +
@@ -443,8 +449,8 @@ public class HtmlEmailTemplate {
                 "                        <p\n" +
                 "                          style=\"font-family: sans-serif; font-size: 14px; font-weight: normal; margin: 0; Margin-bottom: 15px;\"\n" +
                 "                        >\n" +
-                "                        <b>" + " You have accepted the invitation to this event!<br/>\n" +
-                "                        <br/>\n" +
+                "                        <b>" + " You have accepted the invitation to this event!<br/><br/>Open the attached invitation file to add the event to your personal calendar.\n" +
+                "                        <br/><br/>\n" +
                 "\n" +
                 "                         <b>Date of event: " + event.getDate_of_event() + "</b> <!-- ---------------date of event---------- --> <br/>\n" +
                 "                         <b>Time of event: " + event.getTime_of_event() + "</b> <!-- ---------------time of event---------- --><br/>\n" +
