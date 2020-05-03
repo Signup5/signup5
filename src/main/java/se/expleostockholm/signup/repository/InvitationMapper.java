@@ -57,11 +57,13 @@ public interface InvitationMapper {
     @Delete("DELETE FROM invitation WHERE invitation.id = #{id}")
     Long removeInvitationById(Long id);
 
-    @Select("SELECT * FROM invitation WHERE guest_id = #{id} AND (SELECT isDraft FROM event WHERE event_id = event.id) = false")
+    @Select("SELECT * FROM invitation WHERE guest_id = #{id}")
     List<Invitation> getInvitationsByGuestId(Long id);
 
     @Select("SELECT * FROM invitation WHERE guest_id = #{id} " +
             "AND (attendance = 'NO_RESPONSE' OR attendance = 'MAYBE') " +
+            "AND (SELECT isCanceled FROM event WHERE event.id = event_id) = false " +
+            "AND (SELECT isDraft FROM event WHERE event.id = event_id) = false " +
             "AND (SELECT date_of_event FROM event WHERE event.id = invitation.event_id) >= now()::DATE " +
             "ORDER BY (SELECT date_of_event FROM event WHERE event.id = invitation.event_id) ASC")
     @Results({
