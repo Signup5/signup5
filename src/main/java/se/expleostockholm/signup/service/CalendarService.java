@@ -1,13 +1,9 @@
 package se.expleostockholm.signup.service;
 
-import java.net.URI;
-import java.text.ParseException;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.GregorianCalendar;
-import java.util.List;
-
-import net.fortuna.ical4j.model.*;
+import net.fortuna.ical4j.model.DateTime;
+import net.fortuna.ical4j.model.TimeZone;
+import net.fortuna.ical4j.model.TimeZoneRegistry;
+import net.fortuna.ical4j.model.TimeZoneRegistryFactory;
 import net.fortuna.ical4j.model.component.VAlarm;
 import net.fortuna.ical4j.model.component.VEvent;
 import net.fortuna.ical4j.model.parameter.Cn;
@@ -17,6 +13,13 @@ import net.fortuna.ical4j.model.property.*;
 import se.expleostockholm.signup.domain.Event;
 import se.expleostockholm.signup.domain.Invitation;
 import se.expleostockholm.signup.domain.Person;
+
+import java.net.URI;
+import java.text.ParseException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.GregorianCalendar;
+import java.util.List;
 
 public class CalendarService {
 
@@ -140,6 +143,11 @@ public class CalendarService {
         });
     }
 
+    /**
+     * Adds a reminder for a Calendar Meeting.
+     *
+     * @param duration
+     */
     private static void setMeetingReminders(Long duration) {
         VAlarm reminder = new VAlarm(java.time.Duration.ofMinutes(duration));
         reminder.getProperties().add(new Repeat(1));

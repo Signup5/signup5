@@ -1,6 +1,5 @@
 package se.expleostockholm.signup.config;
 
-
 import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpMethod;
@@ -18,56 +17,54 @@ import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import se.expleostockholm.signup.filter.JwtRequestFilter;
 
+/**
+ * Spring security configuration class.
+ */
 @EnableWebSecurity
 @AllArgsConstructor
 public class SecurityConfigurer extends WebSecurityConfigurerAdapter {
 
-  private final JwtRequestFilter jwtRequestFilter;
+    private final JwtRequestFilter jwtRequestFilter;
 
-  @Override
-  protected void configure(AuthenticationManagerBuilder auth) {
-  }
+    @Override
+    protected void configure(AuthenticationManagerBuilder auth) {
+    }
 
+    @Override
+    protected void configure(HttpSecurity http) throws Exception {
+        http.csrf().disable().cors().and()
+                .authorizeRequests()
+                .antMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+                .antMatchers("/login", "/password/**", "/graphiql/**", "/vendor/**")
+                .permitAll()
+                .anyRequest()
+                .authenticated()
+                .and()
+                .exceptionHandling()
+                .and()
+                .sessionManagement()
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+        http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
+    }
 
-  @Override
-  protected void configure(HttpSecurity http) throws Exception {
-    http.csrf().disable().cors().and()
-        .authorizeRequests()
-        .antMatchers(HttpMethod.OPTIONS,"/**").permitAll()
-        .antMatchers("/login", "/password/**", "/graphiql/**", "/vendor/**")
-        .permitAll()
-        .anyRequest()
-        .authenticated()
-        .and()
-        .exceptionHandling()
-        .and()
-        .sessionManagement()
-        .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-    http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
-  }
+    @Bean
+    @Override
+    public AuthenticationManager authenticationManagerBean() throws Exception {
+        return super.authenticationManagerBean();
+    }
 
+    @Bean
+    public PasswordEncoder getPasswordEncoder() {
+        PasswordEncoder encoder = new BCryptPasswordEncoder();
+        return encoder;
+    }
 
-
-
-  @Bean
-  @Override
-  public AuthenticationManager authenticationManagerBean() throws Exception {
-    return super.authenticationManagerBean();
-  }
-
-  @Bean
-  public PasswordEncoder getPasswordEncoder(){
-    PasswordEncoder encoder = new BCryptPasswordEncoder();
-    return encoder;
-  }
-  @Bean
-  CorsConfigurationSource corsConfigurationSource() {
-    UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-    source.registerCorsConfiguration("/**", new CorsConfiguration().applyPermitDefaultValues());
-    return source;
-  }
-
-
+    @Bean
+    CorsConfigurationSource corsConfigurationSource() {
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", new CorsConfiguration().applyPermitDefaultValues());
+        return source;
+    }
 
 
 }

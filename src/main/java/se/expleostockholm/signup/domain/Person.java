@@ -1,12 +1,11 @@
 package se.expleostockholm.signup.domain;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 import se.expleostockholm.signup.domain.web.PersonModel;
 
+/**
+ * Model for Person.
+ */
 @Data
 @Builder
 @NoArgsConstructor
@@ -19,7 +18,6 @@ public class Person {
     private String last_name;
     @ToString.Exclude
     private String password;
-
 
     public PersonModel asPersonModel() {
         return PersonModel.builder()

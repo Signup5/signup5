@@ -1,7 +1,6 @@
 package se.expleostockholm.signup;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.env.Environment;
 import se.expleostockholm.signup.domain.Event;
 
@@ -21,14 +20,27 @@ public class HtmlEmailTemplate {
         acceptanceEmail();
     }
 
+    /**
+     * Getter for invitation email.
+     *
+     * @return
+     */
     public String getInvitationEmail() {
         return invitationEmail;
     }
 
+    /**
+     * Getter for acceptance email.
+     *
+     * @return
+     */
     public String getAcceptanceEmail() {
         return acceptanceEmail;
     }
 
+    /**
+     * HTML-formatted Invitation email.
+     */
     private void invitationEmail() {
         this.invitationEmail = "<!DOCTYPE html>\n" +
                 "<html>\n" +
@@ -181,7 +193,7 @@ public class HtmlEmailTemplate {
                 "                        <h3\n" +
                 "                          style=\"font-family: sans-serif; font-size: 18px; font-weight: bold; margin: 0; Margin-bottom: 15px;\"\n" +
                 "                        >\n" +
-                "                          " +event.getTitle() + "<!-- ---------Event Title----------- -->\n" +
+                "                          " + event.getTitle() + "<!-- ---------Event Title----------- -->\n" +
                 "                    </h3>\n" +
                 "                        <p\n" +
                 "                          style=\"font-family: sans-serif; font-size: 14px; font-weight: normal; margin: 0; Margin-bottom: 15px;\"\n" +
@@ -444,7 +456,7 @@ public class HtmlEmailTemplate {
                 "                        <h3\n" +
                 "                          style=\"font-family: sans-serif; font-size: 18px; font-weight: bold; margin: 0; Margin-bottom: 15px;\"\n" +
                 "                        >\n" +
-                "                          " +event.getTitle() + "<!-- ---------Event Title----------- -->\n" +
+                "                          " + event.getTitle() + "<!-- ---------Event Title----------- -->\n" +
                 "                       </h3>\n" +
                 "                        <p\n" +
                 "                          style=\"font-family: sans-serif; font-size: 14px; font-weight: normal; margin: 0; Margin-bottom: 15px;\"\n" +

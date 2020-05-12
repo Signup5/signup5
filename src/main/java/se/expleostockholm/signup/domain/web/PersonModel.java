@@ -1,11 +1,10 @@
 package se.expleostockholm.signup.domain.web;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 
+/**
+ * Web model for Person
+ */
 @Data
 @Builder
 @NoArgsConstructor

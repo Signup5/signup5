@@ -1,6 +1,5 @@
 package se.expleostockholm.signup.service;
 
-import java.util.List;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import se.expleostockholm.signup.domain.Attendance;
@@ -11,6 +10,8 @@ import se.expleostockholm.signup.exception.EventException;
 import se.expleostockholm.signup.exception.InvitationException;
 import se.expleostockholm.signup.repository.EventMapper;
 import se.expleostockholm.signup.repository.InvitationMapper;
+
+import java.util.List;
 
 @Service
 @AllArgsConstructor
@@ -36,7 +37,8 @@ public class InvitationService {
             invitation.setEvent_id(eventId);
             invitation.setGuest(personService.savePerson(invitation.getGuest()));
             invitationExists(invitation);
-            if (invitationMapper.saveInvitation(invitation) == 0) throw new InvitationException("Something went wrong while saving invitation");
+            if (invitationMapper.saveInvitation(invitation) == 0)
+                throw new InvitationException("Something went wrong while saving invitation");
         });
     }
 
@@ -101,22 +103,38 @@ public class InvitationService {
      * @return a list of Invitations if Event Id was found in the database
      */
     public List<Invitation> getInvitationsByEventId(Long id) {
-        return  invitationMapper.getInvitationsByEventId(id);
+        return invitationMapper.getInvitationsByEventId(id);
     }
 
+    /**
+     * Fectching all Invitations from Guest.
+     *
+     * @param id
+     * @return list of Invitations
+     */
     public List<Invitation> getInvitationsByGuestId(Long id) {
         return invitationMapper.getInvitationsByGuestId(id);
     }
 
-
+    /**
+     * Fetch upcoming and unreplied Invitations for Guest.
+     *
+     * @param id
+     * @return list of Invitations
+     */
     public List<Invitation> getUpcomingUnRepliedInvitationsByGuestId(Long id) {
-        return  invitationMapper.getUpcomingUnRepliedInvitationsByGuestId(id);
+        return invitationMapper.getUpcomingUnRepliedInvitationsByGuestId(id);
     }
 
+    /**
+     * Delete one or more Invitations
+     *
+     * @param invitationsToRemove
+     */
     public void deleteInvitations(List<Invitation> invitationsToRemove) {
         try {
             invitationsToRemove.forEach(i -> invitationMapper.removeInvitationById(i.getId()));
-        } catch (Exception ex){
+        } catch (Exception ex) {
             throw new InvitationException("Deleting invitation failed!");
         }
 

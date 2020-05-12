@@ -1,6 +1,10 @@
 package se.expleostockholm.signup.domain.web;
 
 import java.util.List;
+
+/**
+ * Model for error response.
+ */
 public class ErrorResponse {
 
   private String message;

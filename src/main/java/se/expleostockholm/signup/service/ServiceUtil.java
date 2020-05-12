@@ -1,12 +1,13 @@
 package se.expleostockholm.signup.service;
 
+import org.jetbrains.annotations.NotNull;
+import se.expleostockholm.signup.domain.Invitation;
+
+import javax.mail.internet.AddressException;
+import javax.mail.internet.InternetAddress;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.function.Predicate;
-import javax.mail.internet.AddressException;
-import javax.mail.internet.InternetAddress;
-import org.jetbrains.annotations.NotNull;
-import se.expleostockholm.signup.domain.Invitation;
 
 public class ServiceUtil {
 
@@ -42,6 +43,12 @@ public class ServiceUtil {
     }
 
 
+    /**
+     * Checks if Person is not appearing in a list of Invitations.
+     *
+     * @param invitations
+     * @return boolean
+     */
     public static Predicate<Invitation> personNotInInvitationList(List<Invitation> invitations) {
         return p -> invitations.stream().noneMatch(invitation -> invitation.getGuest().getEmail().equalsIgnoreCase(p.getGuest().getEmail()));
     }

@@ -3,8 +3,12 @@ package se.expleostockholm.signup.exception;
 import graphql.ErrorClassification;
 import graphql.GraphQLError;
 import graphql.language.SourceLocation;
+
 import java.util.List;
 
+/**
+ * GraphQL exception for Person.
+ */
 public class PersonException extends RuntimeException implements GraphQLError {
 
     public PersonException(String message) {

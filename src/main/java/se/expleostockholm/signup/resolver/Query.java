@@ -1,7 +1,6 @@
 package se.expleostockholm.signup.resolver;
 
 import com.coxautodev.graphql.tools.GraphQLQueryResolver;
-import java.util.List;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 import se.expleostockholm.signup.domain.Event;
@@ -11,6 +10,8 @@ import se.expleostockholm.signup.service.EventService;
 import se.expleostockholm.signup.service.InvitationService;
 import se.expleostockholm.signup.service.PersonService;
 
+import java.util.List;
+
 @Component
 @AllArgsConstructor
 public class Query implements GraphQLQueryResolver {
@@ -19,14 +20,31 @@ public class Query implements GraphQLQueryResolver {
     private final EventService eventService;
     private final InvitationService invitationService;
 
+    /**
+     * Fetch all Persons in database
+     *
+     * @return list of Persons
+     */
     public List<Person> getAllPersons() {
         return personService.getAllPersons();
     }
 
+    /**
+     * Fetch all Events by Host
+     *
+     * @param id
+     * @return list of Events
+     */
     public List<Event> getEventsByHostId(Long id) {
         return eventService.getEventsByHostId(id);
     }
 
+    /**
+     * Fetch all Invitations for Guest
+     *
+     * @param id
+     * @return list of Invitations
+     */
     public List<Invitation> getInvitationsByGuestId(Long id) {
         return invitationService.getInvitationsByGuestId(id);
     }
@@ -36,8 +54,8 @@ public class Query implements GraphQLQueryResolver {
      * <p>
      * Accepts a Long as an argument representing the Person Id in the database.
      *
-     * @param   id  a Long value representing a Person Id
-     * @return      a Person if Person Id was found in the database
+     * @param id a Long value representing a Person Id
+     * @return a Person if Person Id was found in the database
      */
     public Person getPersonById(Long id) {
         return personService.getPersonById(id);
@@ -49,17 +67,28 @@ public class Query implements GraphQLQueryResolver {
      * <p>
      * Accepts email as a String argument to be matched with a Person in the database.
      *
-     * @param   email  a String representing a Persons email address
-     * @return      a Person if email was found in the database
+     * @param email a String representing a Persons email address
+     * @return a Person if email was found in the database
      */
     public Person getPersonByEmail(String email) {
-        return personService.getPersonByEmail(email);}
+        return personService.getPersonByEmail(email);
+    }
 
-
+    /**
+     * Fetch all Events in database.
+     *
+     * @return list of Events
+     */
     public List<Event> getAllEvents() {
         return eventService.getAllEvents();
     }
 
+    /**
+     * Fetch hosted and invited events by Person.
+     *
+     * @param id
+     * @return list of Events
+     */
     public List<Event> getHostedAndInvitedEventsByPersonId(Long id) {
         return eventService.getHostedAndInvitedEventsByPersonId(id);
     }
@@ -69,30 +98,40 @@ public class Query implements GraphQLQueryResolver {
      * <p>
      * Accepts a Long as an argument representing the Event Id in the database.
      *
-     * @param   id  a Long value representing an Event Id
-     * @return      an Event if Id was found in the database
+     * @param id a Long value representing an Event Id
+     * @return an Event if Id was found in the database
      */
     public Event getEventById(Long id) {
         return eventService.getEventById(id);
     }
 
+    /**
+     * Fetch all Invitations in database.
+     *
+     * @return list of Invitations
+     */
     public List<Invitation> getAllInvitations() {
         return invitationService.getAllInvitations();
     }
-
 
     /**
      * GraphQL endpoint for retrieving an Invitation from the Database based on its Id.
      * <p>
      * Accepts a Long as an argument representing the Invitation Id in the database.
      *
-     * @param   id  a Long value representing an Invitation Id
-     * @return      an Invitation if Id was found in the database
+     * @param id a Long value representing an Invitation Id
+     * @return an Invitation if Id was found in the database
      */
     public Invitation getInvitationById(Long id) {
         return invitationService.getInvitationById(id);
     }
 
+    /**
+     * fetch upcoming and unreplied Invitations for Guest.
+     *
+     * @param id
+     * @return list of Invitations
+     */
     public List<Invitation> getUpcomingUnRepliedInvitationsByGuestId(Long id) {
         return invitationService.getUpcomingUnRepliedInvitationsByGuestId(id);
     }
@@ -102,8 +141,8 @@ public class Query implements GraphQLQueryResolver {
      * <p>
      * Accepts a Long as an argument representing the Event Id in the database.
      *
-     * @param   id  a Long value representing an Event Id
-     * @return      a list of Invitations if Event Id was found in the database
+     * @param id a Long value representing an Event Id
+     * @return a list of Invitations if Event Id was found in the database
      */
     public List<Invitation> getInvitationsByEventId(Long id) {
         return invitationService.getInvitationsByEventId(id);

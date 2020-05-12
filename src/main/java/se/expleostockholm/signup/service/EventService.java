@@ -1,13 +1,5 @@
 package se.expleostockholm.signup.service;
 
-import static se.expleostockholm.signup.service.ServiceUtil.isValidDate;
-import static se.expleostockholm.signup.service.ServiceUtil.personNotInInvitationList;
-
-import java.util.Collection;
-import java.util.Comparator;
-import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import se.expleostockholm.signup.domain.Event;
@@ -16,6 +8,15 @@ import se.expleostockholm.signup.exception.EventException;
 import se.expleostockholm.signup.exception.InvalidDateException;
 import se.expleostockholm.signup.exception.PersonException;
 import se.expleostockholm.signup.repository.EventMapper;
+
+import java.util.Collection;
+import java.util.Comparator;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+import static se.expleostockholm.signup.service.ServiceUtil.isValidDate;
+import static se.expleostockholm.signup.service.ServiceUtil.personNotInInvitationList;
 
 @Service
 @AllArgsConstructor
@@ -82,10 +83,22 @@ public class EventService {
         return eventMapper.isDuplicateEvent(event) == 1;
     }
 
+    /**
+     * Fetch all Events for Host.
+     *
+     * @param id
+     * @return list of Events
+     */
     public List<Event> getEventsByHostId(Long id) {
         return eventMapper.getEventsByHostId(id);
     }
 
+    /**
+     * Fetch hosted and invited Events for Person.
+     *
+     * @param id
+     * @return list of Events
+     */
     public List<Event> getHostedAndInvitedEventsByPersonId(Long id) {
         return Stream.of(getEventsByHostId(id), getEventsByGuestIdWhereGuestAttending(id))
                 .flatMap(Collection::stream)
@@ -93,10 +106,21 @@ public class EventService {
                 .collect(Collectors.toList());
     }
 
+    /**
+     * Fetch Events for Guest where Guest is Attending.
+     *
+     * @param id
+     * @return list of Events
+     */
     public List<Event> getEventsByGuestIdWhereGuestAttending(Long id) {
         return eventMapper.getEventsByGuestIdWhereGuestIsAttending(id);
     }
 
+    /**
+     * Update Event.
+     *
+     * @param event
+     */
     public void updateEvent(Event event) {
         if (eventMapper.updateEvent(event) == 0) throw new EventException("No event updated!");
 
@@ -120,6 +144,11 @@ public class EventService {
         }
     }
 
+    /**
+     * Cancel Event.
+     *
+     * @param id
+     */
     public void cancelEvent(Long id) {
         if (eventMapper.cancelEvent(id) == 0)
             throw new EventException("Error updating event!");

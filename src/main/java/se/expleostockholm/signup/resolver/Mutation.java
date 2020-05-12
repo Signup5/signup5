@@ -50,15 +50,33 @@ public class Mutation implements GraphQLMutationResolver {
         return event;
     }
 
+    /**
+     * Create Person.
+     *
+     * @param person
+     * @return Response with
+     */
     public Response createPerson(Person person) {
         return personService.createNewPerson(person);
     }
 
+    /**
+     * Update Event.
+     *
+     * @param event
+     * @return
+     */
     public Event updateEvent(Event event) {
         eventService.updateEvent(event);
         return event;
     }
 
+    /**
+     * Cancel Event.
+     *
+     * @param id
+     * @return
+     */
     public Response cancelEvent(Long id) {
         eventService.cancelEvent(id);
 

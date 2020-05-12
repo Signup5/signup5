@@ -12,18 +12,25 @@ import se.expleostockholm.signup.repository.PersonMapper;
 @Service
 public class LoginService {
 
-  private final PersonMapper userRepository;
-  private final PasswordEncoder passwordEncoder;
+    private final PersonMapper userRepository;
+    private final PasswordEncoder passwordEncoder;
 
-  public Person login(String email, String loginPassword) throws LoginException {
-    Person person = userRepository.getPersonByEmail(email)
-        .orElseThrow(() ->
-            new LoginException("Username or password incorrect"));
-    if(passwordEncoder.matches(loginPassword, person.getPassword())) {
-      return person;
+    /**
+     * Fetch Person if Person has valid credentials.
+     *
+     * @param email
+     * @param loginPassword
+     * @return a Person
+     * @throws LoginException
+     */
+    public Person login(String email, String loginPassword) throws LoginException {
+        Person person = userRepository.getPersonByEmail(email)
+                .orElseThrow(() ->
+                        new LoginException("Username or password incorrect"));
+        if (passwordEncoder.matches(loginPassword, person.getPassword())) {
+            return person;
+        } else {
+            throw new LoginException("Username or password not correct");
+        }
     }
-     else {
-      throw new LoginException("Username or password not correct");
-    }
-  }
 }
